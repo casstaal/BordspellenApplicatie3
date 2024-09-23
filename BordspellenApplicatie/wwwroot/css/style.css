@@ -1,0 +1,30 @@
+﻿.scroll-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.scroll-item {
+    flex: 0 0 250px; /* Control width of each item */
+    margin-right: 15px;
+}
+
+/* Optional: Adding some design */
+.scroll-item {
+    transition: transform 0.3s;
+}
+
+    .scroll-item:hover {
+        transform: scale(1.05); /* Slight zoom effect on hover */
+    }
+
+/* Adjust the size of the navbar logo and user icon */
+.navbar .logo img {
+    max-height: 50px;
+}
+
+.navbar .user-icon img {
+    max-height: 40px;
+}
