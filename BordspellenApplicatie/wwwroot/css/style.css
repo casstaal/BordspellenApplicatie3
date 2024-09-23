@@ -28,3 +28,11 @@
 .navbar .user-icon img {
     max-height: 40px;
 }
+
+
+.banner {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}

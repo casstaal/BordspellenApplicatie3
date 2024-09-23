@@ -26,7 +26,7 @@ namespace BordspellenApplicatie.Controllers
             };
 
             ViewBag.BannerUrl = "/imageBoardgame.jpg";
-            ViewBag.InfoText = "Details about what the board game nights are.";
+            ViewBag.InfoText = "Welkom op onze bordspellenavonden voor immigranten! Ben je nieuw in Nederland en wil je op een leuke en ontspannen manier de Nederlandse taal leren? Kom dan naar onze gezellige bordspellenavonden. Hier combineren we taalvaardigheid met spelplezier!\nTijdens deze avonden speel je samen met anderen verschillende bordspellen, waarbij je op een speelse manier je Nederlands oefent. Het is een perfecte gelegenheid om nieuwe mensen te ontmoeten, de taal in praktijk te brengen en spelenderwijs je woordenschat en taalbegrip te verbeteren.\nOf je nu een beginner bent of al wat verder gevorderd, iedereen is welkom. Onze vrijwilligers begeleiden de avond en helpen je graag met moeilijke woorden of zinnen. Het belangrijkste is dat je plezier hebt terwijl je leert!\nDoe mee, verbeter je Nederlands en ontdek hoe leuk taal leren kan zijn!";
             ViewBag.FutureEvents = futureEvents;
 
             return View();
