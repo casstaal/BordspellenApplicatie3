@@ -32,23 +32,21 @@
         </div>
         <div class="navigation">
             <p>
-                Homepage / <b>My Account</b>
+                Homepage / My Account / <b>Aangemelde bordspelavonden</b>
             </p>
             <h1>
                 My Account
             </h1>
         </div>
         <div class="accountChoises">
-            <ul>
-                <li>My details</li>
-                <li>Aangemelde bordspelavonden</li>
-                <li>Georganiseerde bordspelavonden</li>
-                <li>Dieetwensen en allergieen</li>
-                <li>Account settings</li>
-            </ul>
+            @Html.ActionLink("My details", "Details", "Account", null, new { @class = "account-link" })<br />
+            @Html.ActionLink("Aangemelde bordspelavonden", "Registered", "Account", null, new { @class = "account-link", @style = "background-color: lightsteelblue" })<br />
+            @Html.ActionLink("Georganiseerde bordspelavonden", "Organized", "Account", null, new { @class = "account-link" })<br />
+            @Html.ActionLink("Dieetwensen en allergieen", "Allergies", "Account", null, new { @class = "account-link" })<br />
+            @Html.ActionLink("Account settings", "Settings", "Account", null, new { @class = "account-link" })
         </div>
         <div class="detailsForm">
-            <h1>Registerd game nights</h1>
+            <h3 style="margin-top: 20px; margin-bottom: 20px;">Registered Game nights</h3>
         </div>
     </div>
 
@@ -64,6 +62,7 @@
         grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
         grid-template-columns: 1fr 1fr 1fr;
         gap: 10px;
+        background-color: aliceblue;
     }
 
     /* Navbar spanning columns 1 to 3 */
@@ -72,28 +71,43 @@
         grid-row: 1 / 2;
         background-color: lightgrey;
         padding: 10px;
+        background-color: lightsteelblue;
     }
 
     .navigation {
         grid-column: 1 / 2;
         grid-row: 2 / 3;
-        background-color: aqua;
         padding-left: 50px;
     }
 
     .accountChoises {
         grid-column: 1 / 2;
         grid-row: 3 / 4;
-        background-color: bisque;
         padding-left: 50px;
-        padding-top: 50px;
+        margin-top: 20px;
     }
 
     .detailsForm {
         grid-column: 2 / 4;
         grid-row: 3 / 5;
-        background-color: darkkhaki;
+        background-color: white;
         border-style: solid;
+        margin-left: 50px;
+        padding-left: 40px;
+        margin-top: 20px;
+        margin-right: 50px;
+    }
+
+
+    .account-link {
+        color: black;
+        display: block;
+    }
+
+    .account-link:hover {
+        background-color: lightsteelblue;
+        color: black;
+        text-decoration: none;
     }
 </style>
 
