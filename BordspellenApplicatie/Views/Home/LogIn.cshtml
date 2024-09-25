@@ -1,0 +1,59 @@
+﻿@{
+    Layout = null;
+    var bannerUrl = ViewBag.BannerUrl as string;
+    var infoText = ViewBag.InfoText as string;
+    var futureEvents = ViewBag.FutureEvents as List<BordspellenApplicatie.Models.BoardGameNight>;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Board Game Nights</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    @*     <link rel="stylesheet" href="/css/style.css"/> *@
+</head>
+<body>
+
+    <!-- Main container with grid layout -->
+    <div class="container-fluid">
+
+        <!-- Navbar (spanning columns 1 to 3) -->
+        <div class="navbar d-flex justify-content-between align-items-center">
+            <div class="logo">
+                <img src="/logoBoardgame.jpg" alt="Logo" class="img-fluid" style="max-height: 50px;">
+            </div>
+            <a href="/account/details">
+                <img src="/userIcon.png" alt="User Icon" class="img-fluid" style="max-height: 40px;">
+            </a>
+        </div>
+
+
+
+
+    </div>
+
+    <!-- Bootstrap and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+<style>
+    /* Main grid container */
+    .container-fluid {
+        display: grid;
+        grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
+        grid-template-columns: 1fr 6fr 1fr;
+        gap: 10px;
+    }
+
+    /* Navbar spanning columns 1 to 3 */
+    .navbar {
+        grid-column: 1 / 5; /* Span across the first three columns */
+        grid-row: 1 / 2;
+        background-color: lightgrey;
+        padding: 10px;
+    }
+</style>
+

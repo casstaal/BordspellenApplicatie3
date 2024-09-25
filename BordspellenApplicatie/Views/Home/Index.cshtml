@@ -31,32 +31,37 @@
 
         <!-- Banner in the middle (column 2) -->
         <div class="banner">
-            <img src="@bannerUrl" alt="Banner" class="img-fluid" style="max-height: 400px;">
+            <img src="@bannerUrl" alt="Banner" class="img-fluid" style="min-width: 1000px; max-height: 300px">
         </div>
 
         <!-- Info Section centered (column 2) -->
         <div class="info-section">
-            <h3>Info over wat de bordspelavonden zijn</h3>
             <p>@infoText</p>
         </div>
 
         <!-- Scroll container (spanning columns 1 to 3) -->
-        <div class="scroll-container">
+        <div class="futureBoardGameNights">
             <h3>Toekomstige bordspelavonden</h3>
-            @if (futureEvents != null && futureEvents.Any())
-            {
-                @foreach (var gameEvent in futureEvents)
+            <div class="scroll-container">
+                @if (futureEvents != null && futureEvents.Any())
                 {
-                    <div class="scroll-item card text-center">
-                        <div class="card-body">
-                            <h5 class="card-title">@gameEvent.Title</h5>
-                            <p class="card-text">Date: @gameEvent.Date.ToString("dd MMM yyyy")</p>
-                            <p class="card-text">Age Restriction: @(gameEvent.Is18Plus ? "18+" : "All Ages")</p>
-                        </div>
-                    </div>
+                    @foreach (var gameEvent in futureEvents)
+                    {
+                        <a href="@Url.Action("Details", "BoardGameNight", new { id = gameEvent.Id, title = gameEvent.Title, date = gameEvent.Date.ToString("yyyy-MM-dd"), is18Plus = gameEvent.Is18Plus })">
+                            <div class="scroll-item card text-center">
+                                <div class="card-body">
+                                    <img src="/boardgame.jpg" alt="User Icon" class="card-img" style="max-height: 100px;">
+                                    <h5 class="card-title">@gameEvent.Title</h5>
+                                    <p class="card-text">Date: @gameEvent.Date.ToString("dd MMM yyyy")</p>
+                                    <p class="card-text">Age Restriction: @(gameEvent.Is18Plus ? "18+" : "All Ages")</p>
+                                </div>
+                            </div>
+                        </a>
+                    }
                 }
-            }
+            </div>
         </div>
+
 
     </div>
 
@@ -89,20 +94,26 @@
         display: block;
         margin-left: auto;
         margin-right: auto;
-        width: 50%;
+        margin-top: 50px;
     }
 
     /* Info section centered in the middle column */
     .info-section {
         grid-column: 2 / 3; /* Span across columns 2 to 3 */
         grid-row: 3 / 4;
-        text-align: center;
+        text-align: left;
+        margin-top: 10px;
+    }
+
+    .futureBoardGameNights {
+        grid-column: 1 / 5; /* Span across the first three columns */
+        grid-row: 4 / 5;
+        margin: 60px 40px 120px 40px;
     }
 
     /* Scroll container spanning columns 1 to 3 */
     .scroll-container {
-        grid-column: 1 / 5; /* Span across the first three columns */
-        grid-row: 4 / 5;
+
         display: flex;
         overflow-x: auto;
         scroll-behavior: smooth;
