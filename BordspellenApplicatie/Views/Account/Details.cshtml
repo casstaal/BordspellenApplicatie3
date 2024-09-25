@@ -41,14 +41,7 @@
             </h1>
         </div>
         <div class="accountChoises">
-@*             <ul>
-                <li>My details</li>
-                <li>Aangemelde bordspelavonden</li>
-                <li>Georganiseerde bordspelavonden</li>
-                <li>Dieetwensen en allergieen</li>
-                <li>Account settings</li>
-            </ul> *@
-            @Html.ActionLink("My details", "Details", "Account", null, new { @class = "account-link" })<br />
+            @Html.ActionLink("My details", "Details", "Account", null, new { @class = "account-link", @style = "background-color: lightsteelblue" })<br />
             @Html.ActionLink("Aangemelde bordspelavonden", "Registered", "Account", null, new { @class = "account-link" })<br />
             @Html.ActionLink("Georganiseerde bordspelavonden", "Organized", "Account", null, new { @class = "account-link" })<br />
             @Html.ActionLink("Dieetwensen en allergieen", "Allergies", "Account", null, new { @class = "account-link" })<br />
@@ -97,6 +90,7 @@
         grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
         grid-template-columns: 1fr 1fr 1fr;
         gap: 10px;
+        height: 100vh;
         background-color: aliceblue;
     }
 
