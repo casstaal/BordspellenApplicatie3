@@ -47,7 +47,7 @@
                 {
                     @foreach (var gameEvent in futureEvents)
                     {
-                        <a href="@Url.Action("Details", "BoardGameNight", new { id = gameEvent.Id, title = gameEvent.Title, date = gameEvent.Date.ToString("yyyy-MM-dd"), is18Plus = gameEvent.Is18Plus })">
+                        <a class="gameNightLink" href="@Url.Action("Details", "BoardGameNight", new { id = gameEvent.Id, title = gameEvent.Title, date = gameEvent.Date.ToString("yyyy-MM-dd"), is18Plus = gameEvent.Is18Plus })">
                             <div class="scroll-item card text-center">
                                 <div class="card-body">
                                     <img src="/boardgame.jpg" alt="User Icon" class="card-img" style="max-height: 100px;">
@@ -77,13 +77,14 @@
         grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
         grid-template-columns: 1fr 6fr 1fr;
         gap: 10px;
+        /*background-color: aliceblue;*/
     }
 
     /* Navbar spanning columns 1 to 3 */
     .navbar {
         grid-column: 1 / 5; /* Span across the first three columns */
         grid-row: 1 / 2;
-        background-color: lightgrey;
+        background-color: lightsteelblue;
         padding: 10px;
     }
 
@@ -103,6 +104,14 @@
         grid-row: 3 / 4;
         text-align: left;
         margin-top: 10px;
+    }
+
+    .gameNightLink {
+        color: black;
+    }
+
+    .gameNightLink:hover {
+        text-decoration: none;
     }
 
     .futureBoardGameNights {
@@ -126,6 +135,8 @@
         flex: 0 0 250px; /* Control width of each item */
         margin-right: 15px;
         transition: transform 0.3s;
+        width: 200px;
+        background-color: aliceblue;
     }
 
         .scroll-item:hover {
