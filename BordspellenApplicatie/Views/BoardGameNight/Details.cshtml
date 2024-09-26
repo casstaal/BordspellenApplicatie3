@@ -1,8 +1,7 @@
-﻿@{
+﻿@model BordspellenApplicatie.Models.BoardGameNightDetailsViewModel
+
+@{
     Layout = null;
-    var bannerUrl = ViewBag.BannerUrl as string;
-    var infoText = ViewBag.InfoText as string;
-    var futureEvents = ViewBag.FutureEvents as List<BordspellenApplicatie.Models.BoardGameNight>;
 }
 
 <!DOCTYPE html>
@@ -15,11 +14,7 @@
     @*     <link rel="stylesheet" href="/css/style.css"/> *@
 </head>
 <body>
-
-    <!-- Main container with grid layout -->
     <div class="container-fluid">
-
-        <!-- Navbar (spanning columns 1 to 3) -->
         <div class="navbar d-flex justify-content-between align-items-center">
             <div class="logo">
                 <img src="/logoBoardgame.jpg" alt="Logo" class="img-fluid" style="max-height: 50px;">
@@ -28,25 +23,40 @@
                 <img src="/userIcon.png" alt="User Icon" class="img-fluid" style="max-height: 40px;">
             </a>
         </div>
-
         <div>
-            <h2>@Model.Title</h2>
-            <p>Date: @Model.Date.ToString("dd MMM yyyy")</p>
-            <p>Age Restriction: @(Model.Is18Plus ? "18+" : "All Ages")</p>
+            <h2 style="margin-top: 50px; margin-left: 40px">@Model.CurrentEvent.Title</h2>
+
+            <div class="futureBoardGameNights">
+                <h5>Geplande bordspellen</h5>
+                <div class="scroll-container">
+                    @if (Model.FutureEvents != null && Model.FutureEvents.Any())
+                    {
+                        @foreach (var gameEvent in Model.FutureEvents)
+                        {
+                            <a class="gameNightLink" href="@Url.Action("Details", "BoardGameNight", new { id = gameEvent.Id, title = gameEvent.Title, date = gameEvent.Date.ToString("yyyy-MM-dd"), is18Plus = gameEvent.Is18Plus })">
+                                <div class="scroll-item card text-center">
+                                    <div class="card-body">
+                                        <img src="/boardgame.jpg" alt="User Icon" class="card-img" style="max-height: 100px;">
+                                        <h5 class="card-title">@gameEvent.Title</h5>
+                                        <p class="card-text">Date: @gameEvent.Date.ToString("dd MMM yyyy")</p>
+                                        <p class="card-text">Age Restriction: @(gameEvent.Is18Plus ? "18+" : "All Ages")</p>
+                                    </div>
+                                </div>
+                            </a>
+                        }
+                    }
+                </div>
+            </div>
+
+            <p>Date: @Model.CurrentEvent.Date.ToString("dd MMM yyyy")</p>
+            <p>Age Restriction: @(Model.CurrentEvent.Is18Plus ? "18+" : "All Ages")</p>
         </div>
-
-
-
-
     </div>
-
-    <!-- Bootstrap and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 <style>
-    /* Main grid container */
     .container-fluid {
         display: grid;
         grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
@@ -54,12 +64,46 @@
         gap: 10px;
     }
 
-    /* Navbar spanning columns 1 to 3 */
     .navbar {
-        grid-column: 1 / 5; /* Span across the first three columns */
+        grid-column: 1 / 5; 
         grid-row: 1 / 2;
         background-color: lightgrey;
         padding: 10px;
+    }
+
+    .gameNightLink {
+        color: black;
+    }
+
+    .gameNightLink:hover {
+        text-decoration: none;
+    }
+
+    .futureBoardGameNights {
+/*         grid-column: 1 / 5;
+        grid-row: 4 / 5; */
+        margin: 40px 40px 120px 40px;
+    }
+
+    .scroll-container {
+        display: flex;
+        flex-wrap: nowrap; /* Prevent flex items from wrapping */
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        padding: 10px;
+        border: 1px solid #ddd;
+    }
+
+    .scroll-item {
+        flex: 0 0 250px;
+        margin-right: 15px;
+        transition: transform 0.3s;
+        width: 200px;
+        background-color: aliceblue;
+    }
+
+    .scroll-item:hover {
+        transform: scale(1.05);
     }
 </style>
 
