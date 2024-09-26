@@ -15,11 +15,7 @@
     @*     <link rel="stylesheet" href="/css/style.css"/> *@
 </head>
 <body>
-
-    <!-- Main container with grid layout -->
     <div class="container-fluid">
-
-        <!-- Navbar (spanning columns 1 to 3) -->
         <div class="navbar d-flex justify-content-between align-items-center">
             <div class="logo">
                 <img src="/logoBoardgame.jpg" alt="Logo" class="img-fluid" style="max-height: 50px;">
@@ -28,19 +24,12 @@
                 <img src="/userIcon.png" alt="User Icon" class="img-fluid" style="max-height: 40px;">
             </a>
         </div>
-
-
-
-
     </div>
-
-    <!-- Bootstrap and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 <style>
-    /* Main grid container */
     .container-fluid {
         display: grid;
         grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
@@ -48,9 +37,8 @@
         gap: 10px;
     }
 
-    /* Navbar spanning columns 1 to 3 */
     .navbar {
-        grid-column: 1 / 5; /* Span across the first three columns */
+        grid-column: 1 / 5; 
         grid-row: 1 / 2;
         background-color: lightgrey;
         padding: 10px;

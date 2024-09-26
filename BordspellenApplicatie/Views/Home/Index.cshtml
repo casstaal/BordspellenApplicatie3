@@ -15,11 +15,7 @@
 @*     <link rel="stylesheet" href="/css/style.css"/> *@
 </head>
 <body>
-
-    <!-- Main container with grid layout -->
     <div class="container-fluid">
-
-        <!-- Navbar (spanning columns 1 to 3) -->
         <div class="navbar d-flex justify-content-between align-items-center">
             <div class="logo">
                 <img src="/logoBoardgame.jpg" alt="Logo" class="img-fluid" style="max-height: 50px;">
@@ -28,18 +24,12 @@
                 <img src="/userIcon.png" alt="User Icon" class="img-fluid" style="max-height: 40px;">
             </a>
         </div>
-
-        <!-- Banner in the middle (column 2) -->
         <div class="banner">
             <img src="@bannerUrl" alt="Banner" class="img-fluid" style="min-width: 1000px; max-height: 300px">
         </div>
-
-        <!-- Info Section centered (column 2) -->
         <div class="info-section">
             <p>@infoText</p>
         </div>
-
-        <!-- Scroll container (spanning columns 1 to 3) -->
         <div class="futureBoardGameNights">
             <h3>Toekomstige bordspelavonden</h3>
             <div class="scroll-container">
@@ -64,14 +54,11 @@
 
 
     </div>
-
-    <!-- Bootstrap and jQuery -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 <style>
-    /* Main grid container */
     .container-fluid {
         display: grid;
         grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
@@ -80,17 +67,15 @@
         /*background-color: aliceblue;*/
     }
 
-    /* Navbar spanning columns 1 to 3 */
     .navbar {
-        grid-column: 1 / 5; /* Span across the first three columns */
+        grid-column: 1 / 5;
         grid-row: 1 / 2;
         background-color: lightsteelblue;
         padding: 10px;
     }
 
-    /* Banner in the middle (centered in column 2) */
     .banner {
-        grid-column: 2 / 3; /* Span across columns 2 to 3 */
+        grid-column: 2 / 3; 
         grid-row: 2 / 3;
         display: block;
         margin-left: auto;
@@ -98,9 +83,8 @@
         margin-top: 50px;
     }
 
-    /* Info section centered in the middle column */
     .info-section {
-        grid-column: 2 / 3; /* Span across columns 2 to 3 */
+        grid-column: 2 / 3;
         grid-row: 3 / 4;
         text-align: left;
         margin-top: 10px;
@@ -115,12 +99,11 @@
     }
 
     .futureBoardGameNights {
-        grid-column: 1 / 5; /* Span across the first three columns */
+        grid-column: 1 / 5; 
         grid-row: 4 / 5;
         margin: 60px 40px 120px 40px;
     }
 
-    /* Scroll container spanning columns 1 to 3 */
     .scroll-container {
 
         display: flex;
@@ -130,17 +113,16 @@
         border: 1px solid #ddd;
     }
 
-    /* Scroll items */
     .scroll-item {
-        flex: 0 0 250px; /* Control width of each item */
+        flex: 0 0 250px; 
         margin-right: 15px;
         transition: transform 0.3s;
         width: 200px;
         background-color: aliceblue;
     }
 
-        .scroll-item:hover {
-            transform: scale(1.05); /* Slight zoom effect on hover */
-        }
+    .scroll-item:hover {
+        transform: scale(1.05); 
+    }
 </style> 
 
