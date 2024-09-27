@@ -34,7 +34,7 @@
         <div class="futureBoardGameNights">
             <div class="title-container">
                 <h3>Toekomstige bordspelavonden</h3>
-                @Html.ActionLink("Toon alle bordspelavonden", "Allergies", "Account", null, new { @class = "bordspelavonden-link" })
+                @Html.ActionLink("Toon alle bordspelavonden", "BoardGameNight", "Overview", null, new { @class = "bordspelavonden-link" })
             </div>
             <div class="scroll-container">
                 @if (futureEvents != null && futureEvents.Any())
