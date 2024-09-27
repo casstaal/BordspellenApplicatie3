@@ -8,5 +8,10 @@ namespace BordspellenApplicatie.Controllers
         {
             return View();
         }
+
+        public IActionResult Boardgame()
+        {
+            return View();
+        }
     }
 }
