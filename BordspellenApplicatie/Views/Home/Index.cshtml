@@ -1,7 +1,7 @@
 ﻿@{
     Layout = null;
     var bannerUrl = ViewBag.BannerUrl as string;
-    var infoText = ViewBag.InfoText as string;
+    // var infoText = ViewBag.InfoText as string;
     var futureEvents = ViewBag.FutureEvents as List<BordspellenApplicatie.Models.BoardGameNight>;
 }
 
@@ -15,23 +15,27 @@
 @*     <link rel="stylesheet" href="/css/style.css"/> *@
 </head>
 <body>
+    <vc:header></vc:header>
     <div class="container-fluid">
-        <div class="navbar d-flex justify-content-between align-items-center">
-            <div class="logo">
-                <img src="/logoBoardgame.jpg" alt="Logo" class="img-fluid" style="max-height: 50px;">
-            </div>
-            <a href="/account/details">
-                <img src="/userIcon.png" alt="User Icon" class="img-fluid" style="max-height: 40px;">
-            </a>
-        </div>
         <div class="banner">
-            <img src="@bannerUrl" alt="Banner" class="img-fluid" style="min-width: 1000px; max-height: 300px">
+            <img src="@bannerUrl" alt="Banner" class="img-fluid" style="min-width: 1000px;">
+            <div class="text-banner ">
+                <h1 style="font-size: 55px;">Bordspelavonden</h1>
+                <p style="font-size: 25px;">Welkom op onze bordspelavond site voor immigranten!</p>
+            </div>
         </div>
         <div class="info-section">
-            <p>@infoText</p>
+@*             <p>@infoText</p> *@ 
+            <p>Ben je nieuw in Nederland en wil je op een leuke en ontspannen manier de Nederlandse taal leren? Kom dan naar onze gezellige bordspellenavonden. Hier combineren we taalvaardigheid met spelplezier!</p>
+            <p>Tijdens deze avonden speel je samen met anderen verschillende bordspellen, waarbij je op een speelse manier je Nederlands oefent. Het is een perfecte gelegenheid om nieuwe mensen te ontmoeten, de taal in praktijk te brengen en spelenderwijs je woordenschat en taalbegrip te verbeteren.</p>
+            <p>Of je nu een beginner bent of al wat verder gevorderd, iedereen is welkom. Onze vrijwilligers begeleiden de avond en helpen je graag met moeilijke woorden of zinnen. Het belangrijkste is dat je plezier hebt terwijl je leert!</p>
+            <p>Doe mee, verbeter je Nederlands en ontdek hoe leuk taal leren kan zijn!</p>
         </div>
         <div class="futureBoardGameNights">
-            <h3>Toekomstige bordspelavonden</h3>
+            <div class="title-container">
+                <h3>Toekomstige bordspelavonden</h3>
+                @Html.ActionLink("Toon alle bordspelavonden", "Allergies", "Account", null, new { @class = "bordspelavonden-link" })
+            </div>
             <div class="scroll-container">
                 @if (futureEvents != null && futureEvents.Any())
                 {
@@ -51,9 +55,8 @@
                 }
             </div>
         </div>
-
-
     </div>
+    <vc:footer></vc:footer>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
@@ -62,25 +65,29 @@
     .container-fluid {
         display: grid;
         grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
-        grid-template-columns: 1fr 6fr 1fr;
+        grid-template-columns: 1fr 4fr 1fr;
         gap: 10px;
         /*background-color: aliceblue;*/
     }
 
-    .navbar {
-        grid-column: 1 / 5;
-        grid-row: 1 / 2;
-        background-color: lightsteelblue;
-        padding: 10px;
-    }
-
     .banner {
-        grid-column: 2 / 3; 
+        grid-column: 1 / -1; 
         grid-row: 2 / 3;
         display: block;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 50px;
+        width: 100%; 
+        margin: 0; 
+        padding: 0; 
+        margin-left: 4px;
+        margin-top: 12px;
+        position: relative;
+        text-align: center;
+        color: white;
+    }
+
+    .text-banner {
+        position: absolute;
+        bottom: 8px;
+        left: 16px;
     }
 
     .info-section {
@@ -88,6 +95,12 @@
         grid-row: 3 / 4;
         text-align: left;
         margin-top: 10px;
+        background-color: aliceblue;
+        padding: 20px 30px 20px 30px;
+        border-radius: 5px;
+/*         margin-top: 40px;
+ *//*         padding-left: 150px;
+        padding-right: 150px; */
     }
 
     .gameNightLink {
@@ -123,6 +136,16 @@
 
     .scroll-item:hover {
         transform: scale(1.05); 
+    }
+
+    .title-container {
+        display: flex;
+        align-items: center; 
+    }
+
+    .bordspelavonden-link {
+        color: black;
+        margin-left: auto;
     }
 </style> 
 
