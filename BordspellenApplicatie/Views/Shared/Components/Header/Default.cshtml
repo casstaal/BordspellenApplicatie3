@@ -1,7 +1,10 @@
 ﻿<div class="navbar d-flex justify-content-between align-items-center">
-    <div class="logo">
+    <a href="/">
         <img src="/logoBoardgame.jpg" alt="Logo" class="img-fluid" style="max-height: 50px;">
-    </div>
+    </a>
+    @Html.ActionLink("Alle bordspelavonden", "BoardGameNight", "Overview", null, new { @class = "navigation-link" })
+    @Html.ActionLink("Aangemelde bordspelavonden", "RegisteredBoardGameNights", "Overview", null, new { @class = "navigation-link" })
+    @Html.ActionLink("Georganiseerde bordspelavonden", "OrganizedBoardGameNights", "Overview", null, new { @class = "navigation-link" })
     <a href="/account/details">
         <img src="/userIcon.png" alt="User Icon" class="img-fluid" style="max-height: 40px;">
     </a>
