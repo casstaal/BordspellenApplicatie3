@@ -1,0 +1,62 @@
+name: build
+
+env:
+  artifactName: buildArtifact
+
+on:
+  pull_request:
+    branches: main # Run workflow on PRs to the main branch.
+
+  # 👇 Run workflow on pushes to any branch, except the main branch.
+  push:
+    branches-ignore: main
+
+  # Allows you to run this workflow manually from the Actions tab.
+  workflow_dispatch:
+
+  # 👇 Allows this workflow to be called from the deployment workflow.
+  workflow_call:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --no-restore
+      
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
+    
+    # The default flag --no-build is removed since it causes errors in GitHub workflows
+    - name: Publish
+      run: dotnet publish ./BordspellenApplicatie --output ./publish/BordspellenApplicatie --configuration Release 
+      
+    # Install the dotnet ef tools and bundle the migrations into a self-contained executable
+    # - name: Bundle EF project
+    #   run:  |
+    #     dotnet tool install --global dotnet-ef
+    #     dotnet tool restore
+    #     dotnet ef migrations bundle --output ./publish/migrations/migrations.exe --startup-project ./DeployMe.API --project ./DeployMe.Infrastructure --self-contained -r linux-x64
+        
+    - name: Upload artifact API
+      uses: actions/upload-artifact@v4
+      with:
+          name: deploy-bordspellenapplicatie
+          path: ./publish/BordspellenApplicatie
+          
+    # - name: Upload artifact Migrations
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #       name: deployme-migrations
+    #       path: ./publish/migrations   
