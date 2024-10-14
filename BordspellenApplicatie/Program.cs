@@ -1,7 +1,23 @@
+using BordspellenApplicatie.Infrastructure.Data;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+var dbConnectionString = builder.Configuration.GetValue<string>("ConnectionStringAzureSQL");
+
+builder.Services.AddDbContext<BordspellenavondDBContext>(options =>
+{
+    options
+        .UseSqlServer(dbConnectionString, sqlOptions =>
+        {
+            sqlOptions.MigrationsHistoryTable("EFMigrationHistory", BordspellenavondDBContext.SqlSchema);
+        });
+});
 
 var app = builder.Build();
 
