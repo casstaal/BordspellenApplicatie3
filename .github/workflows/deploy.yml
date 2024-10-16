@@ -23,7 +23,7 @@ jobs:
           - name: Download api
             uses: actions/download-artifact@v4
             with:
-                name: bordspellen-app
+                name: deploy-bordspellenapplicatie
                 path: ./BordspellenApplicatie
          
           - name: Download migrations

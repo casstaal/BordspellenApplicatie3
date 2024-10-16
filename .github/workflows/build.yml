@@ -52,7 +52,7 @@ jobs:
     - name: Upload artifact API
       uses: actions/upload-artifact@v4
       with:
-          name: bordspellenapplicatie-api
+          name: deploy-bordspellenapplicatie
           path: ./publish/BordspellenApplicatie
           
     - name: Upload artifact Migrations
