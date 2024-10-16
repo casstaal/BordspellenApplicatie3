@@ -18,7 +18,7 @@
             <h1>Create your account</h1>
             <p>Maak een account aan om bordspelavonden te organiseren en je aan te melden voor bordspelavonden</p>
         </div>
-        <form class="loginForm">
+        <form asp-action="Register" method="post" class="loginForm">
             <div>
                 <label asp-for="FirstName">Voornaam</label><br />
                 <input asp-for="FirstName" />
@@ -33,7 +33,7 @@
             </div>
             <div style="margin-top: 15px;">
                 <label asp-for="Email">Email</label><br />
-                <input asp-for="Email" />
+                <input asp-for="EmailAddress" />
             </div>
             <div style="margin-top: 15px;">
                 <label asp-for="Phonenumber">Telefoonnummer</label><br />
