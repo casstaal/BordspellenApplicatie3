@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BordspellenApplicatie.Domain.Interfaces
 {
-    class IAddressRepository
+    public interface IAddressRepository
     {
     }
 }
