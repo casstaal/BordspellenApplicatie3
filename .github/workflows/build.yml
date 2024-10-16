@@ -43,11 +43,11 @@ jobs:
       run: dotnet publish ./BordspellenApplicatie --output ./publish/BordspellenApplicatie --configuration Release 
       
     # Install the dotnet ef tools and bundle the migrations into a self-contained executable
-    # - name: Bundle EF project
-    #   run:  |
-    #     dotnet tool install --global dotnet-ef
-    #     dotnet tool restore
-    #     dotnet ef migrations bundle --output ./publish/migrations/migrations.exe --startup-project ./DeployMe.API --project ./DeployMe.Infrastructure --self-contained -r linux-x64
+    - name: Bundle EF project
+      run:  |
+         dotnet tool install --global dotnet-ef
+         dotnet tool restore
+         dotnet ef migrations bundle --output ./publish/migrations/migrations.exe --startup-project ./DeployMe.API --project ./DeployMe.Infrastructure --self-contained -r linux-x64
         
     - name: Upload artifact API
       uses: actions/upload-artifact@v4
@@ -55,8 +55,8 @@ jobs:
           name: deploy-bordspellenapplicatie
           path: ./publish/BordspellenApplicatie
           
-    # - name: Upload artifact Migrations
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #       name: deployme-migrations
-    #       path: ./publish/migrations   
+    - name: Upload artifact Migrations
+      uses: actions/upload-artifact@v4
+      with:
+          name: deployme-migrations
+          path: ./publish/migrations   
