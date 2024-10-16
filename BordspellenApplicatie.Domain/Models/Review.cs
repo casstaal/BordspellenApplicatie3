@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BordspellenApplicatie.Domain.Models
 {
-    internal class Review
+    public class Review
     {
         public Guid Id { get; set; }
         public int Score { get; set; }
