@@ -36,7 +36,7 @@ jobs:
           - name: Execute EF migrations
             run: |
                   chmod +x ./migrations/migrations.exe
-                  ./migrations/migrations.exe --connection "Server=tcp:${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net,1433;Database=${{ secrets.AZURE_SQL_DATABASE_NAME }};User ID=bordspelavond_migrator;Password=${{ secrets.AZURE_SQL_APP_USER_PASSWORD }};Trusted_Connection=False;Encrypt=True;"
+                  ./migrations/migrations.exe --connection "Server=tcp:${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net,1433;Database=${{ secrets.AZURE_SQL_DATABASE_NAME }};User ID=bordspelavond_migrator;Password=${{ secrets.AZURE_SQL_MIGRATOR_PASSWORD }};Trusted_Connection=False;Encrypt=True;"
 
           - uses: azure/login@v1
             with:
@@ -52,6 +52,6 @@ jobs:
           - uses: azure/appservice-settings@v1
             with:
                 app-name: '${{secrets.AZURE_APP_SERVICE_NAME}}'
-                app-settings-json: '[{ "name": "ConnectionStringAzureSQL", "value": "Server=tcp:${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net,1433;Database=${{ secrets.AZURE_SQL_DATABASE_NAME }};User ID=bordspelavond_app_user;Password=${{ secrets.AZURE_SQL_MIGRATOR_PASSWORD }};Trusted_Connection=False;Encrypt=True;"}]' 
+                app-settings-json: '[{ "name": "ConnectionStringAzureSQL", "value": "Server=tcp:${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net,1433;Database=${{ secrets.AZURE_SQL_DATABASE_NAME }};User ID=bordspelavond_app_user;Password=${{ secrets.AZURE_SQL_APP_USER_PASSWORD }};Trusted_Connection=False;Encrypt=True;"}]' 
 
                 
