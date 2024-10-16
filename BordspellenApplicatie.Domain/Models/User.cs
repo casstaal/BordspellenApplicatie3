@@ -1,8 +1,11 @@
-﻿namespace BordspellenApplicatie.Models
+﻿using BordspellenApplicatie.Domain.Models;
+
+namespace BordspellenApplicatie.Models
 {
     public class User
     {
         public int Id { get; set; }
+        public string? IdentityId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
@@ -14,6 +17,8 @@
         public bool IsVegetarian { get; set; }
         public bool HasNutAllergy { get; set; }
         public bool DrinksAlcohol { get; set; }
+        public required UserRole Role { get; set; }
+
 
         public enum GenderEnum
         {
