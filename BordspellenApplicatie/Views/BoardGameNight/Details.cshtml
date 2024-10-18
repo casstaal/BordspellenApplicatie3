@@ -14,15 +14,8 @@
     @*     <link rel="stylesheet" href="/css/style.css"/> *@
 </head>
 <body>
+    <vc:header></vc:header>
     <div class="container-fluid">
-        <div class="navbar d-flex justify-content-between align-items-center">
-            <div class="logo">
-                <img src="/logoBoardgame.jpg" alt="Logo" class="img-fluid" style="max-height: 50px;">
-            </div>
-            <a href="/account/details">
-                <img src="/userIcon.png" alt="User Icon" class="img-fluid" style="max-height: 40px;">
-            </a>
-        </div>
         <div>
             <h2 style="margin-top: 50px; margin-left: 40px">@Model.CurrentEvent.Title</h2>
 
@@ -33,21 +26,91 @@
                     {
                         @foreach (var gameEvent in Model.FutureEvents)
                         {
-                            <a class="gameNightLink" href="@Url.Action("Details", "BoardGameNight", new { id = gameEvent.Id, title = gameEvent.Title, date = gameEvent.DateTime.ToString("yyyy-MM-dd") })">
-                                <div class="scroll-item card text-center">
-                                    <div class="card-body">
-                                        <img src="/boardgame.jpg" alt="User Icon" class="card-img" style="max-height: 100px;">
-                                        <h5 class="card-title">@gameEvent.Title</h5>
-                                        <p class="card-text">Date: @gameEvent.DateTime.ToString("dd MMM yyyy")</p>
-                                    </div>
+                            <div class="scroll-item card text-center">
+                                <div class="card-body">
+                                    <img src="/boardgame.jpg" alt="User Icon" class="card-img" style="max-height: 100px;">
+                                    <h5 class="card-title">@gameEvent.Title</h5>
+                                    <p class="card-text">Date: @gameEvent.DateTime.ToString("dd MMM yyyy")</p>
                                 </div>
-                            </a>
+                            </div>
                         }
                     }
                 </div>
             </div>
+            <div class="description-BoardgameNight">
+                <h5>Beschrijving bordspelavond</h5>
+                <p>
+                    Ben je op zoek naar een leuke en ontspannen manier om je Nederlands te verbeteren? Doe dan mee met onze bordspelavond voor immigranten! Samen spelen we verschillende bordspellen, terwijl we op een informele manier de Nederlandse taal oefenen.
+                </p>
+                <p>
+                    Of je nu net begonnen bent met het leren van Nederlands of al wat verder bent, iedereen is welkom. Tijdens het spelen van de spellen leer je nieuwe woorden, zinnen en hoe je in het Nederlands kunt communiceren met anderen. En het beste van alles? Het is een gezellige manier om mensen te ontmoeten en samen plezier te hebben!
+                </p>
+            </div>
+            <div class="extra-information">
+                <p><b>Organisator: </b> Cas Staal</p>
+                <p><b>Date:</b> @Model.CurrentEvent.DateTime.ToString("dd MMM yyyy")</p>
+                <p><b>Leeftijd: </b> 18+</p>
+            </div>
 
-            <p>Date: @Model.CurrentEvent.DateTime.ToString("dd MMM yyyy")</p>
+            <div class="address-information">
+                <h5>Adresinformatie</h5>
+                <p><b>Straat + huisnummer: </b>Hogeschoollaan 29</p>
+                <p><b>Stad:</b> Breda</p>
+            </div>
+
+            <button>Inschrijven</button>
+
+            <div class="description-food-drinks">
+                <h5>Beschrijving drinken en eten</h5>
+                <p>
+                    Tijdens de bordspelavond is er niet alleen volop spelplezier, maar kun je ook genieten van een selectie heerlijke snacks en verfrissende drankjes! We zorgen voor een gevarieerd aanbod, zodat er voor iedereen wat lekkers is.
+                </p>
+                <h7>Hartige snacks</h7>
+                <ul>
+                    <li>
+                        Mini-sandwiches met verschillende belegopties zoals kaas, kipfilet en hummus.
+                    </li>
+                    <li>
+                        Kaasblokjes, worstjes en olijven om gemakkelijk tussendoor te snacken.
+                    </li>
+                    <li>
+                        Zoute crackers en chips voor de liefhebbers van iets knapperigs.
+                    </li>
+                </ul>
+                <h7>Zoete tussendoortjes</h7>
+                <ul>
+                    <li>
+                        Vers fruit zoals appelpartjes, druiven en mandarijntjes.
+                    </li>
+                    <li>
+                        Chocolade en koekjes om de zoetekauw in jou te plezieren.
+                    </li>
+                    <li>
+                        Kleine gebakjes of cakejes voor een extra traktatie.
+                    </li>
+                </ul>
+                <h7>Drankjes</h7>
+                <ul>
+                    <li>
+                        Verfrissende frisdranken zoals cola, sinas, en bruiswater.
+                    </li>
+                    <li>
+                        Vruchtensappen zoals sinaasappel- en appelsap.
+                    </li>
+                    <li>
+                        Koffie en thee voor een warme opkikker tijdens het spelen.
+                    </li>
+                    <li>
+                        Water voor iedereen die iets lichts wil drinken.
+                    </li>
+                </ul>
+            </div>
+            <div class="review">
+                <h5>Review</h5>
+                <p>Mocht u uw mening willen delen over deze bordspelavond, kunt u hieronder uw review achterlaten</p>
+                <button>Plaats review</button>
+            </div>
+
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -63,7 +126,7 @@
     }
 
     .navbar {
-        grid-column: 1 / 5; 
+        grid-column: 1 / 5;
         grid-row: 1 / 2;
         background-color: lightgrey;
         padding: 10px;
@@ -73,13 +136,13 @@
         color: black;
     }
 
-    .gameNightLink:hover {
-        text-decoration: none;
-    }
+        .gameNightLink:hover {
+            text-decoration: none;
+        }
 
     .futureBoardGameNights {
-/*         grid-column: 1 / 5;
-        grid-row: 4 / 5; */
+        /*         grid-column: 1 / 5;
+            grid-row: 4 / 5; */
         margin: 40px 40px 120px 40px;
     }
 
@@ -100,8 +163,7 @@
         background-color: aliceblue;
     }
 
-    .scroll-item:hover {
-        transform: scale(1.05);
-    }
+        .scroll-item:hover {
+            transform: scale(1.05);
+        }
 </style>
-
