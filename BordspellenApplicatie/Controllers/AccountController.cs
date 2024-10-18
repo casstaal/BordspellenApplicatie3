@@ -41,6 +41,24 @@ namespace BordspellenApplicatie.Controllers
             }
             if (!ModelState.IsValid)
             {
+                //foreach (var error in ModelState)
+                //{
+                //    Console.WriteLine($"Key: {error.Key}, Errors: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
+                //}
+                //return View(registerVM); // Pass the model back to the view for repopulation
+                //var errors = ModelState.Values.SelectMany(v => v.Errors);
+
+                foreach (var state in ModelState)
+                {
+                    var fieldName = state.Key; // The field (e.g., "Email", "Password")
+                    var fieldErrors = state.Value.Errors; // The errors associated with that field
+
+                    foreach (var error in fieldErrors)
+                    {
+                        Console.WriteLine($"Field: {fieldName}, Error: {error.ErrorMessage}");
+                    }
+                }
+
                 return View();
             }
 
@@ -58,13 +76,21 @@ namespace BordspellenApplicatie.Controllers
                 await userManager.AddClaimAsync(user, new Claim("UserType", "user"));
                 await userManager.AddToRoleAsync(user, registerVM.Role.ToString());
 
+                //BordspellenApplicatie.Domain.Models.User appUser = new BordspellenApplicatie.Domain.Models.User()
                 User appUser = new()
                 {
-                    FirstName = registerVM.FirstName,
-                    LastName = registerVM.LastName,
+                    //FirstName = registerVM.FirstName,
+                    //LastName = registerVM.LastName,
                     Email = registerVM.EmailAddress,
+                    //DateOfBirth = registerVM.DateOfBirth,
+                    //Gender = registerVM.Gender,
+                    //Address = registerVM.Address,
+                    //IsLactoseIntolerant = registerVM.IsLactoseIntolerant,
+                    //IsVegetarian = registerVM.IsVegetarian,
+                    //HasNutAllergy = registerVM.HasNutAllergy,
+                    //DrinksAlcohol = registerVM.DrinksAlcohol,
                     Role = registerVM.Role,
-                    IdentityId = user.Id,
+                    IdentityId = user.Id
                 };
                 userRepository.Add(appUser);
 

@@ -1,4 +1,4 @@
-﻿using BordspellenApplicatie.Models;
+﻿using BordspellenApplicatie.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace BordspellenApplicatie.Infrastructure.Data
 
         public DbSet<BoardGameNight> BoardGameNights => Set<BoardGameNight>();
         public DbSet<Boardgame> Games => Set<Boardgame>();
-        public DbSet<Address> Addresses => Set<Address>();
+        public DbSet<User> Users => Set<User>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) => modelBuilder.HasDefaultSchema(SqlSchema);
 

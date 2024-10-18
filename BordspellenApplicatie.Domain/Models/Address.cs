@@ -1,10 +1,12 @@
-﻿namespace BordspellenApplicatie.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace BordspellenApplicatie.Domain.Models
 {
+    [Owned]
     public class Address
     {
-        public Guid Id { get; set; }
-        public string Street { get; set; }
-        public string Number { get; set; }
-        public string City { get; set; }
+        public required string Street { get; set; }
+        public required string Number { get; set; }
+        public required string City { get; set; }
     }
 }

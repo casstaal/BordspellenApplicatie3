@@ -1,5 +1,5 @@
 ﻿using BordspellenApplicatie.Domain.Interfaces;
-using BordspellenApplicatie.Models;
+using BordspellenApplicatie.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

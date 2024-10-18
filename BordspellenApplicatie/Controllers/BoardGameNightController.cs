@@ -1,4 +1,5 @@
-﻿using BordspellenApplicatie.Models;
+﻿using BordspellenApplicatie.Domain.Models;
+using BordspellenApplicatie.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BordspellenApplicatie.Controllers
@@ -44,14 +45,13 @@ namespace BordspellenApplicatie.Controllers
             {
                 Id = id,
                 Title = title,
-                Date = parsedDate,
-                Is18Plus = is18Plus
+                DateTime = parsedDate,
             };
 
             var futureEvents = new List<BoardGameNight>
             {
-                new BoardGameNight { Id = 1, Title = "Game Night 1", Date = DateTime.Now.AddDays(7), Is18Plus = true },
-                new BoardGameNight { Id = 2, Title = "Game Night 2", Date = DateTime.Now.AddDays(14), Is18Plus = true },
+                new BoardGameNight { Id = 1, Title = "Game Night 1", DateTime = DateTime.Now.AddDays(7)},
+                new BoardGameNight { Id = 2, Title = "Game Night 2", DateTime = DateTime.Now.AddDays(14)},
                 // Add more future events
             };
 

@@ -1,4 +1,6 @@
-﻿namespace BordspellenApplicatie.Models
+﻿using BordspellenApplicatie.Domain.Models;
+
+namespace BordspellenApplicatie.Models
 {
     public class BoardGameNightDetailsViewModel
     {

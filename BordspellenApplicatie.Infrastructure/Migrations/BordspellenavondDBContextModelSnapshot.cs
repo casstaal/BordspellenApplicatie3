@@ -23,30 +23,7 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("BordspellenApplicatie.Models.Address", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Addresses", "Bordspellenavond");
-                });
-
-            modelBuilder.Entity("BordspellenApplicatie.Models.BoardGameNight", b =>
+            modelBuilder.Entity("BordspellenApplicatie.Domain.Models.BoardGameNight", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -98,7 +75,7 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
                     b.ToTable("BoardGameNights", "Bordspellenavond");
                 });
 
-            modelBuilder.Entity("BordspellenApplicatie.Models.Boardgame", b =>
+            modelBuilder.Entity("BordspellenApplicatie.Domain.Models.Boardgame", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -135,7 +112,7 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
                     b.ToTable("Games", "Bordspellenavond");
                 });
 
-            modelBuilder.Entity("BordspellenApplicatie.Models.User", b =>
+            modelBuilder.Entity("BordspellenApplicatie.Domain.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -143,58 +120,29 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<Guid>("AddressId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateOnly>("BirthDate")
-                        .HasColumnType("date");
-
                     b.Property<int?>("BoardGameNightId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("DrinksAlcohol")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
+                    b.Property<string>("IdentityId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Gender")
+                    b.Property<int>("Role")
                         .HasColumnType("int");
-
-                    b.Property<bool>("HasNutAllergy")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsLactoseIntolerant")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsVegetarian")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressId");
-
                     b.HasIndex("BoardGameNightId");
 
-                    b.ToTable("User", "Bordspellenavond");
+                    b.ToTable("Users", "Bordspellenavond");
                 });
 
-            modelBuilder.Entity("BordspellenApplicatie.Models.BoardGameNight", b =>
+            modelBuilder.Entity("BordspellenApplicatie.Domain.Models.BoardGameNight", b =>
                 {
-                    b.HasOne("BordspellenApplicatie.Models.User", "Organizer")
+                    b.HasOne("BordspellenApplicatie.Domain.Models.User", "Organizer")
                         .WithMany()
                         .HasForeignKey("OrganizerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -203,29 +151,21 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
                     b.Navigation("Organizer");
                 });
 
-            modelBuilder.Entity("BordspellenApplicatie.Models.Boardgame", b =>
+            modelBuilder.Entity("BordspellenApplicatie.Domain.Models.Boardgame", b =>
                 {
-                    b.HasOne("BordspellenApplicatie.Models.BoardGameNight", null)
+                    b.HasOne("BordspellenApplicatie.Domain.Models.BoardGameNight", null)
                         .WithMany("Games")
                         .HasForeignKey("BoardGameNightId");
                 });
 
-            modelBuilder.Entity("BordspellenApplicatie.Models.User", b =>
+            modelBuilder.Entity("BordspellenApplicatie.Domain.Models.User", b =>
                 {
-                    b.HasOne("BordspellenApplicatie.Models.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BordspellenApplicatie.Models.BoardGameNight", null)
+                    b.HasOne("BordspellenApplicatie.Domain.Models.BoardGameNight", null)
                         .WithMany("Users")
                         .HasForeignKey("BoardGameNightId");
-
-                    b.Navigation("Address");
                 });
 
-            modelBuilder.Entity("BordspellenApplicatie.Models.BoardGameNight", b =>
+            modelBuilder.Entity("BordspellenApplicatie.Domain.Models.BoardGameNight", b =>
                 {
                     b.Navigation("Games");
 

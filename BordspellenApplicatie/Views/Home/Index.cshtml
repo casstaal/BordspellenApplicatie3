@@ -2,7 +2,7 @@
     Layout = null;
     var bannerUrl = ViewBag.BannerUrl as string;
     // var infoText = ViewBag.InfoText as string;
-    var futureEvents = ViewBag.FutureEvents as List<BordspellenApplicatie.Models.BoardGameNight>;
+    var futureEvents = ViewBag.FutureEvents as List<BordspellenApplicatie.Domain.Models.BoardGameNight>;
 }
 
 <!DOCTYPE html>
@@ -41,13 +41,12 @@
                 {
                     @foreach (var gameEvent in futureEvents)
                     {
-                        <a class="gameNightLink" href="@Url.Action("Details", "BoardGameNight", new { id = gameEvent.Id, title = gameEvent.Title, date = gameEvent.Date.ToString("yyyy-MM-dd"), is18Plus = gameEvent.Is18Plus })">
+                        <a class="gameNightLink" href="@Url.Action("Details", "BoardGameNight", new { id = gameEvent.Id, title = gameEvent.Title, date = gameEvent.DateTime.ToString("yyyy-MM-dd") })">
                             <div class="scroll-item card text-center">
                                 <div class="card-body">
                                     <img src="/banner6.jpg" alt="Usert Icon" class="card-img" style="max-height: 100px;">
                                     <h5 class="card-title">@gameEvent.Title</h5>
-                                    <p class="card-text">Date: @gameEvent.Date.ToString("dd MMM yyyy")</p>
-                                    <p class="card-text">Age Restriction: @(gameEvent.Is18Plus ? "18+" : "All Ages")</p>
+                                    <p class="card-text">Date: @gameEvent.DateTime.ToString("dd MMM yyyy")</p>
                                 </div>
                             </div>
                         </a>

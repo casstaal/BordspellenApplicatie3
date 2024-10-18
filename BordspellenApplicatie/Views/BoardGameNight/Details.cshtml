@@ -33,13 +33,12 @@
                     {
                         @foreach (var gameEvent in Model.FutureEvents)
                         {
-                            <a class="gameNightLink" href="@Url.Action("Details", "BoardGameNight", new { id = gameEvent.Id, title = gameEvent.Title, date = gameEvent.Date.ToString("yyyy-MM-dd"), is18Plus = gameEvent.Is18Plus })">
+                            <a class="gameNightLink" href="@Url.Action("Details", "BoardGameNight", new { id = gameEvent.Id, title = gameEvent.Title, date = gameEvent.DateTime.ToString("yyyy-MM-dd") })">
                                 <div class="scroll-item card text-center">
                                     <div class="card-body">
                                         <img src="/boardgame.jpg" alt="User Icon" class="card-img" style="max-height: 100px;">
                                         <h5 class="card-title">@gameEvent.Title</h5>
-                                        <p class="card-text">Date: @gameEvent.Date.ToString("dd MMM yyyy")</p>
-                                        <p class="card-text">Age Restriction: @(gameEvent.Is18Plus ? "18+" : "All Ages")</p>
+                                        <p class="card-text">Date: @gameEvent.DateTime.ToString("dd MMM yyyy")</p>
                                     </div>
                                 </div>
                             </a>
@@ -48,8 +47,7 @@
                 </div>
             </div>
 
-            <p>Date: @Model.CurrentEvent.Date.ToString("dd MMM yyyy")</p>
-            <p>Age Restriction: @(Model.CurrentEvent.Is18Plus ? "18+" : "All Ages")</p>
+            <p>Date: @Model.CurrentEvent.DateTime.ToString("dd MMM yyyy")</p>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

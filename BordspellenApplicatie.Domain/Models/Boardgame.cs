@@ -1,4 +1,4 @@
-﻿namespace BordspellenApplicatie.Models
+﻿namespace BordspellenApplicatie.Domain.Models
 {
     public class Boardgame
     {

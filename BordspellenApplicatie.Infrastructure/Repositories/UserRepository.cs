@@ -1,11 +1,11 @@
 ﻿using BordspellenApplicatie.Domain.Interfaces;
-using BordspellenApplicatie.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BordspellenApplicatie.Infrastructure.Data;
+using BordspellenApplicatie.Domain.Models;
 
 
 namespace BordspellenApplicatie.Infrastructure.Repositories

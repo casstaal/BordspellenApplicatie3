@@ -1,6 +1,6 @@
 ﻿@{
     Layout = null;
-    var futureEvents = ViewBag.FutureEvents as List<BordspellenApplicatie.Models.BoardGameNight>;
+    var futureEvents = ViewBag.FutureEvents as List<BordspellenApplicatie.Domain.Models.BoardGameNight>;
 }
 
 <!DOCTYPE html>
@@ -32,8 +32,7 @@
                         <img src="/banner6.jpg" alt="Usert Icon" class="card-img" style="max-height: 100px;">
                         <h5 class="card-title">@eventItem.Title</h5>
                         <p class="card-text">
-                            Date: @eventItem.Date.ToString("MMMM dd, yyyy")<br />
-                            18+: @(eventItem.Is18Plus ? "Yes" : "No")
+                            Date: @eventItem.DateTime.ToString("MMMM dd, yyyy")<br />
                         </p>
                     </div>
                 }
@@ -41,7 +40,7 @@
             else
             {
                 <p>No upcoming board game nights available.</p>
-            }
+            }b
         </div>
     </div>
     <vc:footer></vc:footer>
