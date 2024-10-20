@@ -79,16 +79,16 @@ namespace BordspellenApplicatie.Controllers
                 //BordspellenApplicatie.Domain.Models.User appUser = new BordspellenApplicatie.Domain.Models.User()
                 User appUser = new()
                 {
-                    //FirstName = registerVM.FirstName,
-                    //LastName = registerVM.LastName,
+                    FirstName = registerVM.FirstName,
+                    LastName = registerVM.LastName,
                     Email = registerVM.EmailAddress,
-                    //DateOfBirth = registerVM.DateOfBirth,
-                    //Gender = registerVM.Gender,
-                    //Address = registerVM.Address,
-                    //IsLactoseIntolerant = registerVM.IsLactoseIntolerant,
-                    //IsVegetarian = registerVM.IsVegetarian,
-                    //HasNutAllergy = registerVM.HasNutAllergy,
-                    //DrinksAlcohol = registerVM.DrinksAlcohol,
+                    DateOfBirth = registerVM.DateOfBirth,
+                    Gender = registerVM.Gender,
+                    Address = registerVM.Address,
+                    IsLactoseIntolerant = registerVM.IsLactoseIntolerant,
+                    IsVegetarian = registerVM.IsVegetarian,
+                    HasNutAllergy = registerVM.HasNutAllergy,
+                    DrinksAlcohol = registerVM.DrinksAlcohol,
                     Role = registerVM.Role,
                     IdentityId = user.Id
                 };

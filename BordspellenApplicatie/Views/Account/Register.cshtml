@@ -21,10 +21,9 @@
             <p>Maak een account aan om bordspelavonden te organiseren en je aan te melden voor bordspelavonden</p>
         </div>
         <form class="loginForm" asp-action="Register" method="post">
-            @Html.AntiForgeryToken()
             <div asp-validation-summary="All">
             </div>
-            @*             <div>
+            <div>
             <label asp-for="FirstName">Voornaam</label><br />
             <input asp-for="FirstName" type="text" />
             </div>
@@ -42,10 +41,10 @@
             <option value="Female">Female</option>
             <option value="Other">Other</option>
             </select>
-            </div> *@
+            </div> 
             <div style="margin-top: 15px;">
-                <label asp-for="Email">Email</label><br />
-                <input asp-for="Email" type="email" />
+                <label asp-for="EmailAddress">Email</label><br />
+                <input asp-for="EmailAddress" type="email" />
             </div>
             <div style="margin-top: 15px;">
                 <label asp-for="Password">Wachtwoord</label><br />
@@ -55,7 +54,7 @@
                 <label asp-for="PasswordConfirmation">Wachtwoord Conformatie</label><br />
                 <input asp-for="PasswordConfirmation" type="password" />
             </div>
-            @*             <div>
+            <div>
             <label asp-for="Address.Street">Street</label><br />
             <input asp-for="Address.Street" type="text" />
             </div>
@@ -66,8 +65,8 @@
             <div>
             <label asp-for="Address.City">City</label>
             <input asp-for="Address.City" type="text" />
-            </div>  *@
-            @*             <div class="allergiesCheckbox">
+            </div>  
+                        <div class="allergiesCheckbox">
             <label class="container">
             <input asp-for="IsLactoseIntolerant" type="checkbox">
             Lactose allergie
@@ -88,7 +87,7 @@
             Drinkt geen alcohol
             <span class="checkmark"></span>
             </label>
-            </div> *@
+            </div> 
             <div class="buttonContainer">
                 <button class="saveButton" type="submit">Create account</button>
             </div>
