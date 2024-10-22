@@ -10,13 +10,11 @@ namespace BordspellenApplicatie.Domain.Interfaces
     public interface IGameRepository
     {
         public IEnumerable<Boardgame> GetAll();
-        public IQueryable<Boardgame> GetAllAsync();
+        //public IQueryable<User> GetAllAsync();
 
         public Boardgame GetById(Guid id);
-        public Task<Boardgame> GetByIdAsync(Guid id);
-
-        public Task<Boardgame> AddAsync(Boardgame game);
-        public Task<Boardgame> UpdateAsync(Boardgame game);
-        public Task<Boardgame> DeleteAsync(int id);
+        public void Add(Boardgame boardgame);
+        public void Update(Boardgame boardgame);
+        public void Delete(Guid id);
     }
 }

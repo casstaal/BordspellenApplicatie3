@@ -1,11 +1,13 @@
-﻿using BordspellenApplicatie.Domain.Models;
+﻿using BordspellenApplicatie.Domain.Interfaces;
+using BordspellenApplicatie.Domain.Models;
 using BordspellenApplicatie.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BordspellenApplicatie.Controllers
 {
-    public class BoardGameNightController : Controller
+    public class BoardGameNightController(IBoardGameNightRepository boardGameNightRepository) : Controller
     {
+        private readonly IBoardGameNightRepository _boardGameNightRepository = boardGameNightRepository;
         public IActionResult Details(int id, string title, string date, bool is18Plus)
         {
             //// Create a model based on the passed parameters
@@ -35,33 +37,74 @@ namespace BordspellenApplicatie.Controllers
 
             //// Pass the event data to the view
             //return View(gameEvent);
-            DateTime parsedDate;
-            if (!DateTime.TryParse(date, out parsedDate))
+            //DateTime parsedDate;
+            //if (!DateTime.TryParse(date, out parsedDate))
+            //{
+            //    return BadRequest("Invalid date format.");
+            //}
+
+            //var gameEvent = new BoardGameNight
+            //{
+            //    Id = id,
+            //    Title = title,
+            //    DateTime = parsedDate,
+            //};
+
+            //var futureEvents = new List<BoardGameNight>
+            //{
+            //    new BoardGameNight { Id = 1, Title = "Game Night 1", DateTime = DateTime.Now.AddDays(7)},
+            //    new BoardGameNight { Id = 2, Title = "Game Night 2", DateTime = DateTime.Now.AddDays(14)},
+            //    // Add more future events
+            //};
+
+            //var viewModel = new BoardGameNightDetailsViewModel
+            //{
+            //    CurrentEvent = gameEvent,
+            //    FutureEvents = futureEvents
+            //};
+
+            return View();
+        }
+
+        public IActionResult Create()
+        {
+            var model = new BoardGameNightDetailsViewModel()
             {
-                return BadRequest("Invalid date format.");
+                Games = new List<Boardgame>()
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(BoardGameNightDetailsViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var boardGameNight = new BoardGameNight()
+                {
+                    Organizer = model.Organizer,
+                    DateTime = model.DateTime,
+                    Address = model.Address,
+                    Is18Plus = model.Is18Plus,
+                    Title = model.Title,
+                    Description = model.Description,
+                    MaxPlayers = model.MaxPlayers,
+                    Food = model.Food,
+                    IsLactoseIntoleranceFriendly = model.IsLactoseIntoleranceFriendly,
+                    IsVegetarianFriendly = model.IsVegetarianFriendly,
+                    IsNutAllergyFriendly = model.IsNutAllergyFriendly,
+                    IsNonAlcoholicFriendly = model.IsNonAlcoholicFriendly,
+                    Users = model.Users.ToList(),
+                    Games = model.Games.ToList()
+                };
+
+                _boardGameNightRepository.Add(boardGameNight);
+
+                return RedirectToAction("Index", "Home");
             }
 
-            var gameEvent = new BoardGameNight
-            {
-                Id = id,
-                Title = title,
-                DateTime = parsedDate,
-            };
-
-            var futureEvents = new List<BoardGameNight>
-            {
-                new BoardGameNight { Id = 1, Title = "Game Night 1", DateTime = DateTime.Now.AddDays(7)},
-                new BoardGameNight { Id = 2, Title = "Game Night 2", DateTime = DateTime.Now.AddDays(14)},
-                // Add more future events
-            };
-
-            var viewModel = new BoardGameNightDetailsViewModel
-            {
-                CurrentEvent = gameEvent,
-                FutureEvents = futureEvents
-            };
-
-            return View(viewModel);
+            return View(model);
         }
     }
 }

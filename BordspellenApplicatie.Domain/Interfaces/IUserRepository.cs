@@ -13,7 +13,7 @@ namespace BordspellenApplicatie.Domain.Interfaces
         //public IQueryable<User> GetAllAsync();
 
         public User GetById(int id);
-        //public Task<User> GetByIdAsync(int id);
+        public User? GetByIdentityId(string identityId);
 
         public void Add(User user);
         public void Update(User user);

@@ -5,9 +5,21 @@
     @Html.ActionLink("Alle bordspelavonden", "BoardGameNight", "Overview", null, new { @class = "navigation-link" })
     @Html.ActionLink("Aangemelde bordspelavonden", "RegisteredBoardGameNights", "Overview", null, new { @class = "navigation-link" })
     @Html.ActionLink("Georganiseerde bordspelavonden", "OrganizedBoardGameNights", "Overview", null, new { @class = "navigation-link" })
-    <a href="/account/details">
+@*     <a href="/account/details">
         <img src="/userIcon.png" alt="User Icon" class="img-fluid" style="max-height: 40px;">
-    </a>
+    </a> *@
+    @if (User.Identity.IsAuthenticated)
+    {
+        <a asp-controller="Account" asp-action="Logout">Logout</a>
+        <a asp-controller="Account" asp-action="Details">
+            <img src="/userIcon.png" alt="User Icon" class="img-fluid" style="max-height: 40px;">
+        </a>
+    }
+    else
+    {
+        <a asp-controller="Account" asp-action="Login">Login</a>
+        <button onclick="location.href='@Url.Action("Register", "Account")'">Aanmelden</button>
+    }
 </div>
 
 <style>

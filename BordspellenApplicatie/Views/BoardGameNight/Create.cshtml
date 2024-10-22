@@ -1,0 +1,358 @@
+﻿@model BoardGameNightDetailsViewModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = null;
+}
+
+<p class="page-title">Spelavond Organiseren</p>
+
+<vc:header></vc:header>
+<div class="main-container">
+    <div class="form-container">
+        <h1>Algemene Informatie</h1>
+        <form asp-action="Create" asp-controller="BoardGameNight" method="post">
+            <div class="form-group">
+                <label asp-for="Organizer">Naam organisator</label>
+                <input type="text" asp-for="Organizer"  readonly>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateTime">Datum</label>
+                <input type="date" asp-for=DateTime>
+            </div>
+            <div class="form-group">
+                <label asp-for="Is18Plus">Is 18 plus</label>
+                <input type="text" asp-for="Is18Plus" placeholder="Is 18 plus">
+            </div>
+            <div class="form-group">
+                <label asp-for="Title">Title</label>
+                <input type="text" asp-for="Title" placeholder="Title">
+            </div>
+            <div class="form-group">
+                <label asp-for="Description">Description</label>
+                <input type="text" asp-for="Description" placeholder="Title">
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxPlayers">Max aantal spelers</label>
+                <input type="number" asp-for="MaxPlayers" placeholder="Max aantal spelers">
+            </div>
+            <div class="form-group">
+                <label asp-for="Food">Eten & Drinken</label>
+                <input type="text" asp-for="Food" placeholder="Eten & Drinken">
+            </div>
+            <div class="form-group">
+                <label asp-for="Address.Street">Street</label><br />
+                <input asp-for="Address.Street" type="text" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Address.Number">Number</label>
+                <input asp-for="Address.Number" type="text" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Address.City">City</label>
+                <input asp-for="Address.City" type="text" />
+            </div>
+            <div class="allergiesCheckbox">
+                <label class="container">
+                    <input asp-for="IsLactoseIntoleranceFriendly" type="checkbox">
+                    Lactose allergie
+                    <span class="checkmark"></span>
+                </label>
+                <label class="container">
+                    <input asp-for="IsNutAllergyFriendly" type="checkbox">
+                    Noten allergie
+                    <span class="checkmark"></span>
+                </label>
+                <label class="container">
+                    <input asp-for="IsVegetarianFriendly" type="checkbox">
+                    Vegetarier
+                    <span class="checkmark"></span>
+                </label>
+                <label class="container">
+                    <input asp-for="IsNonAlcoholicFriendly" type="checkbox">
+                    Drinkt geen alcohol
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="form-container">
+        <h1>Spel Informatie</h1>
+        <form>
+            <div class="form-group">
+                <label for="game-name">Naam</label>
+                <input type="text" id="game-name" placeholder="Naam">
+            </div>
+            <div class="form-group">
+                <label for="game-type">Soort spel</label>
+                <select id="game-type">
+                    <option>Kaartspel</option>
+                    <option>Bordspel</option>
+                    <option>Anders</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="genre">Genre</label>
+                <select id="genre">
+                    <option>Actie</option>
+                    <option>Strategie</option>
+                </select>
+            </div>
+            <div class="form-group form-inline">
+                <label>18+</label>
+                <input type="radio" id="yes" name="age" value="yes">
+                <label for="yes">Ja</label>
+                <input type="radio" id="no" name="age" value="no">
+                <label for="no">Nee</label>
+            </div>
+            <div class="form-group">
+                <label for="description">Beschrijving</label>
+                <textarea id="description" rows="4" placeholder="Beschrijving"></textarea>
+            </div>
+            <button type="submit">Voeg Spel Toe</button>
+        </form>
+    </div>
+</div>
+
+<div class="added-games">
+    <h4>Toegevoegde Spellen</h4>
+
+    <div class="game-entry">
+        <div class="game-header">
+            <span class="game-title">Spel Naam</span>
+            <span class="game-age">18+</span>
+        </div>
+        <div class="game-body">
+            <div class="game-info">
+                <p><strong>Soort spel:</strong> Kaartspel</p>
+                <p><strong>Genre:</strong> Tactisch</p>
+            </div>
+            <div class="game-description">
+                <p><strong>Beschrijving:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ac odio nulla.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="game-entry">
+        <div class="game-header">
+            <span class="game-title">Spel Naam</span>
+            <span class="game-age">18+</span>
+        </div>
+        <div class="game-body">
+            <div class="game-info">
+                <p><strong>Soort spel:</strong> Kaartspel</p>
+                <p><strong>Genre:</strong> Tactisch</p>
+            </div>
+            <div class="game-description">
+                <p><strong>Beschrijving:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ac odio nulla.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="game-entry">
+        <div class="game-header">
+            <span class="game-title">Spel Naam</span>
+            <span class="game-age">18+</span>
+        </div>
+        <div class="game-body">
+            <div class="game-info">
+                <p><strong>Soort spel:</strong> Kaartspel</p>
+                <p><strong>Genre:</strong> Tactisch</p>
+            </div>
+            <div class="game-description">
+                <p><strong>Beschrijving:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ac odio nulla.</p>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" class="organizer-action">Organiseer Avond</button>
+</div>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #EBE9E1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .page-title {
+        margin-top: 400px;
+        margin: 20px auto;
+        font-size: 2.5em;
+        font-weight: bold;
+        text-align: center;
+        color: #E43D12;
+    }
+
+    .main-container {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        margin-bottom: 40px;
+        margin-top:200px;
+    }
+
+    .form-container:nth-child(1) {
+        background-color: #FFA2B6;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 400px;
+    }
+
+    .form-container:nth-child(2) {
+        background-color: #EFB11D;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 400px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+        color: #E43D12;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="time"],
+    input[type="number"],
+    textarea,
+    select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        background-color: #EBE9E1;
+    }
+
+    input[readonly] {
+        background-color: #EBE9E1;
+        color: #666;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    button {
+        padding: 10px 15px;
+        background-color: #E43D12;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #bf3510;
+        }
+
+
+    .form-inline {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .form-inline label {
+            display: inline;
+        }
+
+    input[type="radio"] {
+        width: auto;
+        margin-left: 10px;
+        background-color: #EBE9E1;
+    }
+
+    .added-games {
+        width: 80%;
+        margin: 15px auto 40px auto;
+    }
+
+        .added-games h4 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #E43D12;
+        }
+
+    .game-entry {
+        border-radius: 10px;
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #e8e3ce;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .game-header {
+        background-color: #EFB11D;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 10px;
+    }
+
+    .game-title {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .game-age {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .game-body {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+    }
+
+    .game-info, .game-description {
+        width: 45%;
+    }
+
+    .organizer-action {
+        display: block;
+        margin: 20px auto;
+        padding: 10px 20px;
+        background-color: #E43D12;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+        .organizer-action:hover {
+            background-color: #bf3510;
+        }
+</style>
+
+

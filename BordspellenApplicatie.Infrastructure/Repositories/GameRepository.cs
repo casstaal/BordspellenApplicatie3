@@ -10,12 +10,12 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
 {
     public class GameRepository : IGameRepository
     {
-        public Task<Boardgame> AddAsync(Boardgame game)
+        public void Add(Boardgame boardgame)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Boardgame> DeleteAsync(int id)
+        public void Delete(Guid id)
         {
             throw new NotImplementedException();
         }
@@ -25,22 +25,12 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public IQueryable<Boardgame> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
         public Boardgame GetById(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Boardgame> GetByIdAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Boardgame> UpdateAsync(Boardgame game)
+        public void Update(Boardgame boardgame)
         {
             throw new NotImplementedException();
         }

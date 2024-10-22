@@ -1,5 +1,6 @@
 ﻿using BordspellenApplicatie.Domain.Interfaces;
 using BordspellenApplicatie.Domain.Models;
+using BordspellenApplicatie.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,14 +9,15 @@ using System.Threading.Tasks;
 
 namespace BordspellenApplicatie.Infrastructure.Repositories
 {
-    public class BoardGameNightRepository : IBoardGameNightRepository
+    public class BoardGameNightRepository(BordspellenavondDBContext dBContext) : IBoardGameNightRepository
     {
-        public Task<BoardGameNight> AddAsync(BoardGameNight boardGameNight)
+        public void Add(BoardGameNight boardGameNight)
         {
-            throw new NotImplementedException();
+            dBContext.Add(boardGameNight);
+            dBContext.SaveChanges();
         }
 
-        public Task<BoardGameNight> DeleteAsync(int id)
+        public void Delete(int id)
         {
             throw new NotImplementedException();
         }
@@ -25,22 +27,22 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public IQueryable<BoardGameNight> GetAllAsync()
-        {
-            throw new NotImplementedException();
-        }
-
         public BoardGameNight GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BoardGameNight> GetByIdAsync(int id)
+        public IEnumerable<User> GetRegisteredUsers(BoardGameNight boardGameNight)
         {
             throw new NotImplementedException();
         }
 
-        public Task<BoardGameNight> UpdateAsync(BoardGameNight boardGameNight)
+        public void Update(BoardGameNight boardGameNight)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Boardgame> GetAllGames(BoardGameNight boardGameNight)
         {
             throw new NotImplementedException();
         }

@@ -122,10 +122,14 @@ namespace BordspellenApplicatie.Controllers
                 if (user != null)
                 {
                     await signInManager.SignOutAsync();
+
+                    //var signInResult = await signInManager.PasswordSignInAsync(user, loginVM.Password, false, false);
+
                     if ((await signInManager.PasswordSignInAsync(user,
                         loginVM.Password, false, false)).Succeeded)
                     {
-                        return RedirectToAction(nameof(Details), loginVM);
+                        return Redirect(loginVM.ReturnUrl);
+                        //return RedirectToAction(nameof(Details), loginVM);
                         //return RedirectToAction(nameof(Details));
                         //return Redirect(loginVM?.ReturnUrl ?? "/Guest/List");
                     }
@@ -136,9 +140,40 @@ namespace BordspellenApplicatie.Controllers
             return View();
         }
 
-        public IActionResult Details()
+        //public IActionResult Details()
+        //{
+        //    return View(); 
+        //}
+        public async Task<IActionResult> DetailsAsync()
         {
-            return View(); 
+            if (User != null && User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                var identityUser = await userManager.FindByNameAsync(User?.Identity?.Name ?? "");
+                if (identityUser != null)
+                {
+
+                    var appUser = userRepository.GetByIdentityId(identityUser.Id);
+
+                    if (appUser != null)
+                    {
+
+                        LoginViewModel loginVM = new()
+                        {
+                            Name = identityUser.UserName ?? "onbekend",
+                            EmailAddress = identityUser.Email,
+                        };
+                        return View(appUser);
+                    }
+                }
+            }
+
+            return RedirectToAction("Login", "Account");
+        }
+
+        public async Task<RedirectResult> Logout(string returnUrl = "/")
+        {
+            await signInManager.SignOutAsync();
+            return Redirect(returnUrl);
         }
 
         public IActionResult Registered()

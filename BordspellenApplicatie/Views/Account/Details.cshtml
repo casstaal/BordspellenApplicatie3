@@ -1,4 +1,6 @@
-﻿@model BordspellenApplicatie.Models.DetailsResponse
+﻿@* @model BordspellenApplicatie.Models.DetailsResponse
+ *@
+@model BordspellenApplicatie.Domain.Models.User
 
 @{
     Layout = null;
@@ -50,24 +52,34 @@
                 <div class="name-container">
                     <div>
                         <label asp-for="FirstName">First name</label><br />
-                        <input asp-for="FirstName" />
+                        <p>@Model.FirstName</p>
                     </div>
                     <div>
                         <label asp-for="LastName">Last name</label><br />
-                        <input asp-for="LastName" />
+                        <p>@Model.LastName</p>
                     </div>
                 </div>
                 <div>
-                    <label asp-for="Birthdate">Birthdate</label><br />
-                    <input asp-for="Birthdate" />
+                    <label asp-for="DateOfBirth">Birthdate</label><br />
+                    <p>@Model.DateOfBirth</p>
                 </div>
                 <div>
-                    <label asp-for="Phonenumber">Phonenumber</label><br />
-                    <input asp-for="Phonenumber" />
+                    <label asp-for="Email">Email address</label><br />
+@*                     <input asp-for="Email"> </input>
+ *@                
+                    <p>@Model.Email</p>
                 </div>
                 <div>
-                    <label asp-for="EmailAddress">Email address</label><br />
-                    <input asp-for="EmailAddress" />
+                    <label asp-for=Address.Street>Street</label>
+                    <p>@Model.Address.Street</p>
+                </div>
+                <div>
+                    <label asp-for="Address.Number">Number</label>
+                    <p>@Model.Address.Number</p>
+                </div>
+                <div>
+                    <label asp-for="Address.City">City</label>
+                    <p>@Model.Address.City</p>
                 </div>
                 <button class="saveButton" type="submit">Save</button>
             </form>

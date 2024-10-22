@@ -7,9 +7,10 @@ namespace BordspellenApplicatie.Domain.Models
         public int Id { get; set; }
         public User Organizer { get; set; }
         public DateTime DateTime { get; set; }
-        //public Address Address { get; set; }
+        public Address Address { get; set; }
+        public bool Is18Plus { get; set; }
         public string Title { get; set; }
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
         public string Description { get; set; }
         public int MaxPlayers { get; set; }
         public string Food { get; set; }

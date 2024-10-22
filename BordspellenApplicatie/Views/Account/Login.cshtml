@@ -1,4 +1,6 @@
-﻿@{
+﻿@model LoginViewModel
+
+@{
     Layout = null;
 }
 
@@ -16,29 +18,32 @@
     <div class="container-fluid">
         <h1 class="title">Login</h1>
 
-        <form class="loginForm">
+        <form asp-action="Login" method="post" class="loginForm">
+            <div><span asp-validation-for="Name" class="text-danger"></span></div>
             <div>
-                <label>Email</label><br />
-                <input/>
+                <label asp-for="Name">Email</label><br />
+                <input asp-for="Name" type="text"/>
             </div>
             <div style="margin-top: 15px;">
-                <label>Password</label><br />
-                <input />
+                <label asp-for="Password">Password</label><br />
+                <input asp-for="Password" type="password" />
             </div>
-            <div>
+@*             <div>
                 <p style="text-align: center; margin-top: 10px;">Wachtwoord vergeten</p>
             </div>
             <div class="buttonContainer">
                 <button class="saveButton" type="submit">Login</button>
-            </div>
+            </div> *@
+            <div asp-validation-summary="All"></div>
+            <button type="submit">Login</button>
         </form>
 
-        <div class="signUp">
+@*         <div class="signUp">
             <p style="text-align: center;">Ik heb nog geen account</p>
             <div class="buttonContainer">
                 <button class="signUpButton">Sign Up</button>
             </div>
-        </div>
+        </div> *@
     </div>
     <vc:footer></vc:footer>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

@@ -43,8 +43,10 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Is18Plus")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsLactoseIntoleranceFriendly")
                         .HasColumnType("bit");
@@ -175,6 +177,34 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("OrganizerId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("BordspellenApplicatie.Domain.Models.Address", "Address", b1 =>
+                        {
+                            b1.Property<int>("BoardGameNightId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Number")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Street")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("BoardGameNightId");
+
+                            b1.ToTable("BoardGameNights", "Bordspellenavond");
+
+                            b1.WithOwner()
+                                .HasForeignKey("BoardGameNightId");
+                        });
+
+                    b.Navigation("Address")
                         .IsRequired();
 
                     b.Navigation("Organizer");

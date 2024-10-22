@@ -52,6 +52,7 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<AuthSeedData>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IBoardGameNightRepository, BoardGameNightRepository>();
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())

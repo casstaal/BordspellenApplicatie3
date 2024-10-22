@@ -33,6 +33,11 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
+        public User? GetByIdentityId(string identityId)
+        {
+            return dBContext.Users.FirstOrDefault(u => u.IdentityId == identityId);
+        }
+
         public void Update(User user)
         {
             throw new NotImplementedException();
