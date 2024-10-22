@@ -9,6 +9,7 @@ namespace BordspellenApplicatie.Domain.Models
     public class Review
     {
         public Guid Id { get; set; }
+        public string Title { get; set; }
         public int Score { get; set; }
         public required string TextReview { get; set; }
         public User Author { get; set; }

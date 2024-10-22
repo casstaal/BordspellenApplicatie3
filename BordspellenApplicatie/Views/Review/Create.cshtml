@@ -1,0 +1,106 @@
+﻿@model ReviewViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Board Game Nights</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    @*     <link rel="stylesheet" href="/css/style.css"/> *@
+</head>
+<body>
+    <vc:header></vc:header>
+    <div class="container-fluid">
+        <div class="title">
+            <h1>Maak review aan</h1>
+        </div>
+        <form class="reviewForm">
+            <div asp-validation-summary="All">
+            </div>
+            <div>
+                <label asp-for="Title">Titel</label><br />
+                <input asp-for="Title" type="text" />
+            </div>
+            <div style="margin-top: 15px;">
+                <label asp-for="Author">Auteur</label><br />
+                <input asp-for="Author" type="text" />
+            </div>
+            <div style="margin-top: 15px;">
+                <label asp-for="Score">Score (1-5)</label><br />
+                <input asp-for="Score" type="number" max="5" min="0" />
+            </div>
+            <div style="margin-top: 15px;">
+                <label asp-for="TextReview">Geboortedatum</label><br />
+                <textarea class="textareaDescription" asp-for="TextReview" rows="4"></textarea>
+            </div>
+            <div class="buttonContainer">
+                <button class="saveButton" type="submit">Create review</button>
+            </div>
+        </form>
+    </div>
+    <vc:footer></vc:footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+<style>
+    .container-fluid {
+        display: grid;
+        grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
+        grid-template-columns: 1fr 0.75fr 1fr;
+        gap: 10px;
+    }
+
+    .title {
+        grid-column: 2/3;
+        grid-row: 1/2;
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .reviewForm {
+        grid-column: 2/3;
+        grid-row: 2/3;
+    }
+
+    input {
+        width: 100%;
+        height: 35px;
+    }
+
+
+    .signUp {
+        grid-column: 2/3;
+        grid-row: 3/4;
+        margin-top: 50px;
+    }
+
+    .textareaDescription {
+        width: 100%;
+    }
+
+    .buttonContainer {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+        margin-bottom: 50px;
+    }
+
+    .saveButton {
+        width: 100%;
+        max-width: 200px; 
+    }
+
+    .saveButton {
+        padding: 7px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+</style>
+
+
