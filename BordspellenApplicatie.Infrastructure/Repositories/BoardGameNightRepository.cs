@@ -1,6 +1,7 @@
 ﻿using BordspellenApplicatie.Domain.Interfaces;
 using BordspellenApplicatie.Domain.Models;
 using BordspellenApplicatie.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,12 +25,21 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
 
         public IEnumerable<BoardGameNight> GetAll()
         {
-            throw new NotImplementedException();
+            return dBContext.BoardGameNights
+                .Include(bgn => bgn.UserBoardGameNights)
+                .Include(bgn => bgn.Address)
+                .Include(bgn => bgn.Games)
+                .ToList();
         }
 
-        public BoardGameNight GetById(int id)
+        public BoardGameNight? GetById(int id)
         {
-            throw new NotImplementedException();
+            return dBContext.BoardGameNights
+            .Include(bg => bg.Organizer)
+            .Include(bg => bg.UserBoardGameNights)
+            .ThenInclude(ugn => ugn.User)
+            .Include(bg => bg.Games)
+            .FirstOrDefault(bg => bg.Id == id);
         }
 
         public IEnumerable<User> GetRegisteredUsers(BoardGameNight boardGameNight)

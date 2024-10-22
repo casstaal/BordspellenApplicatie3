@@ -18,7 +18,9 @@ namespace BordspellenApplicatie.Domain.Models
         public bool IsVegetarianFriendly { get; set; }
         public bool IsNutAllergyFriendly { get; set; }
         public bool IsNonAlcoholicFriendly { get; set; }
-        public IEnumerable<User> Users { get; set; }
-        public IEnumerable<Boardgame> Games { get; set; }
+        public List<Boardgame> Games { get; set; } = new List<Boardgame>();
+        public virtual ICollection<UserBoardGameNight> UserBoardGameNights { get; set; }
+        public bool IsSignedUp { get; set; }
+
     }
 }

@@ -1,4 +1,4 @@
-﻿@model BoardGameNightDetailsViewModel
+﻿@model AddGamesViewModel
 
 @{
     Layout = null;
@@ -19,33 +19,33 @@
         <div class="title">
             <h1>Voeg spellen toe</h1>
         </div>
-        <form class="addGamesForm" asp-action="Create" asp-controller="BoardGameNight" method="post">
+        <form class="addGamesForm" asp-action="AddGames" asp-controller="BoardGameNight" method="post">
             <div style="margin-top: 15px;">
-                    <label for="game-name">Spelnaam</label>
-                    <input type="text" id="game-name">
+                    <label asp-for="game.Name">Spelnaam</label>
+                    <input type="text" asp-for="game.Name">
                 </div>
             <div style="margin-top: 15px;">
-                    <label for="game-type">Soort spel</label><br />
-                    <select id="game-type">
+                    <label asp-for="game.Type">Soort spel</label><br />
+                    <select asp-for="game.Type">
                         <option>Kaartspel</option>
                         <option>Bordspel</option>
                         <option>Anders</option>
                     </select>
                 </div>
             <div style="margin-top: 15px;">
-                    <label for="genre">Genre</label><br />
-                    <select id="genre">
+                    <label asp-for="game.Genre">Genre</label><br />
+                    <select asp-for="game.Genre">
                         <option>Actie</option>
                         <option>Strategie</option>
                     </select>
                 </div>
             <div style="margin-top: 15px;">
-                    <label for="Is18Plus">18+</label><br />
-                    <input style="transform: scale(0.7);" for="Is18Plus" type="checkbox" />
+                    <label asp-for="game.Is18Plus">18+</label><br />
+                    <input style="transform: scale(0.7);" asp-for="game.Is18Plus" type="checkbox" />
                 </div>
                 <div style="margin-top: 15px;">
-                    <label for="description">Beschrijving</label><br />
-                    <textarea class="textareaDescription" id="description" rows="4" placeholder="Beschrijving"></textarea>
+                    <label asp-for="game.Description">Beschrijving</label><br />
+                    <textarea class="textareaDescription" asp-for="game.Description" rows="4" placeholder="Beschrijving"></textarea>
                 </div>
             <div class="buttonContainer">
                 <button class="saveButton" type="submit">Voeg spel toe</button>

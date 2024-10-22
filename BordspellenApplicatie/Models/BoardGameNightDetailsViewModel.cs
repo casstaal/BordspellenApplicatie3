@@ -25,7 +25,11 @@ namespace BordspellenApplicatie.Models
         public bool IsVegetarianFriendly { get; set; }
         public bool IsNutAllergyFriendly { get; set; }
         public bool IsNonAlcoholicFriendly { get; set; }
-        public IEnumerable<User> Users { get; set; } = null!;
-        public IEnumerable<Boardgame> Games { get; set; } = null!;
+        public List<Boardgame> Games { get; set; } = new List<Boardgame>();
+        public ICollection<UserBoardGameNight> UserBoardGameNights { get; set; } = new List<UserBoardGameNight>();
+        public int RegisteredUsersCount { get; set; }
+        public bool IsSignedUp { get; set; }
+
+
     }
 }

@@ -1,68 +1,25 @@
 ﻿using BordspellenApplicatie.Domain.Interfaces;
 using BordspellenApplicatie.Domain.Models;
+using BordspellenApplicatie.Infrastructure.Repositories;
 using BordspellenApplicatie.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BordspellenApplicatie.Controllers
 {
-    public class BoardGameNightController(IBoardGameNightRepository boardGameNightRepository) : Controller
+    [Authorize]
+    public class BoardGameNightController(UserManager<IdentityUser> userManager, IBoardGameNightRepository boardGameNightRepository, IUserRepository userRepository, IUserBoardGameNightRepository userBoardGameNightRepository) : Controller
     {
+
+        private readonly IUserRepository _userRepository = userRepository;
+        private readonly UserManager<IdentityUser> _userManager = userManager;
         private readonly IBoardGameNightRepository _boardGameNightRepository = boardGameNightRepository;
+        private readonly IUserBoardGameNightRepository _userBoardGameNightRepository = userBoardGameNightRepository;
+
+
         public IActionResult Details(int id, string title, string date, bool is18Plus)
         {
-            //// Create a model based on the passed parameters
-            //var gameEvent = new BoardGameNight
-            //{
-            //    Id = id,
-            //    Title = title,
-            //    Date = DateTime.Parse(date), // Convert date from string
-            //    Is18Plus = is18Plus
-            //};
-
-            //var futureEvents = new List<BoardGameNight>
-            //{
-            //    new BoardGameNight { Id = 1, Title = "Game Night 1", Date = DateTime.Now.AddDays(7), Is18Plus = true },
-            //    new BoardGameNight { Id = 2, Title = "Game Night 2", Date = DateTime.Now.AddDays(14), Is18Plus = true },
-            //    new BoardGameNight { Id = 3, Title = "Game Night 3", Date = DateTime.Now.AddDays(21), Is18Plus = true },
-            //    new BoardGameNight { Id = 4, Title = "Game Night 4", Date = DateTime.Now.AddDays(28), Is18Plus = true },
-            //    new BoardGameNight { Id = 5, Title = "Game Night 5", Date = DateTime.Now.AddDays(35), Is18Plus = true },
-            //    new BoardGameNight { Id = 6, Title = "Game Night 6", Date = DateTime.Now.AddDays(7), Is18Plus = true },
-            //    new BoardGameNight { Id = 7, Title = "Game Night 7", Date = DateTime.Now.AddDays(14), Is18Plus = true },
-            //    new BoardGameNight { Id = 8, Title = "Game Night 8", Date = DateTime.Now.AddDays(21), Is18Plus = true },
-            //    new BoardGameNight { Id = 9, Title = "Game Night 9", Date = DateTime.Now.AddDays(28), Is18Plus = true },
-            //    new BoardGameNight { Id = 10, Title = "Game Night 10", Date = DateTime.Now.AddDays(35), Is18Plus = true }
-            //};
-
-            //ViewBag.FutureEvents = futureEvents;
-
-            //// Pass the event data to the view
-            //return View(gameEvent);
-            //DateTime parsedDate;
-            //if (!DateTime.TryParse(date, out parsedDate))
-            //{
-            //    return BadRequest("Invalid date format.");
-            //}
-
-            //var gameEvent = new BoardGameNight
-            //{
-            //    Id = id,
-            //    Title = title,
-            //    DateTime = parsedDate,
-            //};
-
-            //var futureEvents = new List<BoardGameNight>
-            //{
-            //    new BoardGameNight { Id = 1, Title = "Game Night 1", DateTime = DateTime.Now.AddDays(7)},
-            //    new BoardGameNight { Id = 2, Title = "Game Night 2", DateTime = DateTime.Now.AddDays(14)},
-            //    // Add more future events
-            //};
-
-            //var viewModel = new BoardGameNightDetailsViewModel
-            //{
-            //    CurrentEvent = gameEvent,
-            //    FutureEvents = futureEvents
-            //};
-
             return View();
         }
 
@@ -70,46 +27,125 @@ namespace BordspellenApplicatie.Controllers
         {
             var model = new BoardGameNightDetailsViewModel()
             {
-                Games = new List<Boardgame>()
+                //Games = new List<Boardgame>()
             };
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(BoardGameNightDetailsViewModel model)
+        public async Task<IActionResult> Create(BoardGameNightDetailsViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var boardGameNight = new BoardGameNight()
+                foreach (var state in ModelState)
                 {
-                    Organizer = model.Organizer,
-                    DateTime = model.DateTime,
-                    Address = model.Address,
-                    Is18Plus = model.Is18Plus,
-                    Title = model.Title,
-                    Description = model.Description,
-                    MaxPlayers = model.MaxPlayers,
-                    Food = model.Food,
-                    IsLactoseIntoleranceFriendly = model.IsLactoseIntoleranceFriendly,
-                    IsVegetarianFriendly = model.IsVegetarianFriendly,
-                    IsNutAllergyFriendly = model.IsNutAllergyFriendly,
-                    IsNonAlcoholicFriendly = model.IsNonAlcoholicFriendly,
-                    Users = model.Users.ToList(),
-                    Games = model.Games.ToList()
-                };
+                    var fieldName = state.Key; // The field (e.g., "Email", "Password")
+                    var fieldErrors = state.Value.Errors; // The errors associated with that field
 
-                _boardGameNightRepository.Add(boardGameNight);
+                    foreach (var error in fieldErrors)
+                    {
+                        Console.WriteLine($"Field: {fieldName}, Error: {error.ErrorMessage}");
+                    }
+                }
 
-                return RedirectToAction("Index", "Home");
+                return View(model);
+
             }
 
-            return View(model);
+            var identityUser = await userManager.FindByNameAsync(User.Identity.Name);
+            if (identityUser == null)
+            {
+                return Unauthorized();
+            }
+            var user = _userRepository.GetByIdentityId(identityUser.Id);
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var boardGameNight = new BoardGameNight()
+            {
+                Title = model.Title,
+                Organizer = user,
+                Description = model.Description,
+                DateTime = model.DateTime,
+                MaxPlayers = model.MaxPlayers,
+                Food = model.Food,
+                Address = model.Address,
+                Is18Plus = model.Is18Plus,
+                IsLactoseIntoleranceFriendly = model.IsLactoseIntoleranceFriendly,
+                IsNutAllergyFriendly = model.IsNutAllergyFriendly,
+                IsNonAlcoholicFriendly = model.IsNonAlcoholicFriendly,
+                IsVegetarianFriendly = model.IsVegetarianFriendly,
+            };
+
+            _boardGameNightRepository.Add(boardGameNight);
+
+            return RedirectToAction("AddGames", "BoardGameNight", new { id = boardGameNight.Id });
         }
 
-        public IActionResult AddGames()
+        public IActionResult AddGames(int id)
         {
-            return View();
+            AddGamesViewModel addGamesViewModel = new AddGamesViewModel();
+            addGamesViewModel.id = id;
+            return View(addGamesViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult AddGames(AddGamesViewModel addGamesViewModel)
+        {
+            var gameNight = boardGameNightRepository.GetById(addGamesViewModel.id);
+            addGamesViewModel.game.Id = new Guid();
+            gameNight.Games.Add(addGamesViewModel.game);
+            _boardGameNightRepository.Update(gameNight);
+            return RedirectToAction("AddGames", "Organize", new { id = addGamesViewModel.id });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> SignUp(int gameNightId)
+        {
+            var identityUser = await _userManager.GetUserAsync(User); // Get the IdentityUser
+            if (identityUser == null)
+            {
+                return Unauthorized();
+            }
+
+            // Assuming you have a repository or service to retrieve the User model by IdentityUser.Id
+            var user = await _userRepository.GetUserByIdentityIdAsync(identityUser.Id);
+            if (user == null)
+            {
+                return NotFound(); // Handle case when User doesn't exist in your own user table
+            }
+
+            var gameNight = _boardGameNightRepository.GetById(gameNightId);
+            if (gameNight == null)
+            {
+                return NotFound();
+            }
+
+            // Check if the user is already signed up for the game night using the repository method
+            var existingRegistration = await _userBoardGameNightRepository.IsUserRegisteredForBoardGameNightAsync(gameNightId, identityUser.Id);
+
+            if (existingRegistration)
+            {
+                ModelState.AddModelError(string.Empty, "You are already signed up for this game night.");
+                return RedirectToAction("EventDetails", new { id = gameNightId });
+            }
+
+            var userGameNight = new UserBoardGameNight
+            {
+                BoardGameNightId = gameNightId,
+                UserId = user.Id // This works because user.Id is an int
+            };
+
+            // Add the new record to the database using the repository method
+            await _userBoardGameNightRepository.AddUserBoardGameNightAsync(userGameNight);
+
+            // Redirect to the event details page or display a success message
+            return RedirectToAction("EventDetails", new { id = gameNightId });
         }
     }
 }

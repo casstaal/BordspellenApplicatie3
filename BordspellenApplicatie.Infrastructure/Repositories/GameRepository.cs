@@ -1,5 +1,7 @@
 ﻿using BordspellenApplicatie.Domain.Interfaces;
 using BordspellenApplicatie.Domain.Models;
+using BordspellenApplicatie.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BordspellenApplicatie.Infrastructure.Repositories
 {
-    public class GameRepository : IGameRepository
+    public class GameRepository(BordspellenavondDBContext dBContext) : IGameRepository
     {
         public void Add(Boardgame boardgame)
         {
@@ -22,7 +24,7 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
 
         public IEnumerable<Boardgame> GetAll()
         {
-            throw new NotImplementedException();
+            return dBContext.Games.ToList();
         }
 
         public Boardgame GetById(Guid id)

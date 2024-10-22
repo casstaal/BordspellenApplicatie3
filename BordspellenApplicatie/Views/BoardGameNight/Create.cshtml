@@ -22,7 +22,8 @@
         <form class="createBoardgamenightForm" asp-action="Create" asp-controller="BoardGameNight" method="post">
             <div style="margin-top: 15px;">
                 <label asp-for="Organizer">Naam organisator</label>
-                <input type="text" asp-for="Organizer" readonly />
+                <input type="text" value="@User.Identity.Name" class="form-control" disabled />
+                <input type="hidden" asp-for="Organizer" value="@User.Identity.Name" />
             </div>
             <div style="margin-top: 15px;">
                 <label asp-for="DateTime">Datum</label>

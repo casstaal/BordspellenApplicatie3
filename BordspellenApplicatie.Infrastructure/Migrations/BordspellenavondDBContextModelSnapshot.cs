@@ -57,6 +57,9 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
                     b.Property<bool>("IsNutAllergyFriendly")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsSignedUp")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsVegetarianFriendly")
                         .HasColumnType("bit");
 
@@ -171,6 +174,29 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
                     b.ToTable("Users", "Bordspellenavond");
                 });
 
+            modelBuilder.Entity("BordspellenApplicatie.Domain.Models.UserBoardGameNight", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BoardGameNightId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BoardGameNightId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserBoardGameNights", "Bordspellenavond");
+                });
+
             modelBuilder.Entity("BordspellenApplicatie.Domain.Models.BoardGameNight", b =>
                 {
                     b.HasOne("BordspellenApplicatie.Domain.Models.User", "Organizer")
@@ -252,11 +278,37 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("BordspellenApplicatie.Domain.Models.UserBoardGameNight", b =>
+                {
+                    b.HasOne("BordspellenApplicatie.Domain.Models.BoardGameNight", "GameNight")
+                        .WithMany("UserBoardGameNights")
+                        .HasForeignKey("BoardGameNightId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BordspellenApplicatie.Domain.Models.User", "User")
+                        .WithMany("UserBoardGameNights")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("GameNight");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("BordspellenApplicatie.Domain.Models.BoardGameNight", b =>
                 {
                     b.Navigation("Games");
 
+                    b.Navigation("UserBoardGameNights");
+
                     b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("BordspellenApplicatie.Domain.Models.User", b =>
+                {
+                    b.Navigation("UserBoardGameNights");
                 });
 #pragma warning restore 612, 618
         }

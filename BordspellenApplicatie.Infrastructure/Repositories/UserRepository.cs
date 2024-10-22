@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BordspellenApplicatie.Infrastructure.Data;
 using BordspellenApplicatie.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace BordspellenApplicatie.Infrastructure.Repositories
@@ -30,7 +31,7 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
 
         public User GetById(int id)
         {
-            throw new NotImplementedException();
+            return dBContext.Users.Find(id);
         }
 
         public User? GetByIdentityId(string identityId)
@@ -40,7 +41,13 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
 
         public void Update(User user)
         {
-            throw new NotImplementedException();
+            dBContext.Update(user);
+            dBContext.SaveChanges();
+        }
+
+        public async Task<User> GetUserByIdentityIdAsync(string identityId)
+        {
+            return await dBContext.Users.SingleOrDefaultAsync(u => u.IdentityId == identityId);
         }
     }
 }

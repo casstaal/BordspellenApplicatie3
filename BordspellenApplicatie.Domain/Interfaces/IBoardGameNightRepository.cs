@@ -21,7 +21,7 @@ namespace BordspellenApplicatie.Domain.Interfaces
 
         public IEnumerable<BoardGameNight> GetAll();
 
-        public BoardGameNight GetById(int id);
+        public BoardGameNight? GetById(int id);
         public void Add(BoardGameNight boardGameNight);
         public void Update(BoardGameNight boardGameNight);
         public void Delete(int id);
