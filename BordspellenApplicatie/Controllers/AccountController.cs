@@ -186,9 +186,29 @@ namespace BordspellenApplicatie.Controllers
             return View(); 
         }
 
-        public IActionResult Allergies()
+        //public IActionResult Allergies()
+        //{
+        //    return View();
+        //}
+
+        public async Task<IActionResult> AllergiesAsync()
         {
-            return View();
+            if (User != null && User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                var identityUser = await userManager.FindByNameAsync(User?.Identity?.Name ?? "");
+                if (identityUser != null)
+                {
+                    var appUser = userRepository.GetByIdentityId(identityUser.Id);
+
+                    if (appUser != null)
+                    {
+                        // Pass the appUser model to the view
+                        return View(appUser);
+                    }
+                }
+            }
+
+            return RedirectToAction("Login", "Account");
         }
 
         public IActionResult Settings()

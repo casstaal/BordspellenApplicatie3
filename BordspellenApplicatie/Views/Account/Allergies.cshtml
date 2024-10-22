@@ -1,10 +1,9 @@
-﻿@model BordspellenApplicatie.Models.DieetAndAllergiesResponse
+﻿@* @model BordspellenApplicatie.Models.DieetAndAllergiesResponse
+ *@
+@model BordspellenApplicatie.Domain.Models.User
 
 @{
     Layout = null;
-    var bannerUrl = ViewBag.BannerUrl as string;
-    var infoText = ViewBag.InfoText as string;
-    var futureEvents = ViewBag.FutureEvents as List<BordspellenApplicatie.Domain.Models.BoardGameNight>;
 }
 
 <!DOCTYPE html>
@@ -53,16 +52,16 @@
             <h3 style="margin-top: 20px; margin-bottom: 20px;">Allergieen</h3>
             <form>
                 <div>
-                    <label asp-for="LactoseAllergie">Lactose Allergy</label>
-                    <input asp-for="LactoseAllergie" type="checkbox" />
+                    <label asp-for="IsLactoseIntolerant">Lactose Allergy</label>
+                     <input asp-for="IsLactoseIntolerant" type="checkbox" />
                 </div>
                 <div>
-                    <label asp-for="NutAllergie">Nut Allergy</label>
-                    <input asp-for="NutAllergie" type="checkbox" />
+                    <label asp-for="HasNutAllergy">Nut Allergy</label>
+                    <input asp-for="HasNutAllergy" type="checkbox" />
                 </div>
                 <div>
-                    <label asp-for="Vegan">Vegan</label>
-                    <input asp-for="Vegan" type="checkbox" />
+                    <label asp-for="IsVegetarian">Vegan</label>
+                    <input asp-for="IsVegetarian" type="checkbox" />
                 </div>
                 <div>
                     <label asp-for="DrinksAlcohol">Drinks Alcohol</label>

@@ -1,58 +1,68 @@
 ﻿@model BoardGameNightDetailsViewModel
 
 @{
-    ViewBag.Title = "title";
     Layout = null;
 }
 
-<p class="page-title">Spelavond Organiseren</p>
-
-<vc:header></vc:header>
-<div class="main-container">
-    <div class="form-container">
-        <h1>Algemene Informatie</h1>
-        <form asp-action="Create" asp-controller="BoardGameNight" method="post">
-            <div class="form-group">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Board Game Nights</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    @*     <link rel="stylesheet" href="/css/style.css"/> *@
+</head>
+<body>
+    <vc:header></vc:header>
+    <div class="container-fluid">
+        <div class="title">
+            <h1>Maak bordspelavond aan</h1>
+        </div>
+        <form class="createBoardgamenightForm" asp-action="Create" asp-controller="BoardGameNight" method="post">
+            <div style="margin-top: 15px;">
                 <label asp-for="Organizer">Naam organisator</label>
-                <input type="text" asp-for="Organizer"  readonly>
+                <input type="text" asp-for="Organizer" readonly />
             </div>
-            <div class="form-group">
+            <div style="margin-top: 15px;">
                 <label asp-for="DateTime">Datum</label>
-                <input type="date" asp-for=DateTime>
+                <input type="date" asp-for=DateTime />
             </div>
-            <div class="form-group">
-                <label asp-for="Is18Plus">Is 18 plus</label>
-                <input type="text" asp-for="Is18Plus" placeholder="Is 18 plus">
+            <div style="margin-top: 15px;">
+                <label asp-for="Is18Plus">18+</label><br />
+                <input style="transform: scale(0.7);" asp-for="Is18Plus" type="checkbox" />
             </div>
-            <div class="form-group">
+            <div style="margin-top: 15px;">
                 <label asp-for="Title">Title</label>
-                <input type="text" asp-for="Title" placeholder="Title">
+                <input type="text" asp-for="Title" />
             </div>
-            <div class="form-group">
-                <label asp-for="Description">Description</label>
-                <input type="text" asp-for="Description" placeholder="Title">
+            <div style ="margin-top: 15px;">
+                <label asp-for="Description">Description</label><br />
+                <textarea class="textareaDescription" asp-for="Description" rows="4"></textarea>
             </div>
-            <div class="form-group">
+            <div style="margin-top: 15px;">
                 <label asp-for="MaxPlayers">Max aantal spelers</label>
-                <input type="number" asp-for="MaxPlayers" placeholder="Max aantal spelers">
+                <input type="number" asp-for="MaxPlayers" />
             </div>
-            <div class="form-group">
+            <div style="margin-top: 15px;">
                 <label asp-for="Food">Eten & Drinken</label>
-                <input type="text" asp-for="Food" placeholder="Eten & Drinken">
+                <textarea class="textareaFood" asp-for="Food" rows="4"></textarea>
             </div>
-            <div class="form-group">
+            <div style="margin-top: 15px;">
                 <label asp-for="Address.Street">Street</label><br />
                 <input asp-for="Address.Street" type="text" />
             </div>
-            <div class="form-group">
+            <div style="margin-top: 15px;">
                 <label asp-for="Address.Number">Number</label>
                 <input asp-for="Address.Number" type="text" />
             </div>
-            <div class="form-group">
+            <div style="margin-top: 15px;">
                 <label asp-for="Address.City">City</label>
                 <input asp-for="Address.City" type="text" />
             </div>
             <div class="allergiesCheckbox">
+                <h5>Allergieen</h5>
+                <h5></h5>
                 <label class="container">
                     <input asp-for="IsLactoseIntoleranceFriendly" type="checkbox">
                     Lactose allergie
@@ -74,285 +84,81 @@
                     <span class="checkmark"></span>
                 </label>
             </div>
-
+            <div class="buttonContainer">
+                <button class="saveButton" type="submit">Create bordspelavond</button>
+            </div>
         </form>
     </div>
-
-    <div class="form-container">
-        <h1>Spel Informatie</h1>
-        <form>
-            <div class="form-group">
-                <label for="game-name">Naam</label>
-                <input type="text" id="game-name" placeholder="Naam">
-            </div>
-            <div class="form-group">
-                <label for="game-type">Soort spel</label>
-                <select id="game-type">
-                    <option>Kaartspel</option>
-                    <option>Bordspel</option>
-                    <option>Anders</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="genre">Genre</label>
-                <select id="genre">
-                    <option>Actie</option>
-                    <option>Strategie</option>
-                </select>
-            </div>
-            <div class="form-group form-inline">
-                <label>18+</label>
-                <input type="radio" id="yes" name="age" value="yes">
-                <label for="yes">Ja</label>
-                <input type="radio" id="no" name="age" value="no">
-                <label for="no">Nee</label>
-            </div>
-            <div class="form-group">
-                <label for="description">Beschrijving</label>
-                <textarea id="description" rows="4" placeholder="Beschrijving"></textarea>
-            </div>
-            <button type="submit">Voeg Spel Toe</button>
-        </form>
-    </div>
-</div>
-
-<div class="added-games">
-    <h4>Toegevoegde Spellen</h4>
-
-    <div class="game-entry">
-        <div class="game-header">
-            <span class="game-title">Spel Naam</span>
-            <span class="game-age">18+</span>
-        </div>
-        <div class="game-body">
-            <div class="game-info">
-                <p><strong>Soort spel:</strong> Kaartspel</p>
-                <p><strong>Genre:</strong> Tactisch</p>
-            </div>
-            <div class="game-description">
-                <p><strong>Beschrijving:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ac odio nulla.</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="game-entry">
-        <div class="game-header">
-            <span class="game-title">Spel Naam</span>
-            <span class="game-age">18+</span>
-        </div>
-        <div class="game-body">
-            <div class="game-info">
-                <p><strong>Soort spel:</strong> Kaartspel</p>
-                <p><strong>Genre:</strong> Tactisch</p>
-            </div>
-            <div class="game-description">
-                <p><strong>Beschrijving:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ac odio nulla.</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="game-entry">
-        <div class="game-header">
-            <span class="game-title">Spel Naam</span>
-            <span class="game-age">18+</span>
-        </div>
-        <div class="game-body">
-            <div class="game-info">
-                <p><strong>Soort spel:</strong> Kaartspel</p>
-                <p><strong>Genre:</strong> Tactisch</p>
-            </div>
-            <div class="game-description">
-                <p><strong>Beschrijving:</strong> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ac odio nulla.</p>
-            </div>
-        </div>
-    </div>
-
-    <button type="button" class="organizer-action">Organiseer Avond</button>
-</div>
-
+    <vc:footer></vc:footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        background-color: #EBE9E1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
-
-    .page-title {
-        margin-top: 400px;
-        margin: 20px auto;
-        font-size: 2.5em;
-        font-weight: bold;
-        text-align: center;
-        color: #E43D12;
-    }
-
-    .main-container {
-        display: flex;
-        justify-content: center;
-        gap: 40px;
-        margin-bottom: 40px;
-        margin-top:200px;
-    }
-
-    .form-container:nth-child(1) {
-        background-color: #FFA2B6;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        width: 400px;
-    }
-
-    .form-container:nth-child(2) {
-        background-color: #EFB11D;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        width: 400px;
-    }
-
-    h1 {
-        font-size: 1.5em;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 20px;
-        color: #E43D12;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    label {
-        display: block;
-        font-size: 14px;
-        margin-bottom: 5px;
-    }
-
-    input[type="text"],
-    input[type="date"],
-    input[type="time"],
-    input[type="number"],
-    textarea,
-    select {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 14px;
-        background-color: #EBE9E1;
-    }
-
-    input[readonly] {
-        background-color: #EBE9E1;
-        color: #666;
-    }
-
-    textarea {
-        resize: none;
-    }
-
-    button {
-        padding: 10px 15px;
-        background-color: #E43D12;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-        button:hover {
-            background-color: #bf3510;
-        }
-
-
-    .form-inline {
-        display: flex;
-        align-items: center;
+    .container-fluid {
+        display: grid;
+        grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
+        grid-template-columns: 1fr 0.75fr 1fr;
         gap: 10px;
     }
 
-        .form-inline label {
-            display: inline;
-        }
-
-    input[type="radio"] {
-        width: auto;
-        margin-left: 10px;
-        background-color: #EBE9E1;
+    .title {
+        grid-column: 2/3;
+        grid-row: 1/2;
+        text-align: center;
+        margin-top: 30px;
     }
 
-    .added-games {
-        width: 80%;
-        margin: 15px auto 40px auto;
+    .createBoardgamenightForm {
+        grid-column: 2/3;
+        grid-row: 2/3;
     }
 
-        .added-games h4 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #E43D12;
-        }
-
-    .game-entry {
-        border-radius: 10px;
-        margin-bottom: 20px;
-        padding: 15px;
-        background-color: #e8e3ce;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    input {
+        width: 100%;
+        height: 35px;
     }
 
-    .game-header {
-        background-color: #EFB11D;
-        padding: 10px;
+    .textareaDescription, .textareaFood {
+        width: 100%;
+    }
+
+    .buttonContainer {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-radius: 10px;
+        justify-content: center;
+        margin-top: 10px;
+        margin-bottom: 50px;
     }
 
-    .game-title {
-        font-size: 18px;
-        font-weight: bold;
+    .saveButton {
+        width: 100%;
+        max-width: 200px; 
     }
 
-    .game-age {
-        font-size: 14px;
-        font-weight: bold;
-    }
-
-    .game-body {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px;
-    }
-
-    .game-info, .game-description {
-        width: 45%;
-    }
-
-    .organizer-action {
-        display: block;
-        margin: 20px auto;
-        padding: 10px 20px;
-        background-color: #E43D12;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
+    .saveButton {
+        padding: 7px 20px;
+        font-size: 16px;
         cursor: pointer;
     }
 
-        .organizer-action:hover {
-            background-color: #bf3510;
+    .allergiesCheckbox {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+        .allergiesCheckbox input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .allergiesCheckbox .container {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
         }
 </style>
-
 

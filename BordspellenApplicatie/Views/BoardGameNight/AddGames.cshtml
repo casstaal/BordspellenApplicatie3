@@ -1,0 +1,107 @@
+﻿@model BoardGameNightDetailsViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Board Game Nights</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    @*     <link rel="stylesheet" href="/css/style.css"/> *@
+</head>
+<body>
+    <vc:header></vc:header>
+    <div class="container-fluid">
+        <div class="title">
+            <h1>Voeg spellen toe</h1>
+        </div>
+        <form class="addGamesForm" asp-action="Create" asp-controller="BoardGameNight" method="post">
+            <div style="margin-top: 15px;">
+                    <label for="game-name">Spelnaam</label>
+                    <input type="text" id="game-name">
+                </div>
+            <div style="margin-top: 15px;">
+                    <label for="game-type">Soort spel</label><br />
+                    <select id="game-type">
+                        <option>Kaartspel</option>
+                        <option>Bordspel</option>
+                        <option>Anders</option>
+                    </select>
+                </div>
+            <div style="margin-top: 15px;">
+                    <label for="genre">Genre</label><br />
+                    <select id="genre">
+                        <option>Actie</option>
+                        <option>Strategie</option>
+                    </select>
+                </div>
+            <div style="margin-top: 15px;">
+                    <label for="Is18Plus">18+</label><br />
+                    <input style="transform: scale(0.7);" for="Is18Plus" type="checkbox" />
+                </div>
+                <div style="margin-top: 15px;">
+                    <label for="description">Beschrijving</label><br />
+                    <textarea class="textareaDescription" id="description" rows="4" placeholder="Beschrijving"></textarea>
+                </div>
+            <div class="buttonContainer">
+                <button class="saveButton" type="submit">Voeg spel toe</button>
+            </div>
+        </form>
+    </div>
+    <vc:footer></vc:footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+<style>
+    .container-fluid {
+        display: grid;
+        grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
+        grid-template-columns: 1fr 0.75fr 1fr;
+        gap: 10px;
+    }
+
+    .title {
+        grid-column: 2/3;
+        grid-row: 1/2;
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .addGamesForm {
+        grid-column: 2/3;
+        grid-row: 2/3;
+    }
+
+    input {
+        width: 100%;
+        height: 35px;
+    }
+
+    .textareaDescription {
+        width: 100%;
+    }
+
+    .buttonContainer {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+        margin-bottom: 50px;
+    }
+
+    .saveButton {
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .saveButton {
+        padding: 7px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+</style>
+

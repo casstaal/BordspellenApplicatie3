@@ -106,6 +106,11 @@ namespace BordspellenApplicatie.Controllers
 
             return View(model);
         }
+
+        public IActionResult AddGames()
+        {
+            return View();
+        }
     }
 }
 

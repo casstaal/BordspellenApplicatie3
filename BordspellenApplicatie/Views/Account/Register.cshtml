@@ -66,27 +66,29 @@
             <label asp-for="Address.City">City</label>
             <input asp-for="Address.City" type="text" />
             </div>  
-                        <div class="allergiesCheckbox">
-            <label class="container">
-            <input asp-for="IsLactoseIntolerant" type="checkbox">
-            Lactose allergie
-            <span class="checkmark"></span>
-            </label>
-            <label class="container">
-            <input asp-for="HasNutAllergy" type="checkbox">
-            Noten allergie
-            <span class="checkmark"></span>
-            </label>
-            <label class="container">
-            <input asp-for="IsVegetarian" type="checkbox">
-            Vegetarier
-            <span class="checkmark"></span>
-            </label>
-            <label class="container">
-            <input asp-for="DrinksAlcohol" type="checkbox">
-            Drinkt geen alcohol
-            <span class="checkmark"></span>
-            </label>
+            <div class="allergiesCheckbox">
+                <h5>Allergieen</h5>
+                <h5></h5>
+                <label class="container">
+                <input asp-for="IsLactoseIntolerant" type="checkbox">
+                Lactose allergie
+                <span class="checkmark"></span>
+                </label>
+                <label class="container">
+                <input asp-for="HasNutAllergy" type="checkbox">
+                Noten allergie
+                <span class="checkmark"></span>
+                </label>
+                <label class="container">
+                <input asp-for="IsVegetarian" type="checkbox">
+                Vegetarier
+                <span class="checkmark"></span>
+                </label>
+                <label class="container">
+                <input asp-for="DrinksAlcohol" type="checkbox">
+                Drinkt geen alcohol
+                <span class="checkmark"></span>
+                </label>
             </div> 
             <div class="buttonContainer">
                 <button class="saveButton" type="submit">Create account</button>

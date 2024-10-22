@@ -4,9 +4,6 @@
 
 @{
     Layout = null;
-    var bannerUrl = ViewBag.BannerUrl as string;
-    var infoText = ViewBag.InfoText as string;
-    var futureEvents = ViewBag.FutureEvents as List<BordspellenApplicatie.Domain.Models.BoardGameNight>;
 }
 
 <!DOCTYPE html>
@@ -52,34 +49,32 @@
                 <div class="name-container">
                     <div>
                         <label asp-for="FirstName">First name</label><br />
-                        <p>@Model.FirstName</p>
+                        <input asp-for="FirstName" type="text" />
                     </div>
                     <div>
                         <label asp-for="LastName">Last name</label><br />
-                        <p>@Model.LastName</p>
+                        <input asp-for="LastName" type="text"/>
                     </div>
                 </div>
                 <div>
                     <label asp-for="DateOfBirth">Birthdate</label><br />
-                    <p>@Model.DateOfBirth</p>
+                    <input asp-for="DateOfBirth" type="date" />
                 </div>
                 <div>
                     <label asp-for="Email">Email address</label><br />
-@*                     <input asp-for="Email"> </input>
- *@                
-                    <p>@Model.Email</p>
+                    <input asp-for="Email" type="email"/>
                 </div>
                 <div>
-                    <label asp-for=Address.Street>Street</label>
-                    <p>@Model.Address.Street</p>
+                    <label asp-for=Address.Street>Street</label><br />
+                    <input asp-for="Address.Street" type="text" />
                 </div>
                 <div>
-                    <label asp-for="Address.Number">Number</label>
-                    <p>@Model.Address.Number</p>
+                    <label asp-for="Address.Number">Number</label><br />
+                    <input asp-for="Address.Number" type="text" />
                 </div>
                 <div>
-                    <label asp-for="Address.City">City</label>
-                    <p>@Model.Address.City</p>
+                    <label asp-for="Address.City">City</label><br />
+                    <input asp-for="Address.City" type="text" />
                 </div>
                 <button class="saveButton" type="submit">Save</button>
             </form>
