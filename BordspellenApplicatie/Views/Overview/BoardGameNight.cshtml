@@ -1,6 +1,7 @@
-﻿@{
+﻿@model IEnumerable<BordspellenApplicatie.Domain.Models.BoardGameNight>
+
+@{
     Layout = null;
-    var futureEvents = ViewBag.FutureEvents as List<BordspellenApplicatie.Domain.Models.BoardGameNight>;
 }
 
 <!DOCTYPE html>
@@ -24,23 +25,23 @@
             </h1>
         </div>
         <div class="grid-container">
-            @if (futureEvents != null && futureEvents.Count > 0)
+            @if (Model != null)
             {
-                foreach (var eventItem in futureEvents)
+                foreach (var boardGameNight in Model)
                 {
                     <div class="card">
-                        <img src="/banner6.jpg" alt="Usert Icon" class="card-img" style="max-height: 100px;">
-                        <h5 class="card-title">@eventItem.Title</h5>
+                        <img src="/banner6.jpg" alt="User Icon" class="card-img" style="max-height: 100px;">
+                        <h5 class="card-title">@boardGameNight.Title</h5>
                         <p class="card-text">
-                            Date: @eventItem.DateTime.ToString("MMMM dd, yyyy")<br />
+                            Date: @boardGameNight.DateTime.ToString("MMMM dd, yyyy")<br />
                         </p>
                     </div>
                 }
             }
             else
             {
-                <p>No upcoming board game nights available.</p>
-            }b
+                <p>No board game nights found.</p>
+            }
         </div>
     </div>
     <vc:footer></vc:footer>

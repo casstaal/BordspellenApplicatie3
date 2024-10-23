@@ -97,7 +97,6 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Is18Plus")
@@ -124,9 +123,6 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("BoardGameNightId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
@@ -168,8 +164,6 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BoardGameNightId");
 
                     b.ToTable("Users", "Bordspellenavond");
                 });
@@ -245,10 +239,6 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
 
             modelBuilder.Entity("BordspellenApplicatie.Domain.Models.User", b =>
                 {
-                    b.HasOne("BordspellenApplicatie.Domain.Models.BoardGameNight", null)
-                        .WithMany("Users")
-                        .HasForeignKey("BoardGameNightId");
-
                     b.OwnsOne("BordspellenApplicatie.Domain.Models.Address", "Address", b1 =>
                         {
                             b1.Property<int>("UserId")
@@ -302,8 +292,6 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
                     b.Navigation("Games");
 
                     b.Navigation("UserBoardGameNights");
-
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("BordspellenApplicatie.Domain.Models.User", b =>

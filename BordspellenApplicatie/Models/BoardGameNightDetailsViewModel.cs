@@ -9,7 +9,7 @@ namespace BordspellenApplicatie.Models
         //public BoardGameNight CurrentEvent { get; set; }
         //public List<BoardGameNight> FutureEvents { get; set; }
 
-        public User Organizer { get; set; } = null!;
+        public string Organizer { get; set; } = null!;
         public DateTime DateTime { get; set; }
         public Address Address { get; set; } = null!;
         public bool Is18Plus { get; set; }

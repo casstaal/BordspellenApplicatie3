@@ -100,7 +100,7 @@ namespace BordspellenApplicatie.Controllers
             addGamesViewModel.game.Id = new Guid();
             gameNight.Games.Add(addGamesViewModel.game);
             _boardGameNightRepository.Update(gameNight);
-            return RedirectToAction("AddGames", "Organize", new { id = addGamesViewModel.id });
+            return RedirectToAction("AddGames", "BoardGameNight", new { id = addGamesViewModel.id });
         }
 
         [HttpPost]

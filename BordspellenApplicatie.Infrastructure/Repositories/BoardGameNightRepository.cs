@@ -49,7 +49,8 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
 
         public void Update(BoardGameNight boardGameNight)
         {
-            throw new NotImplementedException();
+            dBContext.Update(boardGameNight);
+            dBContext.SaveChanges(); ;
         }
 
         public IEnumerable<Boardgame> GetAllGames(BoardGameNight boardGameNight)
