@@ -1,4 +1,5 @@
-﻿@model ReviewViewModel
+﻿@using BordspellenApplicatie.Models
+@model ReviewViewModel
 
 @{
     Layout = null;
@@ -19,7 +20,7 @@
         <div class="title">
             <h1>Maak review aan</h1>
         </div>
-        <form class="reviewForm">
+        <form class="reviewForm" asp-action="create" asp-controller="Review" method="post">
             <div asp-validation-summary="All">
             </div>
             <div>
@@ -28,14 +29,15 @@
             </div>
             <div style="margin-top: 15px;">
                 <label asp-for="Author">Auteur</label><br />
-                <input asp-for="Author" type="text" />
+                <input type="text" value="@User.Identity.Name" disabled />
+                <input type="hidden" asp-for="Author" value="@User.Identity.Name" />
             </div>
             <div style="margin-top: 15px;">
                 <label asp-for="Score">Score (1-5)</label><br />
                 <input asp-for="Score" type="number" max="5" min="0" />
             </div>
             <div style="margin-top: 15px;">
-                <label asp-for="TextReview">Geboortedatum</label><br />
+                <label asp-for="TextReview">Beschrijving</label><br />
                 <textarea class="textareaDescription" asp-for="TextReview" rows="4"></textarea>
             </div>
             <div class="buttonContainer">

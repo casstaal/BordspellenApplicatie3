@@ -108,7 +108,8 @@
             <div class="review">
                 <h5>Review</h5>
                 <p>Mocht u uw mening willen delen over deze bordspelavond, kunt u hieronder uw review achterlaten</p>
-                <button onclick="location.href='@Url.Action("Create", "Review")'">Plaats review</button>
+@*                 <button onclick="location.href='@Url.Action("Create", "Review", new { boardGameNightId = Model.Id })'">Plaats review</button>
+ *@                <button onclick="location.href='@Url.Action("Create", "Review")'">Plaats review</button>
             </div>
         </div>
     <vc:footer></vc:footer>

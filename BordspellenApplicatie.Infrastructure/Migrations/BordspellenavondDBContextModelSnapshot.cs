@@ -116,6 +116,41 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
                     b.ToTable("Games", "Bordspellenavond");
                 });
 
+            modelBuilder.Entity("BordspellenApplicatie.Domain.Models.Review", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BoardGameNightId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TextReview")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("BoardGameNightId");
+
+                    b.ToTable("Reviews", "Bordspellenavond");
+                });
+
             modelBuilder.Entity("BordspellenApplicatie.Domain.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -237,6 +272,25 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
                         .HasForeignKey("BoardGameNightId");
                 });
 
+            modelBuilder.Entity("BordspellenApplicatie.Domain.Models.Review", b =>
+                {
+                    b.HasOne("BordspellenApplicatie.Domain.Models.User", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BordspellenApplicatie.Domain.Models.BoardGameNight", "BoardGameNight")
+                        .WithMany("Reviews")
+                        .HasForeignKey("BoardGameNightId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+
+                    b.Navigation("BoardGameNight");
+                });
+
             modelBuilder.Entity("BordspellenApplicatie.Domain.Models.User", b =>
                 {
                     b.OwnsOne("BordspellenApplicatie.Domain.Models.Address", "Address", b1 =>
@@ -290,6 +344,8 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
             modelBuilder.Entity("BordspellenApplicatie.Domain.Models.BoardGameNight", b =>
                 {
                     b.Navigation("Games");
+
+                    b.Navigation("Reviews");
 
                     b.Navigation("UserBoardGameNights");
                 });

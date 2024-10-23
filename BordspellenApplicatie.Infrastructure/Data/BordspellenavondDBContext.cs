@@ -20,6 +20,7 @@ namespace BordspellenApplicatie.Infrastructure.Data
         public DbSet<Boardgame> Games => Set<Boardgame>();
         public DbSet<User> Users => Set<User>();
         public DbSet<UserBoardGameNight> UserBoardGameNights => Set<UserBoardGameNight>();
+        public DbSet<Review> Reviews => Set<Review>();
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -39,7 +40,14 @@ namespace BordspellenApplicatie.Infrastructure.Data
                 .WithMany(g => g.UserBoardGameNights)
                 .HasForeignKey(ug => ug.BoardGameNightId)
                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
-        } 
+
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.BoardGameNight)
+                .WithMany(b => b.Reviews) // Assuming a BoardGameNight can have many Reviews
+                .HasForeignKey(r => r.BoardGameNightId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+        }
 
     }
 }

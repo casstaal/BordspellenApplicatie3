@@ -13,6 +13,8 @@ namespace BordspellenApplicatie.Domain.Models
         public int Score { get; set; }
         public required string TextReview { get; set; }
         public User Author { get; set; }
-        public DateOnly Date {  get; set; }
+        public DateTime Date {  get; set; }
+        public BoardGameNight BoardGameNight { get; set; } = null!;
+        public int BoardGameNightId { get; set; }
     }
 }

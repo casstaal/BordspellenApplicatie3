@@ -9,7 +9,10 @@ namespace BordspellenApplicatie.Models
         public string Title { get; set; } = null!;
         public int Score { get; set; }
         public required string TextReview { get; set; }
-        public User Author { get; set; } = null!;
-        public DateOnly Date { get; set; }
+        public string Author { get; set; } = null!;
+        public DateTime Date { get; set; }
+
+        [Required]
+        public int BoardGameNightId { get; set; }
     }
 }

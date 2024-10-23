@@ -54,6 +54,7 @@ builder.Services.AddScoped<AuthSeedData>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IBoardGameNightRepository, BoardGameNightRepository>();
 builder.Services.AddScoped<IUserBoardGameNightRepository, UserBoardGameNightRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 
 var app = builder.Build();
 

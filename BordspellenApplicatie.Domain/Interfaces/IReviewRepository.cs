@@ -10,13 +10,9 @@ namespace BordspellenApplicatie.Domain.Interfaces
     public interface IReviewRepository
     {
         public IEnumerable<Review> GetAll();
-        public IQueryable<Review> GetAllAsync();
-
         public Review GetById(Guid id);
-        public Task<Review> GetByIdAsync(Guid id);
-
-        public Task<Review> AddAsync(Review Review);
-        public Task<Review> UpdateAsync(Review Review);
-        public Task<Review> DeleteAsync(int id);
+        public void Add(Review review);
+        public void Delete(Guid id);
+        public void Update(Review review);
     }
 }
