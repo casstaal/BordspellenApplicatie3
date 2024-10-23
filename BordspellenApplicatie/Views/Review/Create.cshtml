@@ -49,6 +49,10 @@
 </body>
 </html>
 <style>
+
+    body {
+        background-color: #AFDDE5;
+    }
     .container-fluid {
         display: grid;
         grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
@@ -61,23 +65,22 @@
         grid-row: 1/2;
         text-align: center;
         margin-top: 30px;
+        margin-bottom: 20px;
     }
 
     .reviewForm {
         grid-column: 2/3;
         grid-row: 2/3;
+        background-color: #0FA4AF;
+        color: white;
+        padding: 20px;
+        margin-bottom: 85px;
+        border-radius: 10px;
     }
 
     input {
         width: 100%;
         height: 35px;
-    }
-
-
-    .signUp {
-        grid-column: 2/3;
-        grid-row: 3/4;
-        margin-top: 50px;
     }
 
     .textareaDescription {
@@ -88,7 +91,8 @@
         display: flex;
         justify-content: center;
         margin-top: 10px;
-        margin-bottom: 50px;
+        margin-bottom: 30px;
+        margin-top: 30px;
     }
 
     .saveButton {

@@ -35,7 +35,9 @@
                 <button class="saveButton" type="submit">Login</button>
             </div> *@
             <div asp-validation-summary="All"></div>
-            <button type="submit">Login</button>
+            <div class="buttonContainer">
+                <button class="saveButton" type="submit">Login</button>
+            </div>
         </form>
 
 @*         <div class="signUp">
@@ -51,6 +53,9 @@
 </body>
 </html>
 <style>
+    body {
+        background-color: #AFDDE5;
+    }
     .container-fluid {
         display: grid;
         grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
@@ -63,11 +68,18 @@
         grid-row: 1/2;
         text-align: center;
         margin-top: 30px;
+        margin-bottom: 20px;
     }
 
     .loginForm {
         grid-column: 2/3;
         grid-row: 2/3;
+        background-color: #0FA4AF;
+        padding: 20px;
+        margin-bottom: 85px;
+        border-radius: 10px;
+        padding-top: 30px;
+        color: white;
     }
 
     input {
@@ -82,20 +94,20 @@
         margin-top: 50px;
     }
 
-    /* Centering buttons within their containers */
     .buttonContainer {
         display: flex;
         justify-content: center;
         margin-top: 10px;
+        margin-bottom: 30px;
+        margin-top: 30px;
     }
 
-    .saveButton, .signUpButton {
+    .saveButton {
         width: 100%;
-        max-width: 200px; /* Adjust the width as needed */
+        max-width: 200px;
     }
 
-    /* Optional: Styling for the buttons */
-    .saveButton, .signUpButton {
+    .saveButton {
         padding: 7px 20px;
         font-size: 16px;
         cursor: pointer;

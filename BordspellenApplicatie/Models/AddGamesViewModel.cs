@@ -6,5 +6,6 @@ namespace BordspellenApplicatie.Models
     {
         public int id { get; set; }
         public Boardgame game { get; set; }
+        public List<Boardgame> boardgames { get; set; } = new List<Boardgame>();
     }
 }

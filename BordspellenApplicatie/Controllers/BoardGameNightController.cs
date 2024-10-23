@@ -18,9 +18,9 @@ namespace BordspellenApplicatie.Controllers
         private readonly IUserBoardGameNightRepository _userBoardGameNightRepository = userBoardGameNightRepository;
 
 
-        public IActionResult Details(int id, string title, string date, bool is18Plus)
+        public IActionResult Details(BoardGameNightDetailsViewModel boardGameNightDetailsViewModel)
         {
-            return View();
+            return View(boardGameNightDetailsViewModel);
         }
 
         public IActionResult Create()
@@ -88,8 +88,18 @@ namespace BordspellenApplicatie.Controllers
 
         public IActionResult AddGames(int id)
         {
-            AddGamesViewModel addGamesViewModel = new AddGamesViewModel();
-            addGamesViewModel.id = id;
+            var boardGameNight = _boardGameNightRepository.GetById(id);
+            if(boardGameNight == null)
+            {
+                return NotFound();
+            }
+
+            AddGamesViewModel addGamesViewModel = new AddGamesViewModel
+            {
+                id = id,
+                boardgames = boardGameNight.Games
+            };
+
             return View(addGamesViewModel);
         }
 

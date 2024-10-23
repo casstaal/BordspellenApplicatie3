@@ -49,5 +49,21 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
         {
             return await dBContext.Users.SingleOrDefaultAsync(u => u.IdentityId == identityId);
         }
+
+        public IEnumerable<BoardGameNight> getOrganizedBoardGameNights(string identityID)
+        {
+            var user = dBContext.Users.FirstOrDefault(u => u.IdentityId == identityID);
+
+            if (user == null)
+            {
+                return Enumerable.Empty<BoardGameNight>(); 
+            }
+
+            return dBContext.BoardGameNights
+                .Include(bg => bg.Organizer)
+                .Include(bg => bg.Games) 
+                .Where(bg => bg.Organizer.Id == user.Id) 
+                .ToList(); 
+        }
     }
 }

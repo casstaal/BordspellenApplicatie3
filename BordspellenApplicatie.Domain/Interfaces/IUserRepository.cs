@@ -19,6 +19,7 @@ namespace BordspellenApplicatie.Domain.Interfaces
         public void Update(User user);
         public void Delete(int id);
         Task<User> GetUserByIdentityIdAsync(string identityId);
+        public IEnumerable<BoardGameNight> getOrganizedBoardGameNights(string identityID);
 
     }
 }

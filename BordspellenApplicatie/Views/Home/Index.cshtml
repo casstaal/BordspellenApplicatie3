@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<BordspellenApplicatie.Domain.Models.BoardGameNight>
+
+@{
     Layout = null;
     var bannerUrl = ViewBag.BannerUrl as string;
     // var infoText = ViewBag.InfoText as string;
@@ -25,7 +27,6 @@
             </div>
         </div>
         <div class="info-section">
-@*             <p>@infoText</p> *@ 
             <p>Ben je nieuw in Nederland en wil je op een leuke en ontspannen manier de Nederlandse taal leren? Kom dan naar onze gezellige bordspellenavonden. Hier combineren we taalvaardigheid met spelplezier!</p>
             <p>Tijdens deze avonden speel je samen met anderen verschillende bordspellen, waarbij je op een speelse manier je Nederlands oefent. Het is een perfecte gelegenheid om nieuwe mensen te ontmoeten, de taal in praktijk te brengen en spelenderwijs je woordenschat en taalbegrip te verbeteren.</p>
             <p>Of je nu een beginner bent of al wat verder gevorderd, iedereen is welkom. Onze vrijwilligers begeleiden de avond en helpen je graag met moeilijke woorden of zinnen. Het belangrijkste is dat je plezier hebt terwijl je leert!</p>
@@ -36,10 +37,11 @@
                 <h3>Toekomstige bordspelavonden</h3>
                 @Html.ActionLink("Toon alle bordspelavonden", "BoardGameNight", "Overview", null, new { @class = "bordspelavonden-link" })
             </div>
+            @*<button class="scroll-button left" onclick="scrollLeft()">Left</button>*@
             <div class="scroll-container">
-                @if (futureEvents != null && futureEvents.Any())
+                @if (Model != null)
                 {
-                    @foreach (var gameEvent in futureEvents)
+                    @foreach (var gameEvent in Model)
                     {
                         <a class="gameNightLink" href="@Url.Action("Details", "BoardGameNight", new { id = gameEvent.Id, title = gameEvent.Title, date = gameEvent.DateTime.ToString("yyyy-MM-dd") })">
                             <div class="scroll-item card text-center">
@@ -51,8 +53,12 @@
                             </div>
                         </a>
                     }
+                } else
+                {
+                    <p>Geen bordspelavonden gevonden.</p>
                 }
             </div>
+@*             <button class="scroll-button right" onclick="scrollRight()">Right</button> *@        
         </div>
     </div>
     <vc:footer></vc:footer>
@@ -61,6 +67,10 @@
 </body>
 </html>
 <style>
+
+    body {
+        background-color: #AFDDE5;
+    }
     .container-fluid {
         display: grid;
         grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
@@ -93,13 +103,11 @@
         grid-column: 2 / 3;
         grid-row: 3 / 4;
         text-align: left;
-        margin-top: 10px;
-        background-color: aliceblue;
-        padding: 20px 30px 20px 30px;
+        background-color: #024950;
+        color: white;
+        padding: 50px 60px 50px 60px;
         border-radius: 5px;
-        margin-top: 40px;
-/*         padding-left: 150px;
-        padding-right: 150px; */
+        margin-top: 100px;
     }
 
     .gameNightLink {
@@ -114,6 +122,7 @@
         grid-column: 1 / 5; 
         grid-row: 4 / 5;
         margin: 60px 40px 120px 40px;
+        margin-top: 150px;
     }
 
     .scroll-container {
@@ -122,8 +131,12 @@
         overflow-x: auto;
         scroll-behavior: smooth;
         padding: 10px;
-        border: 1px solid #ddd;
+        @*width: calc(100% - 60px);*@
     }
+
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
 
     .scroll-item {
         flex: 0 0 250px; 
@@ -137,14 +150,57 @@
         transform: scale(1.05); 
     }
 
+
+/*     .scroll-button {
+        background-color: #024950;
+        color: white;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+        font-size: 24px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1;
+    }
+
+        .scroll-button.left {
+            left: 0;
+        }
+
+        .scroll-button.right {
+            right: 0;
+        }
+
+        .scroll-button:hover {
+            background-color: #333;
+        } */
+
     .title-container {
         display: flex;
         align-items: center; 
     }
 
     .bordspelavonden-link {
-        color: black;
+        color: #964734;
         margin-left: auto;
+        font-weight: bold;
+    }
+
+    .bordspelavonden-link:hover {
+        color: #964734;
     }
 </style> 
+
+@* <script>
+    function scrollLeft() {
+        const container = document.querySelector('.scroll-container');
+        container.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+
+    function scrollRight() {
+        const container = document.querySelector('.scroll-container');
+        container.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+</script> *@
 

@@ -1,5 +1,6 @@
 ﻿using BordspellenApplicatie.Domain.Interfaces;
 using BordspellenApplicatie.Domain.Models;
+using BordspellenApplicatie.Infrastructure.Repositories;
 using BordspellenApplicatie.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -181,15 +182,17 @@ namespace BordspellenApplicatie.Controllers
             return View(); 
         }
 
-        public IActionResult Organized()
+        public async Task<IActionResult> Organized()
         {
-            return View(); 
-        }
+            var identityUser = await userManager.FindByNameAsync(User.Identity.Name);
+            if (identityUser == null)
+            {
+                return Unauthorized();
+            }
 
-        //public IActionResult Allergies()
-        //{
-        //    return View();
-        //}
+            var organizedGameNights = userRepository.getOrganizedBoardGameNights(identityUser.Id);
+            return View(organizedGameNights); 
+        }
 
         public async Task<IActionResult> AllergiesAsync()
         {

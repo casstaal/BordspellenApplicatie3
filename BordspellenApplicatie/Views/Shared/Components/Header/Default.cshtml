@@ -1,4 +1,4 @@
-﻿<div class="navbar d-flex justify-content-between align-items-center">
+﻿<div class="navbar d-flex">
     <a href="/">
         <img src="/logoBoardgame.jpg" alt="Logo" class="img-fluid" style="max-height: 50px;">
     </a>
@@ -15,7 +15,7 @@
     }
     else
     {
-        <a asp-controller="Account" asp-action="Login">Login</a>
+        <a asp-controller="Account" asp-action="Login" class="loginButton">Login</a>
         <button onclick="location.href='@Url.Action("Register", "Account")'">Aanmelden</button>
     }
 </div>
@@ -24,17 +24,32 @@
          .navbar {
             grid-column: 1 / 5;
             grid-row: 1 / 2;
-            background-color: lightsteelblue;
+            background-color: #0FA4AF;
             padding: 10px;
+            display: flex;
+            align-items: center;
         } 
 
         .navigation-link {
-            color: black;
+            color: white;
             text-decoration: none;
+            font-weight: bold;
         }
 
         .navigation-link:hover {
-            text-decoration: none;
+            color: #964734;
+        }
+
+        button {
+            background-color: #964734;
             color: white;
+            padding: 6px;
+            border-radius: 4px;
+        }
+
+        .loginButton {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
         }
 </style>

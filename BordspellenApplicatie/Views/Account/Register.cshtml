@@ -95,11 +95,16 @@
             </div>
         </form>
     </div>
+    <vc:footer></vc:footer>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 <style>
+    body {
+        background-color: #AFDDE5;
+    }
+
     .container-fluid {
         display: grid;
         grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
@@ -117,6 +122,10 @@
     .loginForm {
         grid-column: 2/3;
         grid-row: 2/3;
+        background-color: #0FA4AF;
+        padding: 20px;
+        margin-bottom: 40px;
+        color: white;
     }
 
     input {

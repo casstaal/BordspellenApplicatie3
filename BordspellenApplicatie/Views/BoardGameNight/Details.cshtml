@@ -16,73 +16,47 @@
 <body>
     <vc:header></vc:header>
     <div class="container-fluid">
-@*         <div>
-            <h2 style="margin-top: 50px; margin-left: 40px">@Model.CurrentEvent.Title</h2>
-
-            <div class="futureBoardGameNights">
-                <h5>Geplande bordspellen</h5>
-                <div class="scroll-container">
-                    @if (Model.FutureEvents != null && Model.FutureEvents.Any()) 
+            <h2 class="title">@Model.Title</h2>
+            <div class="scroll-container">
+                @if (Model != null)
+                {
+                    @foreach (var gameEvent in Model.Games)
                     {
-                        @foreach (var gameEvent in Model.FutureEvents)
-                        {
-                            <div class="scroll-item card text-center">
-                                <div class="card-body">
-                                    <img src="/boardgame.jpg" alt="User Icon" class="card-img" style="max-height: 100px;">
-                                    <h5 class="card-title">@gameEvent.Title</h5>
-                                    <p class="card-text">Date: @gameEvent.DateTime.ToString("dd MMM yyyy")</p>
-                                </div>
+                        <div class="scroll-item card text-center">
+                            <div class="card-body">
+                                <img src="/banner6.jpg" alt="Usert Icon" class="card-img" style="max-height: 100px;">
+                                <h5 class="card-title">@gameEvent.Name</h5>
+                                <p class="card-text">Date: @gameEvent.Description</p>
                             </div>
-                        }
+                        </div>
                     }
-                </div>
-            </div> *@
-            <h2 class="title">Catan avond</h2>
-            <div class="plannedGames">
-                <h5>Geplande bordspellen</h5>
-                <div class="scroll-container">
-                    <div class="card-body">
-                        <img src="/banner6.jpg" alt="Boardgamenigh image" class="card-img" style="max-height: 100px;" />
-                        <h5 class="card-title">Catan</h5>
-                        <p class="card-text">kdkdkdaokdkdk</p>
-                    </div>
-                    <div class="card-body">
-                        <img src="/banner6.jpg" alt="Boardgamenigh image" class="card-img" style="max-height: 100px;" />
-                        <h5 class="card-title">Catan</h5>
-                        <p class="card-text">kdkdkdaokdkdk</p>
-                    </div>
-                <div class="card-body">
-                    <img src="/banner6.jpg" alt="Boardgamenigh image" class="card-img" style="max-height: 100px;" />
-                    <h5 class="card-title">Catan</h5>
-                    <p class="card-text">kdkdkdaokdkdk</p>
-                </div>
-                <div class="card-body">
-                    <img src="/banner6.jpg" alt="Boardgamenigh image" class="card-img" style="max-height: 100px;" />
-                    <h5 class="card-title">Catan</h5>
-                    <p class="card-text">kdkdkdaokdkdk</p>
-                </div>
-                </div>
+                }
+                else
+                {
+                    <p>Geen bordspelavonden gevonden.</p>
+                }
             </div>
             <div class="description-BoardgameNight">
                 <h5>Beschrijving bordspelavond</h5>
-                <p>
-                    Ben je op zoek naar een leuke en ontspannen manier om je Nederlands te verbeteren? Doe dan mee met onze bordspelavond voor immigranten! Samen spelen we verschillende bordspellen, terwijl we op een informele manier de Nederlandse taal oefenen.
-                </p>
-                <p>
-                    Of je nu net begonnen bent met het leren van Nederlands of al wat verder bent, iedereen is welkom. Tijdens het spelen van de spellen leer je nieuwe woorden, zinnen en hoe je in het Nederlands kunt communiceren met anderen. En het beste van alles? Het is een gezellige manier om mensen te ontmoeten en samen plezier te hebben!
-                </p>
+                <p>@Model.Description</p>
             </div>
             <div class="extra-information">
-                <p><b>Organisator: </b> Cas Staal    <b>Date:</b>11-11-2024     <b>Leeftijd: </b> 18+</p>
-                <p><b>Aantal plekken: </b>10</p>
-                <p><b>Aantal open plekken: </b>5</p>
+                @if(@Model.Is18Plus == true)
+                {
+                    <p><b>Organisator: </b>@Model.Organizer <b>Date: </b> @Model.DateTime <b>Leeftijd: </b> 18+</p>
+                } else
+                {
+                    <p><b>Organisator: </b>@Model.Organizer <b>Date: </b> @Model.DateTime <b>Leeftijd: </b> 16+</p>
+                }
+                <p><b>Aantal plekken: </b> @Model.MaxPlayers</p>
+                <p><b>Aantal open plekken: </b> nog maken</p>
             </div>
 
-            <div class="address-information">
+@*             <div class="address-information">
                 <h5>Adresinformatie</h5>
-                <p><b>Straat + huisnummer: </b>Hogeschoollaan 29</p>
-                <p><b>Stad:</b> Breda</p>
-            </div>
+                <p><b>Straat + huisnummer: </b>@Model.Address.Street @Model.Address.Number</p>
+                <p><b>Stad:</b> @Model.Address.City</p>
+            </div> *@
 
             <button class="signUpButton">Inschrijven</button>
 
@@ -163,7 +137,7 @@
             text-decoration: none;
         }
 
-    .plannedGames {
+    .scroll-container {
         grid-column: 2 / 5;
         grid-row: 2 / 3; 
         margin: 40px 40px 120px 40px;
