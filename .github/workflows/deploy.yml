@@ -35,8 +35,10 @@ jobs:
             # Step to execute the ef migrations
           - name: Execute EF migrations
             run: |
-                  chmod +x ./migrations/migrations.exe
-                  ./migrations/migrations.exe --connection "Server=tcp:${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net,1433;Database=${{ secrets.AZURE_SQL_DATABASE_NAME }};User ID=bordspelavond_migrator;Password=${{ secrets.AZURE_SQL_MIGRATOR_PASSWORD }};Trusted_Connection=False;Encrypt=True;"
+              chmod +x ./migrations/migrations.exe
+              ./migrations/migrations.exe --connection "Server=tcp:${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net,1433;Database=${{ secrets.AZURE_SQL_DATABASE_NAME }};User ID=bordspelavond_migrator;Password=${{ secrets.AZURE_SQL_MIGRATOR_PASSWORD }};Trusted_Connection=False;Encrypt=True;"
+              chmod +x ./migrations/migrations-auth.exe
+              ./migrations/migrations-auth.exe --connection "Server=tcp:${{ secrets.AZURE_SQL_SERVER_NAME }}.database.windows.net,1433;Database=${{ secrets.AZURE_SQL_DATABASE_NAME }};User ID=bordspelavond_migrator;Password=${{ secrets.AZURE_SQL_MIGRATOR_PASSWORD }};Trusted_Connection=False;Encrypt=True;"
 
           - uses: azure/login@v1
             with:

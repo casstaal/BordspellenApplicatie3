@@ -214,12 +214,17 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
                     b.Property<int>("BoardGameNightId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("BoardGameNightId1")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BoardGameNightId");
+
+                    b.HasIndex("BoardGameNightId1");
 
                     b.HasIndex("UserId");
 
@@ -330,6 +335,10 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("BordspellenApplicatie.Domain.Models.BoardGameNight", null)
+                        .WithMany("RegisteredUsers")
+                        .HasForeignKey("BoardGameNightId1");
+
                     b.HasOne("BordspellenApplicatie.Domain.Models.User", "User")
                         .WithMany("UserBoardGameNights")
                         .HasForeignKey("UserId")
@@ -344,6 +353,8 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
             modelBuilder.Entity("BordspellenApplicatie.Domain.Models.BoardGameNight", b =>
                 {
                     b.Navigation("Games");
+
+                    b.Navigation("RegisteredUsers");
 
                     b.Navigation("Reviews");
 

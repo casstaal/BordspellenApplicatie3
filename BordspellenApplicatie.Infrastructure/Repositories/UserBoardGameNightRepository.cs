@@ -12,13 +12,14 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
 {
     public class UserBoardGameNightRepository(BordspellenavondDBContext dBContext) : IUserBoardGameNightRepository
     {
-        public IEnumerable<UserBoardGameNight> GetAll(string userId)
+        public IEnumerable<UserBoardGameNight> GetAll(int userId)
         {
             //return dBContext.UserBoardGameNights.ToList();
 
             return dBContext.UserBoardGameNights
-                .Where(ubgn => ubgn.UserId.ToString() == userId)  // Filter by userId
+                .Where(ubgn => ubgn.UserId == userId)  // Filter by userId
                 .Include(ubgn => ubgn.GameNight)  // Assuming you want details of the BoardGameNight too
+                .ThenInclude(gn => gn.Organizer)       // Include the Organizer of the GameNight
                 .ToList();
         }
 

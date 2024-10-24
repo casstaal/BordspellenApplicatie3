@@ -9,7 +9,7 @@ namespace BordspellenApplicatie.Domain.Interfaces
 {
     public interface IUserBoardGameNightRepository
     {
-        public IEnumerable<UserBoardGameNight> GetAll(string userId);
+        public IEnumerable<UserBoardGameNight> GetAll(int userId);
 
         // Gebruik voor inschrijven user
         Task AddUserBoardGameNightAsync(UserBoardGameNight userBoardGameNight);

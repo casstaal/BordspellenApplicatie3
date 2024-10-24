@@ -142,7 +142,7 @@ namespace BordspellenApplicatie.Controllers
             if (existingRegistration)
             {
                 ModelState.AddModelError(string.Empty, "You are already signed up for this game night.");
-                return RedirectToAction("EventDetails", new { id = gameNightId });
+                return RedirectToAction("Details", "BoardGameNight", new { id = gameNightId });
             }
 
             var userGameNight = new UserBoardGameNight
@@ -155,7 +155,7 @@ namespace BordspellenApplicatie.Controllers
             await _userBoardGameNightRepository.AddUserBoardGameNightAsync(userGameNight);
 
             // Redirect to the event details page or display a success message
-            return RedirectToAction("EventDetails", new { id = gameNightId });
+            return RedirectToAction("Details", "BoardGameNight", new { id = gameNightId });
         }
     }
 }

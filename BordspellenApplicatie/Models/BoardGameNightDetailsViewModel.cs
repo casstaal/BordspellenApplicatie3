@@ -30,7 +30,7 @@ namespace BordspellenApplicatie.Models
         public ICollection<UserBoardGameNight> UserBoardGameNights { get; set; } = new List<UserBoardGameNight>();
         public int RegisteredUsersCount { get; set; }
         public bool IsSignedUp { get; set; }
-
+        public int Id { get; set; }
 
     }
 }

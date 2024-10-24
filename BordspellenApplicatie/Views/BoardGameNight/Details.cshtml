@@ -58,7 +58,10 @@
                 <p><b>Stad:</b> @Model.Address.City</p>
             </div> *@
 
-            <button class="signUpButton">Inschrijven</button>
+            <form asp-action="SignUp" method="post">
+                <input type="hidden" name="gameNightId" value="@Model.Id" />
+                <button type="submit" @(Model.IsSignedUp ? "disabled" : "")>Inschrijven</button>
+            </form>
 
             <div class="description-food-drinks">
                 <h5>Beschrijving drinken en eten</h5>
