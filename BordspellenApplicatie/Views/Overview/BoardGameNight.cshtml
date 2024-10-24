@@ -14,46 +14,62 @@
     @*     <link rel="stylesheet" href="/css/style.css"/> *@
 </head>
 <body>
-    <vc:header></vc:header>
-    <div class="container-fluid">
-        <div class="navigation">
-            <p>
-                Homepage / <b>Overzicht bordspellenavonden</b>
-            </p>
-            <h1>
-                Overzicht bordspellenavonden
-            </h1>
-        </div>
-        <div class="grid-container">
-            @if (Model != null)
-            {
-                foreach (var boardGameNight in Model)
+    <div class="page-wrapper">
+        <vc:header></vc:header>
+        <div class="container-fluid content">
+            <div class="navigation">
+                <p>
+                    Homepage / <b>Overzicht bordspellenavonden</b>
+                </p>
+                <h1>
+                    Overzicht bordspellenavonden
+                </h1>
+            </div>
+            <div class="grid-container">
+                @if (Model != null)
                 {
-                    <div class="card">
-                        <img src="/banner6.jpg" alt="User Icon" class="card-img" style="max-height: 100px;">
-                        <h5 class="card-title">@boardGameNight.Title</h5>
-                        <p class="card-text">
-                            Date: @boardGameNight.DateTime.ToString("MMMM dd, yyyy")<br />
-                        </p>
-                    </div>
+                    foreach (var boardGameNight in Model)
+                    {
+                        <a class="gameNightLink" href="@Url.Action("Details", "BoardGameNight", new { id = boardGameNight.Id, title = boardGameNight.Title, date = boardGameNight.DateTime.ToString("yyyy-MM-dd") })">
+                            <div class="card">
+                                <img src="/banner6.jpg" alt="User Icon" class="card-img" style="max-height: 100px;">
+                                <h5 class="card-title">@boardGameNight.Title</h5>
+                                <p class="card-text">
+                                    Date: @boardGameNight.DateTime.ToString("MMMM dd, yyyy")<br />
+                                </p>
+                            </div>
+                        </a>
+                    }
                 }
-            }
-            else
-            {
-                <p>No board game nights found.</p>
-            }
+                else
+                {
+                    <p>No board game nights found.</p>
+                }
+            </div>
         </div>
+        <vc:footer></vc:footer>
     </div>
-    <vc:footer></vc:footer>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 <style>
-    body {
-        font-family: Arial, sans-serif;
+    html, body {
+        height: 100%;
         margin: 0;
-        padding: 0;
+        display: flex;
+        flex-direction: column;
+        background-color: #AFDDE5;
+    }
+
+    .page-wrapper {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .content {
+        flex: 1;
     }
 
     .container {

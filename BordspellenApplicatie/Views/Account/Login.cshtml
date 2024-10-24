@@ -14,48 +14,64 @@
     @*     <link rel="stylesheet" href="/css/style.css"/> *@
 </head>
 <body>
-    <vc:header></vc:header>
-    <div class="container-fluid">
-        <h1 class="title">Login</h1>
-
-        <form asp-action="Login" method="post" class="loginForm">
-            <div><span asp-validation-for="Name" class="text-danger"></span></div>
-            <div>
-                <label asp-for="Name">Email</label><br />
-                <input asp-for="Name" type="text"/>
-            </div>
-            <div style="margin-top: 15px;">
-                <label asp-for="Password">Password</label><br />
-                <input asp-for="Password" type="password" />
-            </div>
-@*             <div>
+    <div class="page-wrapper">
+        <vc:header></vc:header>
+        <div class="container-fluid content">
+            <h1 class="title">Login</h1>
+            <form asp-action="Login" method="post" class="loginForm">
+                <div><span asp-validation-for="Name" class="text-danger"></span></div>
+                <div>
+                    <label asp-for="Name">Email</label><br />
+                    <input asp-for="Name" type="text" />
+                </div>
+                <div style="margin-top: 15px;">
+                    <label asp-for="Password">Password</label><br />
+                    <input asp-for="Password" type="password" />
+                </div>
+                @*             <div>
                 <p style="text-align: center; margin-top: 10px;">Wachtwoord vergeten</p>
-            </div>
-            <div class="buttonContainer">
+                </div>
+                <div class="buttonContainer">
                 <button class="saveButton" type="submit">Login</button>
-            </div> *@
-            <div asp-validation-summary="All"></div>
-            <div class="buttonContainer">
-                <button class="saveButton" type="submit">Login</button>
-            </div>
-        </form>
+                </div> *@
+                <div asp-validation-summary="All"></div>
+                <div class="buttonContainer">
+                    <button class="saveButton" type="submit">Login</button>
+                </div>
+            </form>
 
-@*         <div class="signUp">
+            @*         <div class="signUp">
             <p style="text-align: center;">Ik heb nog geen account</p>
             <div class="buttonContainer">
-                <button class="signUpButton">Sign Up</button>
+            <button class="signUpButton">Sign Up</button>
             </div>
-        </div> *@
+            </div> *@
+        </div>
+        <vc:footer></vc:footer>
     </div>
-    <vc:footer></vc:footer>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 <style>
-    body {
+    html, body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
         background-color: #AFDDE5;
     }
+
+    .page-wrapper {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .content {
+        flex: 1;
+    }
+
     .container-fluid {
         display: grid;
         grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
@@ -98,8 +114,9 @@
         display: flex;
         justify-content: center;
         margin-top: 10px;
-        margin-bottom: 30px;
         margin-top: 30px;
+        margin-bottom: -85px;
+ 
     }
 
     .saveButton {

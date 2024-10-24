@@ -5,17 +5,21 @@ using BordspellenApplicatie.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.Reflection;
 using System.Security.Claims;
 
 namespace BordspellenApplicatie.Controllers
 {
-    public class AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, IUserRepository userRepository) : Controller
+    public class AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, IUserRepository userRepository, IBoardGameNightRepository boardGameNightRepository, IUserBoardGameNightRepository userBoardGameNightRepository) : Controller
     {
 
         private readonly UserManager<IdentityUser> userManager = userManager;
         private readonly SignInManager<IdentityUser> signInManager = signInManager;
         private readonly RoleManager<IdentityRole> roleManager = roleManager;
         private readonly IUserRepository userRepository = userRepository;
+        private readonly IBoardGameNightRepository _boardGameNightRepository = boardGameNightRepository;
+        private readonly IUserBoardGameNightRepository _userBoardGameNightRepository = userBoardGameNightRepository;
 
 
         [AllowAnonymous]
@@ -219,6 +223,49 @@ namespace BordspellenApplicatie.Controllers
             return View(); 
         }
 
+
+        [HttpPost]
+        public IActionResult UpdateDetails(User model)
+        {
+            //if (ModelState.IsValid)
+            //{
+            //    // Update the user's details in the database
+            //    userRepository.Update(model); // Assume a service is used to update user details
+
+            //    // Redirect to a confirmation or the My Details page again
+            //    return RedirectToAction("Details", "Account");
+            //}
+
+            //// If the model is invalid, return to the view with validation errors
+            //return View("Details", model);
+            var userBoardgameNights = _userBoardGameNightRepository.GetAll(model.Id);
+
+            if (!ModelState.IsValid)
+            {
+                return View("Details", model);
+            }
+
+            // Get the existing game night using the ID from the model
+            var userToUpdate = userRepository.GetById(model.Id);
+            if (userToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            // Update fields directly from the model
+            userToUpdate.FirstName = model.FirstName;
+            userToUpdate.LastName = model.LastName;
+            userToUpdate.DateOfBirth = model.DateOfBirth;
+            userToUpdate.Address.Street = model.Address.Street; 
+            userToUpdate.Address.Number = model.Address.Number;
+            userToUpdate.Address.City = model.Address.City;
+            userToUpdate.UserBoardGameNights = userBoardgameNights.ToList();
+
+            // Save changes to the repository
+            userRepository.UpdateAsync(userToUpdate);
+
+            return RedirectToAction("Details", "Account"); // Redirect after update
+        }
 
 
     }

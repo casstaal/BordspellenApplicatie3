@@ -239,7 +239,7 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("BordspellenApplicatie.Domain.Models.Address", "Address", b1 =>
+                    b.OwnsOne("BordspellenApplicatie.Domain.Models.BoardGameNight.Address#BordspellenApplicatie.Domain.Models.Address", "Address", b1 =>
                         {
                             b1.Property<int>("BoardGameNightId")
                                 .HasColumnType("int");
@@ -298,7 +298,7 @@ namespace BordspellenApplicatie.Infrastructure.Migrations
 
             modelBuilder.Entity("BordspellenApplicatie.Domain.Models.User", b =>
                 {
-                    b.OwnsOne("BordspellenApplicatie.Domain.Models.Address", "Address", b1 =>
+                    b.OwnsOne("BordspellenApplicatie.Domain.Models.User.Address#BordspellenApplicatie.Domain.Models.Address", "Address", b1 =>
                         {
                             b1.Property<int>("UserId")
                                 .HasColumnType("int");

@@ -5,6 +5,7 @@ using BordspellenApplicatie.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BordspellenApplicatie.Controllers
 {
@@ -17,11 +18,48 @@ namespace BordspellenApplicatie.Controllers
         private readonly IBoardGameNightRepository _boardGameNightRepository = boardGameNightRepository;
         private readonly IUserBoardGameNightRepository _userBoardGameNightRepository = userBoardGameNightRepository;
 
-
         public IActionResult Details(BoardGameNightDetailsViewModel boardGameNightDetailsViewModel)
         {
             return View(boardGameNightDetailsViewModel);
         }
+        //public async Task<IActionResult> Details(BoardGameNightDetailsViewModel boardGameNightDetailsViewModel)
+        //{
+        //    //// Get the current user's ID (assuming you're using Identity or similar authentication)
+        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Fetch the logged-in user's ID
+
+        //    //// Fetch the board game night details from your repository (assuming you have this method)
+        //    //var gameNightDetails = await _boardGameNightRepository.GetBoardGameNightByIdAsync(boardGameNightId);
+
+        //    //if (gameNightDetails == null)
+        //    //{
+        //    //    return NotFound();  // Handle the case where the board game night doesn't exist
+        //    //}
+
+        //    //// Check if the current user is signed up for this game night
+        //    bool isSignedUp = await _userBoardGameNightRepository.IsUserRegisteredForBoardGameNightAsync(boardGameNightDetailsViewModel.Id, userId);
+
+        //    //// Build the view model
+        //    //var viewModel = new BoardGameNightDetailsViewModel
+        //    //{
+        //    //    Id = gameNightDetails.Id,
+        //    //    Title = gameNightDetails.Title,
+        //    //    Description = gameNightDetails.Description,
+        //    //    Organizer = gameNightDetails.Organizer,
+        //    //    DateTime = gameNightDetails.DateTime,
+        //    //    MaxPlayers = gameNightDetails.MaxPlayers,
+        //    //    IsSignedUp = isSignedUp,  // Set this to true if the user is signed up
+        //    //    Games = gameNightDetails.Games.ToList(),
+        //    //    RegisteredUsersCount = gameNightDetails.RegisteredUsers.Count(),  // Or whatever logic you use to count
+        //    //    Is18Plus = gameNightDetails.Is18Plus
+        //    //};
+        //    var viewModel = new BoardGameNightDetailsViewModel
+        //    {
+        //        IsSignedUp = isSignedUp
+        //    };
+
+        //    return View(viewModel);
+        //    //return View(boardGameNightDetailsViewModel);
+        //}
 
         public IActionResult Create()
         {
@@ -156,6 +194,21 @@ namespace BordspellenApplicatie.Controllers
 
             // Redirect to the event details page or display a success message
             return RedirectToAction("Details", "BoardGameNight", new { id = gameNightId });
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteUserGameNight(int gameNightId)
+        {
+            var userId = _userManager.GetUserId(User);
+            var user = await _userRepository.GetUserByIdentityIdAsync(userId);
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            await _userBoardGameNightRepository.DeleteUserGameNightAsync(gameNightId, user.Id);
+            return Ok();
         }
     }
 }

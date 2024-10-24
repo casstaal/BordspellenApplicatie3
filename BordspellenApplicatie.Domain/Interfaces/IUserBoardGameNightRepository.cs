@@ -19,5 +19,7 @@ namespace BordspellenApplicatie.Domain.Interfaces
 
 
         Task<bool> IsUserRegisteredForBoardGameNightAsync(int boardGameNightId, string userId);
+        public Task DeleteUserGameNightAsync(int gamenightId, int userId);
+
     }
 }

@@ -51,5 +51,21 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
             return await dBContext.UserBoardGameNights
                 .AnyAsync(ubgn => ubgn.BoardGameNightId == boardGameNightId && ubgn.UserId.ToString() == userId);
         }
+
+        public async Task DeleteUserGameNightAsync(int gamenightId, int userId)
+        {
+            // Find the existing entry for the given user and board game night
+            var existingEntry = await dBContext.UserBoardGameNights
+                .FirstOrDefaultAsync(ubgn => ubgn.UserId == userId && ubgn.BoardGameNightId == gamenightId);
+
+            if (existingEntry != null)
+            {
+                // Remove the entry from the context
+                dBContext.UserBoardGameNights.Remove(existingEntry);
+
+                // Save changes to persist the deletion
+                await dBContext.SaveChangesAsync();
+            }
+        }
     }
 }

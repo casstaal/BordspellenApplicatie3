@@ -17,6 +17,7 @@ namespace BordspellenApplicatie.Domain.Interfaces
 
         public void Add(User user);
         public void Update(User user);
+        Task UpdateAsync(User user);
         public void Delete(int id);
         Task<User> GetUserByIdentityIdAsync(string identityId);
         public IEnumerable<BoardGameNight> getOrganizedBoardGameNights(string identityID);

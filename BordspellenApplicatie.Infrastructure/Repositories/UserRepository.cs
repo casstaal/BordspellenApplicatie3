@@ -45,6 +45,29 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
             dBContext.SaveChanges();
         }
 
+        public async Task UpdateAsync(User user)
+        {
+            var userToUpdate = await dBContext.Users
+                //.Include(u => u.UserBoardGameNights)  // Load the collection
+                .Include(bgn => bgn.Address)
+                .FirstOrDefaultAsync(bgn => bgn.Id == user.Id);
+
+            if (userToUpdate == null)
+            {
+                throw new InvalidOperationException("User not found");
+            }
+
+            userToUpdate.FirstName = user.FirstName;
+            userToUpdate.LastName = user.LastName;
+            userToUpdate.DateOfBirth = user.DateOfBirth;
+            userToUpdate.Address.Street = user.Address.Street;
+            userToUpdate.Address.Number = user.Address.Number;
+            userToUpdate.Address.City = user.Address.City;
+            userToUpdate.UserBoardGameNights = user.UserBoardGameNights;
+
+            await dBContext.SaveChangesAsync();
+        }
+
         public async Task<User> GetUserByIdentityIdAsync(string identityId)
         {
             return await dBContext.Users.SingleOrDefaultAsync(u => u.IdentityId == identityId);

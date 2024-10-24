@@ -20,9 +20,16 @@ namespace BordspellenApplicatie.Controllers
             return View(boardGameNights);
         }
 
-        public IActionResult OrganizedBoardGameNights()
+        public async Task<IActionResult> OrganizedBoardGameNights()
         {
-            return View();
+            var identityUser = await userManager.FindByNameAsync(User.Identity.Name);
+            if (identityUser == null)
+            {
+                return Unauthorized();
+            }
+
+            var organizedGameNights = userRepository.getOrganizedBoardGameNights(identityUser.Id);
+            return View(organizedGameNights);
         }
 
         private BoardGameNightDetailsViewModel MapToViewModel(UserBoardGameNight userBoardGameNight)

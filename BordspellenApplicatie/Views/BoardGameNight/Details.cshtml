@@ -57,12 +57,26 @@
                 <p><b>Straat + huisnummer: </b>@Model.Address.Street @Model.Address.Number</p>
                 <p><b>Stad:</b> @Model.Address.City</p>
             </div> *@
-
+         @if (Model.IsSignedUp)
+        {
+@*             <button class="unsubscribe-button" onclick="deleteUserGameNight(@Model.Id)">Uitschrijven</button>
+ *@
+            <form asp-action="DeleteUserGameNight" method="post">
+                <input type="hidden" name="gameNightId" value="@Model.Id" />
+                <button type="submit" class="btn btn-danger">Uitschrijven</button>
+            </form>
+        } else
+        {
             <form asp-action="SignUp" method="post">
                 <input type="hidden" name="gameNightId" value="@Model.Id" />
                 <button type="submit" @(Model.IsSignedUp ? "disabled" : "")>Inschrijven</button>
             </form>
+        } 
 
+@*             <form asp-action="SignUp" method="post">
+                <input type="hidden" name="gameNightId" value="@Model.Id" />
+                <button type="submit" @(Model.IsSignedUp ? "disabled" : "")>Inschrijven</button>
+            </form> *@
             <div class="description-food-drinks">
                 <h5>Beschrijving drinken en eten</h5>
                 <p>
@@ -199,3 +213,24 @@
             transform: scale(1.05);
         }
 </style>
+
+
+<script>
+    async function deleteUserGameNight(gameNightId) {
+        try {
+            const response = await fetch(`/BoardGameNight/DeleteUserGameNight?gameNightId=${gameNightId}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                alert("U bent succesvol uitgeschreven.");
+                location.reload();
+            } else {
+                alert("Er is iets misgegaan bij het uitschrijven.");
+            }
+        } catch (error) {
+            console.error("Error deleting game night:", error);
+            alert("Er is een fout opgetreden.");
+        }
+    }
+</script>
