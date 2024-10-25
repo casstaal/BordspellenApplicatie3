@@ -28,7 +28,7 @@
                 </h1>
             </div>
             <div class="accountChoises">
-                @Html.ActionLink("My details", "Details", "Account", null, new { @class = "account-link", @style = "background-color: #0FA4AF" })<br />
+                @Html.ActionLink("My details", "Details", "Account", null, new { @class = "account-link-selected", @style = "background-color: #0FA4AF; color: white;" })<br />
                 @Html.ActionLink("Aangemelde bordspelavonden", "Registered", "Account", null, new { @class = "account-link" })<br />
                 @Html.ActionLink("Georganiseerde bordspelavonden", "Organized", "Account", null, new { @class = "account-link" })<br />
                 @Html.ActionLink("Dieetwensen en allergieen", "Allergies", "Account", null, new { @class = "account-link" })<br />
@@ -101,7 +101,7 @@
     .container-fluid {
         display: grid;
         grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
-        grid-template-columns: 1fr 0.5fr 1fr 1fr;
+        grid-template-columns: 1fr 0.5fr 1fr 1fr 0.5fr;
         gap: 10px;
         height: 100vh;
     }
@@ -146,6 +146,17 @@
     .account-link {
         color: black;
         display: block;
+    }
+
+    .account-link-selected {
+        color: black;
+        display: block;
+        padding-left: 5px;
+        margin-left: -5px;
+        border-radius: 5px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        margin-right: 100px;
     }
 
     .account-link:hover {

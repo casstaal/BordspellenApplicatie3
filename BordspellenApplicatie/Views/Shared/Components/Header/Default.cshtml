@@ -1,55 +1,62 @@
-﻿<div class="navbar d-flex">
-    <a href="/">
-        <img src="/logoBoardgame.jpg" alt="Logo" class="img-fluid" style="max-height: 50px;">
-    </a>
-    @Html.ActionLink("Bordspelavonden", "BoardGameNight", "Overview", null, new { @class = "navigation-link" })
-    @Html.ActionLink("Aangemeld", "RegisteredBoardGameNights", "Overview", null, new { @class = "navigation-link" })
-    @Html.ActionLink("Organiseren", "OrganizedBoardGameNights", "Overview", null, new { @class = "navigation-link" })
-
-    @if (User.Identity.IsAuthenticated)
-    {
-        <a asp-controller="Account" asp-action="Logout">Logout</a>
-        <a asp-controller="Account" asp-action="Details">
-            <img src="/userIcon.png" alt="User Icon" class="img-fluid" style="max-height: 40px;">
+﻿<div class="navbar d-flex justify-content-between">
+    <div class="navbar-left d-flex align-items-center">
+        <a href="/">
+            <img src="/logoBoardgame.jpg" alt="Logo" class="img-fluid" style="max-height: 50px;">
         </a>
-    }
-    else
-    {
-        <a asp-controller="Account" asp-action="Login" class="loginButton">Login</a>
-        <button onclick="location.href='@Url.Action("Register", "Account")'">Aanmelden</button>
-    }
+        @Html.ActionLink("Bordspelavonden", "BoardGameNight", "Overview", null, new { @class = "navigation-link mx-3" })
+        @Html.ActionLink("Aangemeld", "RegisteredBoardGameNights", "Overview", null, new { @class = "navigation-link mx-3" })
+        @Html.ActionLink("Organiseren", "OrganizedBoardGameNights", "Overview", null, new { @class = "navigation-link mx-3" })
+    </div>
+
+    <div class="navbar-right d-flex align-items-center">
+        @if (User.Identity.IsAuthenticated)
+
+        {
+            <a asp-controller="Account" asp-action="Logout" class="logoutButton mx-3">Logout</a>
+            <a asp-controller="Account" asp-action="Details">
+                <img src="/userIcon.png" alt="User Icon" class="img-fluid" style="max-height: 40px;">
+            </a>
+        }
+
+        else
+
+        {
+            <a asp-controller="Account" asp-action="Login" class="loginButton mx-3">Login</a>
+            <button onclick="location.href='@Url.Action("Register", "Account")'" class="registerButton">Aanmelden</button>
+        }
+    </div>
 </div>
 
 <style>
-         .navbar {
-            grid-column: 1 / 5;
-            grid-row: 1 / 2;
-            background-color: #0FA4AF;
-            padding: 10px;
-            display: flex;
-            align-items: center;
-        } 
+    .navbar {
+        background-color: #0FA4AF;
+        padding: 10px;
+    }
 
-        .navigation-link {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
+    .navigation-link, .loginButton, .logoutButton {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+    }
 
-        .navigation-link:hover {
+        .navigation-link:hover, .loginButton:hover, .logoutButton:hover {
             color: #964734;
         }
 
-        button {
-            background-color: #964734;
-            color: white;
-            padding: 6px;
-            border-radius: 4px;
-        }
+     button {
+         background-color: #964734;
+         color: white;
+     }
 
-        .loginButton {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
+    .registerButton {
+        background-color: #964734;
+        color: white;
+        padding: 6px 10px;
+        border: none;
+        border-radius: 4px;
+    }
+
+    .navbar-left a, .navbar-right a, .navbar-right button {
+        margin-left: 15px;
+    }
 </style>

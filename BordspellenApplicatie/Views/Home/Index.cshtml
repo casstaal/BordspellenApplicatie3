@@ -68,9 +68,10 @@
 </html>
 <style>
 
-    body {
+    html, body {
         background-color: #AFDDE5;
-    }
+        font-family: Arial;
+     }
     .container-fluid {
         display: grid;
         grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
@@ -93,11 +94,23 @@
         color: white;
     }
 
+/*     .text-banner {
+        position: absolute;
+        bottom: 8px;
+        left: 16px;
+    } */
+
     .text-banner {
         position: absolute;
         bottom: 8px;
         left: 16px;
+        text-align: left; /* Aligns the content to the left */
     }
+
+        .text-banner h1,
+        .text-banner p {
+            text-align: left; /* Ensures all text inside text-banner aligns to the left */
+        }
 
     .info-section {
         grid-column: 2 / 3;

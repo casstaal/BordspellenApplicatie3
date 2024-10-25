@@ -17,7 +17,7 @@
     <div class="page-wrapper">
         <vc:header></vc:header>
         <div class="container-fluid content">
-            <div class="navigation">
+            <div style="margin-top: 10px; margin-left: 50px;" class="navigation">
                 <p>
                     Homepage / <b>Overzicht bordspellenavonden</b>
                 </p>
@@ -33,7 +33,13 @@
                         <a class="gameNightLink" href="@Url.Action("Details", "BoardGameNight", new { id = boardGameNight.Id, title = boardGameNight.Title, date = boardGameNight.DateTime.ToString("yyyy-MM-dd") })">
                             <div class="card">
                                 <img src="/banner6.jpg" alt="User Icon" class="card-img" style="max-height: 100px;">
-                                <h5 class="card-title">@boardGameNight.Title</h5>
+                                <div class="title-container">
+                                    <h5 class="card-title">@boardGameNight.Title</h5>
+                                    @if (!boardGameNight.Is18Plus)
+                                    {
+                                        <span class="age-indicator">18+</span>
+                                    }
+                                </div>
                                 <p class="card-text">
                                     Date: @boardGameNight.DateTime.ToString("MMMM dd, yyyy")<br />
                                 </p>
@@ -60,6 +66,7 @@
         display: flex;
         flex-direction: column;
         background-color: #AFDDE5;
+        font-family: Arial;
     }
 
     .page-wrapper {
@@ -88,25 +95,40 @@
         grid-template-rows: repeat(2, auto); /* 2 rows */
         gap: 20px;
         margin-top: 20px;
+        margin-left: 50px;
     }
 
     .card {
-        background-color: #f4f4f4;
+        background-color: darkcyan;
         padding: 20px;
-        border: 1px solid #ddd;
         border-radius: 8px;
-        text-align: center;
+        text-align: left;
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        color: white;
+    }
+
+    .title-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .age-indicator {
+        font-size: 1.1em;
+        font-weight: bold;
+        color: white;
+        margin-left: 10px;
     }
 
     .card-title {
         font-size: 1.25em;
-        margin-bottom: 10px;
+        margin-top: 7px;
     }
 
     .card-text {
         font-size: 0.95em;
-        color: #555;
+        color: white;
     }
 </style>
 
