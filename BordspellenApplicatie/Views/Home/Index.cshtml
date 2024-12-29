@@ -43,15 +43,22 @@
                 {
                     @foreach (var gameEvent in Model)
                     {
-                        <a class="gameNightLink" href="@Url.Action("Details", "BoardGameNight", new { id = gameEvent.Id, title = gameEvent.Title, date = gameEvent.DateTime.ToString("yyyy-MM-dd") })">
-                            <div class="scroll-item card text-center">
-                                <div class="card-body">
-                                    <img src="/banner6.jpg" alt="Usert Icon" class="card-img" style="max-height: 100px;">
+                        <div class="scroll-item card">
+                            <div class="card-body">
+                                <img src="/banner6.jpg" alt="Usert Icon" class="card-img" style="max-height: 100px;">
+                                <div class="title-container">
                                     <h5 class="card-title">@gameEvent.Title</h5>
-                                    <p class="card-text">Date: @gameEvent.DateTime.ToString("dd MMM yyyy")</p>
+                                    @if (!gameEvent.Is18Plus)
+                                    {
+                                        <span class="age-indicator">18+</span>
+                                    }
                                 </div>
+                                <p class="card-text">Date: @gameEvent.DateTime.ToString("dd MMM yyyy")</p>
                             </div>
-                        </a>
+                            <a class="gameNightLink btn" style="background-color:#964734; color:white; margin:0px 20px 20px 20px" href="@Url.Action("Details", "BoardGameNight", new { id = gameEvent.Id, title = gameEvent.Title, date = gameEvent.DateTime.ToString("yyyy-MM-dd") })">
+                                Zie details
+                            </a>
+                        </div>
                     }
                 } else
                 {
@@ -156,11 +163,37 @@
         margin-right: 15px;
         transition: transform 0.3s;
         width: 200px;
-        background-color: aliceblue;
+        background-color: darkcyan;
+        color: white;
+        border-radius: 8px;
     }
 
     .scroll-item:hover {
         transform: scale(1.05); 
+    }
+
+    .title-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .age-indicator {
+        font-size: 1.1em;
+        font-weight: bold;
+        color: white;
+        margin-left: 10px;
+    }
+
+    .card-title {
+        font-size: 1.25em;
+        margin-top: 7px;
+    }
+
+    .card-text {
+        font-size: 0.95em;
+        color: white;
     }
 
 
@@ -203,6 +236,12 @@
     .bordspelavonden-link:hover {
         color: #964734;
     }
+
+/*     .card-body {
+        background-color: darkcyan;
+        color: white;
+        border-radius: 8px;
+    } */
 </style> 
 
 @* <script>
