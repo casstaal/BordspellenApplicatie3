@@ -18,10 +18,66 @@ namespace BordspellenApplicatie.Controllers
         private readonly IBoardGameNightRepository _boardGameNightRepository = boardGameNightRepository;
         private readonly IUserBoardGameNightRepository _userBoardGameNightRepository = userBoardGameNightRepository;
 
-        public IActionResult Details(BoardGameNightDetailsViewModel boardGameNightDetailsViewModel)
+        //public IActionResult Details(BoardGameNightDetailsViewModel boardGameNightDetailsViewModel)
+        //{
+        //    return View(boardGameNightDetailsViewModel);
+        //}
+
+        public IActionResult Details(int id)
         {
-            return View(boardGameNightDetailsViewModel);
+            var gameNightDetails = _boardGameNightRepository.GetById(id);
+
+            if (gameNightDetails == null)
+            {
+                return NotFound();
+            }
+
+            var organizer = gameNightDetails.Organizer;
+
+
+            var viewModel = new BoardGameNightDetailsViewModel
+            {
+                //Id = boardGameNightDetails.Id,
+                //Title = userBoardGameNight.GameNight.Title ?? "No Title",
+                //Organizer = organizer != null
+                //    ? $"{organizer.FirstName} {organizer.LastName}"
+                //    : "Unknown Organizer", // Only set "Unknown Organizer" if no organizer is found
+                //Description = userBoardGameNight.GameNight.Description ?? "No Description",
+                //DateTime = userBoardGameNight.GameNight.DateTime,
+                //MaxPlayers = userBoardGameNight.GameNight.MaxPlayers,
+                //Food = userBoardGameNight.GameNight.Food ?? "No Food Information",
+                //Is18Plus = userBoardGameNight.GameNight.Is18Plus,
+                //IsLactoseIntoleranceFriendly = userBoardGameNight.GameNight.IsLactoseIntoleranceFriendly,
+                //IsNutAllergyFriendly = userBoardGameNight.GameNight.IsNutAllergyFriendly,
+                //IsNonAlcoholicFriendly = userBoardGameNight.GameNight.IsNonAlcoholicFriendly,
+                //IsVegetarianFriendly = userBoardGameNight.GameNight.IsVegetarianFriendly,
+                //IsSignedUp = true,
+                //Games = userBoardGameNight.GameNight.Games?.ToList() ?? new List<Boardgame>(),
+                //RegisteredUsersCount = userBoardGameNight.GameNight.RegisteredUsers?.Count ?? 0
+
+                Id = gameNightDetails.Id,
+                Title = gameNightDetails.Title,
+                Description = gameNightDetails.Description,
+                Organizer = organizer != null
+                    ? $"{organizer.FirstName} {organizer.LastName}"
+                    : "Unknown Organizer", // Only set "Unknown Organizer" if no organizer is found
+                DateTime = gameNightDetails.DateTime,
+                MaxPlayers = gameNightDetails.MaxPlayers,
+                Food = gameNightDetails.Food,
+                IsLactoseIntoleranceFriendly = gameNightDetails.IsLactoseIntoleranceFriendly,
+                IsNutAllergyFriendly = gameNightDetails.IsNutAllergyFriendly,
+                IsNonAlcoholicFriendly = gameNightDetails.IsNonAlcoholicFriendly,
+                IsVegetarianFriendly = gameNightDetails.IsVegetarianFriendly,
+                IsSignedUp = true,  // Set this to true if the user is signed up
+                Games = gameNightDetails.Games.ToList() ?? new List<Boardgame>(),
+                RegisteredUsersCount = gameNightDetails.RegisteredUsers.Count(),  // Or whatever logic you use to count
+                Is18Plus = gameNightDetails.Is18Plus
+            };
+
+            return View(viewModel);
         }
+
+
         //public async Task<IActionResult> Details(BoardGameNightDetailsViewModel boardGameNightDetailsViewModel)
         //{
         //    //// Get the current user's ID (assuming you're using Identity or similar authentication)

@@ -4,8 +4,11 @@
             <img src="/logoBoardgame.jpg" alt="Logo" class="img-fluid" style="max-height: 50px;">
         </a>
         @Html.ActionLink("Bordspelavonden", "BoardGameNight", "Overview", null, new { @class = "navigation-link mx-3" })
-        @Html.ActionLink("Aangemeld", "RegisteredBoardGameNights", "Overview", null, new { @class = "navigation-link mx-3" })
-        @Html.ActionLink("Organiseren", "OrganizedBoardGameNights", "Overview", null, new { @class = "navigation-link mx-3" })
+        @if(User.Identity.IsAuthenticated)
+        {
+            @Html.ActionLink("Aangemeld", "RegisteredBoardGameNights", "Overview", null, new { @class = "navigation-link mx-3" })
+            @Html.ActionLink("Organiseren", "OrganizedBoardGameNights", "Overview", null, new { @class = "navigation-link mx-3" })
+        }
     </div>
 
     <div class="navbar-right d-flex align-items-center">
