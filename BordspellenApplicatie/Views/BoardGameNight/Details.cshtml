@@ -21,7 +21,14 @@
                 <div class="col-2"></div>
                 <div class="scroll-container col-8">
                     <div class="row">
-                        <h3 class="col-12">Geplande Bordspellen</h3>
+                    <form asp-action="DeleteUserGameNight" asp-controller="BoardGameNight" method="post" onsubmit="return confirm('Are you sure you want to delete this?');">
+                        <input type="hidden" name="gameNightId" value="@Model.Id" />
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                    <a class="gameNightLink btn" style="background-color:#964734; color:white" href="@Url.Action("Edit", "BoardGameNight", new { id = Model.Id })">
+                        Edit
+                    </a>
+                    <h3 class="col-12">Geplande Bordspellen</h3>
                         <div class="col-12">
                             @if (Model != null)
                             {

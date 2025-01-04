@@ -25,6 +25,7 @@ namespace BordspellenApplicatie.Domain.Interfaces
         public void Add(BoardGameNight boardGameNight);
         public void Update(BoardGameNight boardGameNight);
         public void Delete(int id);
+        void Delete(BoardGameNight boardGameNight);
 
         // Nog een methode om de bijbehorende games op te vragen
         public IEnumerable<Boardgame> GetAllGames(BoardGameNight boardGameNight);

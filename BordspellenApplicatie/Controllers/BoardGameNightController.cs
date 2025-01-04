@@ -1,22 +1,22 @@
 ﻿using BordspellenApplicatie.Domain.Interfaces;
 using BordspellenApplicatie.Domain.Models;
-using BordspellenApplicatie.Infrastructure.Repositories;
 using BordspellenApplicatie.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace BordspellenApplicatie.Controllers
 {
     [Authorize]
-    public class BoardGameNightController(UserManager<IdentityUser> userManager, IBoardGameNightRepository boardGameNightRepository, IUserRepository userRepository, IUserBoardGameNightRepository userBoardGameNightRepository) : Controller
+    public class BoardGameNightController(UserManager<IdentityUser> userManager, IBoardGameNightRepository boardGameNightRepository, IUserRepository userRepository, IUserBoardGameNightRepository userBoardGameNightRepository, ILogger<BoardGameNightController> logger) : Controller
     {
 
         private readonly IUserRepository _userRepository = userRepository;
         private readonly UserManager<IdentityUser> _userManager = userManager;
         private readonly IBoardGameNightRepository _boardGameNightRepository = boardGameNightRepository;
         private readonly IUserBoardGameNightRepository _userBoardGameNightRepository = userBoardGameNightRepository;
+        private readonly ILogger<BoardGameNightController> _logger = logger;
+
 
         //public IActionResult Details(BoardGameNightDetailsViewModel boardGameNightDetailsViewModel)
         //{
@@ -117,6 +117,113 @@ namespace BordspellenApplicatie.Controllers
         //    //return View(boardGameNightDetailsViewModel);
         //}
 
+        public IActionResult Edit(int id)
+        {
+            var gameNightDetails = _boardGameNightRepository.GetById(id);
+
+            if (gameNightDetails == null)
+            {
+                return NotFound();
+            }
+
+            var organizer = gameNightDetails.Organizer;
+
+
+            var viewModel = new BoardGameNightDetailsViewModel
+            {
+                Id = gameNightDetails.Id,
+                Title = gameNightDetails.Title,
+                Description = gameNightDetails.Description,
+                Organizer = organizer != null
+                    ? $"{organizer.FirstName} {organizer.LastName}"
+                    : "Unknown Organizer", // Only set "Unknown Organizer" if no organizer is found
+                DateTime = gameNightDetails.DateTime,
+                MaxPlayers = gameNightDetails.MaxPlayers,
+                Food = gameNightDetails.Food,
+                Address = gameNightDetails.Address,
+                IsLactoseIntoleranceFriendly = gameNightDetails.IsLactoseIntoleranceFriendly,
+                IsNutAllergyFriendly = gameNightDetails.IsNutAllergyFriendly,
+                IsNonAlcoholicFriendly = gameNightDetails.IsNonAlcoholicFriendly,
+                IsVegetarianFriendly = gameNightDetails.IsVegetarianFriendly,
+                IsSignedUp = true,  // Set this to true if the user is signed up
+                Games = gameNightDetails.Games.ToList() ?? new List<Boardgame>(),
+                RegisteredUsersCount = gameNightDetails.RegisteredUsers.Count(),  // Or whatever logic you use to count
+                Is18Plus = gameNightDetails.Is18Plus
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(BoardGameNightDetailsViewModel model)
+        {
+            //// Validate the date is not in the past
+            //if (model.Date < DateTime.Now.Date)
+            //{
+            //    ModelState.AddModelError("Date", "Datum kan niet in het verleden zijn");
+            //}
+
+            //// Validate that start time and end time are not the same
+            //if (model.StartTime == model.EndTime)
+            //{
+            //    ModelState.AddModelError("StartTime", "De starttijd kan niet hetzelfde zijn als de eindtijd");
+            //}
+
+            //if (!ModelState.IsValid)
+            //{
+
+            //    return View("index", "Home"); // Return the view with errors if any validations fail
+            //}
+            if (!ModelState.IsValid)
+            {
+                // Log the model data
+                _logger.LogWarning("Model is invalid. Model data: {Model}", model);
+
+                // Log validation errors in ModelState
+                foreach (var key in ModelState.Keys)
+                {
+                    var errors = ModelState[key].Errors;
+                    foreach (var error in errors)
+                    {
+                        _logger.LogWarning("Validation error for {Key}: {Error}", key, error.ErrorMessage);
+                    }
+                }
+
+                return View("index", "Home"); // Return the view with errors if any validations fail
+            }
+
+            // Get the existing game night using the ID from the model
+            var gameNight = boardGameNightRepository.GetById(model.Id);
+            if (gameNight == null)
+            {
+                return NotFound(); // Handle the not found case
+            }
+
+            // Update fields directly from the model
+            gameNight.Title = model.Title;
+            gameNight.Description = model.Description;
+            gameNight.DateTime = model.DateTime;
+            gameNight.MaxPlayers = model.MaxPlayers;
+            gameNight.Food = model.Food;
+            gameNight.Address = model.Address;
+            gameNight.IsLactoseIntoleranceFriendly = model.IsLactoseIntoleranceFriendly;
+            gameNight.IsNutAllergyFriendly = model.IsNutAllergyFriendly;
+            gameNight.IsNonAlcoholicFriendly = model.IsNonAlcoholicFriendly;
+            gameNight.IsVegetarianFriendly = model.IsVegetarianFriendly;
+            gameNight.Is18Plus = model.Is18Plus;
+
+            // Save changes to the repository
+            boardGameNightRepository.Update(gameNight);
+
+            return RedirectToAction("Details", "BoardGameNight", new
+            {
+                id = gameNight.Id,
+                title = gameNight.Title,
+                date = gameNight.DateTime.ToString("yyyy-MM-dd")
+            });
+        }
+
         public IActionResult Create()
         {
             var model = new BoardGameNightDetailsViewModel()
@@ -183,7 +290,7 @@ namespace BordspellenApplicatie.Controllers
         public IActionResult AddGames(int id)
         {
             var boardGameNight = _boardGameNightRepository.GetById(id);
-            if(boardGameNight == null)
+            if (boardGameNight == null)
             {
                 return NotFound();
             }
@@ -252,7 +359,7 @@ namespace BordspellenApplicatie.Controllers
             return RedirectToAction("Details", "BoardGameNight", new { id = gameNightId });
         }
 
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> DeleteUserGameNight(int gameNightId)
         {
             var userId = _userManager.GetUserId(User);
@@ -263,8 +370,12 @@ namespace BordspellenApplicatie.Controllers
                 return Unauthorized();
             }
 
-            await _userBoardGameNightRepository.DeleteUserGameNightAsync(gameNightId, user.Id);
-            return Ok();
+            var boardGameNight = _boardGameNightRepository.GetById(gameNightId);
+
+            //await _userBoardGameNightRepository.DeleteUserGameNightAsync(gameNightId, user.Id);
+            _boardGameNightRepository.Delete(boardGameNight);
+            //return Ok();
+            return RedirectToAction("BoardGameNight", "Overview");
         }
     }
 }
