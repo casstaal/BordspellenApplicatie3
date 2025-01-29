@@ -16,13 +16,6 @@ namespace BordspellenApplicatie.Controllers
         private readonly IBoardGameNightRepository _boardGameNightRepository = boardGameNightRepository;
         private readonly IUserBoardGameNightRepository _userBoardGameNightRepository = userBoardGameNightRepository;
         private readonly ILogger<BoardGameNightController> _logger = logger;
-
-
-        //public IActionResult Details(BoardGameNightDetailsViewModel boardGameNightDetailsViewModel)
-        //{
-        //    return View(boardGameNightDetailsViewModel);
-        //}
-
         public IActionResult Details(int id)
         {
             var gameNightDetails = _boardGameNightRepository.GetById(id);
@@ -37,30 +30,12 @@ namespace BordspellenApplicatie.Controllers
 
             var viewModel = new BoardGameNightDetailsViewModel
             {
-                //Id = boardGameNightDetails.Id,
-                //Title = userBoardGameNight.GameNight.Title ?? "No Title",
-                //Organizer = organizer != null
-                //    ? $"{organizer.FirstName} {organizer.LastName}"
-                //    : "Unknown Organizer", // Only set "Unknown Organizer" if no organizer is found
-                //Description = userBoardGameNight.GameNight.Description ?? "No Description",
-                //DateTime = userBoardGameNight.GameNight.DateTime,
-                //MaxPlayers = userBoardGameNight.GameNight.MaxPlayers,
-                //Food = userBoardGameNight.GameNight.Food ?? "No Food Information",
-                //Is18Plus = userBoardGameNight.GameNight.Is18Plus,
-                //IsLactoseIntoleranceFriendly = userBoardGameNight.GameNight.IsLactoseIntoleranceFriendly,
-                //IsNutAllergyFriendly = userBoardGameNight.GameNight.IsNutAllergyFriendly,
-                //IsNonAlcoholicFriendly = userBoardGameNight.GameNight.IsNonAlcoholicFriendly,
-                //IsVegetarianFriendly = userBoardGameNight.GameNight.IsVegetarianFriendly,
-                //IsSignedUp = true,
-                //Games = userBoardGameNight.GameNight.Games?.ToList() ?? new List<Boardgame>(),
-                //RegisteredUsersCount = userBoardGameNight.GameNight.RegisteredUsers?.Count ?? 0
-
                 Id = gameNightDetails.Id,
                 Title = gameNightDetails.Title,
                 Description = gameNightDetails.Description,
                 Organizer = organizer != null
-                    ? $"{organizer.FirstName} {organizer.LastName}"
-                    : "Unknown Organizer", // Only set "Unknown Organizer" if no organizer is found
+                    ? $"{organizer.Email}"
+                    : "Unknown Organizer", 
                 DateTime = gameNightDetails.DateTime,
                 MaxPlayers = gameNightDetails.MaxPlayers,
                 Food = gameNightDetails.Food,
@@ -68,55 +43,15 @@ namespace BordspellenApplicatie.Controllers
                 IsNutAllergyFriendly = gameNightDetails.IsNutAllergyFriendly,
                 IsNonAlcoholicFriendly = gameNightDetails.IsNonAlcoholicFriendly,
                 IsVegetarianFriendly = gameNightDetails.IsVegetarianFriendly,
-                IsSignedUp = true,  // Set this to true if the user is signed up
+                IsSignedUp = true,  
+                UserBoardGameNights = gameNightDetails.UserBoardGameNights ?? new List<UserBoardGameNight>(),
                 Games = gameNightDetails.Games.ToList() ?? new List<Boardgame>(),
-                RegisteredUsersCount = gameNightDetails.RegisteredUsers.Count(),  // Or whatever logic you use to count
+                RegisteredUsersCount = gameNightDetails.RegisteredUsers.Count(),
                 Is18Plus = gameNightDetails.Is18Plus
             };
 
             return View(viewModel);
         }
-
-
-        //public async Task<IActionResult> Details(BoardGameNightDetailsViewModel boardGameNightDetailsViewModel)
-        //{
-        //    //// Get the current user's ID (assuming you're using Identity or similar authentication)
-        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Fetch the logged-in user's ID
-
-        //    //// Fetch the board game night details from your repository (assuming you have this method)
-        //    //var gameNightDetails = await _boardGameNightRepository.GetBoardGameNightByIdAsync(boardGameNightId);
-
-        //    //if (gameNightDetails == null)
-        //    //{
-        //    //    return NotFound();  // Handle the case where the board game night doesn't exist
-        //    //}
-
-        //    //// Check if the current user is signed up for this game night
-        //    bool isSignedUp = await _userBoardGameNightRepository.IsUserRegisteredForBoardGameNightAsync(boardGameNightDetailsViewModel.Id, userId);
-
-        //    //// Build the view model
-        //    //var viewModel = new BoardGameNightDetailsViewModel
-        //    //{
-        //    //    Id = gameNightDetails.Id,
-        //    //    Title = gameNightDetails.Title,
-        //    //    Description = gameNightDetails.Description,
-        //    //    Organizer = gameNightDetails.Organizer,
-        //    //    DateTime = gameNightDetails.DateTime,
-        //    //    MaxPlayers = gameNightDetails.MaxPlayers,
-        //    //    IsSignedUp = isSignedUp,  // Set this to true if the user is signed up
-        //    //    Games = gameNightDetails.Games.ToList(),
-        //    //    RegisteredUsersCount = gameNightDetails.RegisteredUsers.Count(),  // Or whatever logic you use to count
-        //    //    Is18Plus = gameNightDetails.Is18Plus
-        //    //};
-        //    var viewModel = new BoardGameNightDetailsViewModel
-        //    {
-        //        IsSignedUp = isSignedUp
-        //    };
-
-        //    return View(viewModel);
-        //    //return View(boardGameNightDetailsViewModel);
-        //}
-
         public IActionResult Edit(int id)
         {
             var gameNightDetails = _boardGameNightRepository.GetById(id);
@@ -135,8 +70,8 @@ namespace BordspellenApplicatie.Controllers
                 Title = gameNightDetails.Title,
                 Description = gameNightDetails.Description,
                 Organizer = organizer != null
-                    ? $"{organizer.FirstName} {organizer.LastName}"
-                    : "Unknown Organizer", // Only set "Unknown Organizer" if no organizer is found
+                    ? $"{organizer.Email}"
+                    : "Unknown Organizer",
                 DateTime = gameNightDetails.DateTime,
                 MaxPlayers = gameNightDetails.MaxPlayers,
                 Food = gameNightDetails.Food,
@@ -145,9 +80,9 @@ namespace BordspellenApplicatie.Controllers
                 IsNutAllergyFriendly = gameNightDetails.IsNutAllergyFriendly,
                 IsNonAlcoholicFriendly = gameNightDetails.IsNonAlcoholicFriendly,
                 IsVegetarianFriendly = gameNightDetails.IsVegetarianFriendly,
-                IsSignedUp = true,  // Set this to true if the user is signed up
+                IsSignedUp = true, 
                 Games = gameNightDetails.Games.ToList() ?? new List<Boardgame>(),
-                RegisteredUsersCount = gameNightDetails.RegisteredUsers.Count(),  // Or whatever logic you use to count
+                RegisteredUsersCount = gameNightDetails.RegisteredUsers.Count(), 
                 Is18Plus = gameNightDetails.Is18Plus
             };
 
@@ -158,29 +93,10 @@ namespace BordspellenApplicatie.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(BoardGameNightDetailsViewModel model)
         {
-            //// Validate the date is not in the past
-            //if (model.Date < DateTime.Now.Date)
-            //{
-            //    ModelState.AddModelError("Date", "Datum kan niet in het verleden zijn");
-            //}
-
-            //// Validate that start time and end time are not the same
-            //if (model.StartTime == model.EndTime)
-            //{
-            //    ModelState.AddModelError("StartTime", "De starttijd kan niet hetzelfde zijn als de eindtijd");
-            //}
-
-            //if (!ModelState.IsValid)
-            //{
-
-            //    return View("index", "Home"); // Return the view with errors if any validations fail
-            //}
             if (!ModelState.IsValid)
             {
-                // Log the model data
                 _logger.LogWarning("Model is invalid. Model data: {Model}", model);
 
-                // Log validation errors in ModelState
                 foreach (var key in ModelState.Keys)
                 {
                     var errors = ModelState[key].Errors;
@@ -190,17 +106,15 @@ namespace BordspellenApplicatie.Controllers
                     }
                 }
 
-                return View("index", "Home"); // Return the view with errors if any validations fail
+                return View("index", "Home"); 
             }
 
-            // Get the existing game night using the ID from the model
             var gameNight = boardGameNightRepository.GetById(model.Id);
             if (gameNight == null)
             {
-                return NotFound(); // Handle the not found case
+                return NotFound();
             }
 
-            // Update fields directly from the model
             gameNight.Title = model.Title;
             gameNight.Description = model.Description;
             gameNight.DateTime = model.DateTime;
@@ -213,7 +127,6 @@ namespace BordspellenApplicatie.Controllers
             gameNight.IsVegetarianFriendly = model.IsVegetarianFriendly;
             gameNight.Is18Plus = model.Is18Plus;
 
-            // Save changes to the repository
             boardGameNightRepository.Update(gameNight);
 
             return RedirectToAction("Details", "BoardGameNight", new
@@ -241,8 +154,8 @@ namespace BordspellenApplicatie.Controllers
             {
                 foreach (var state in ModelState)
                 {
-                    var fieldName = state.Key; // The field (e.g., "Email", "Password")
-                    var fieldErrors = state.Value.Errors; // The errors associated with that field
+                    var fieldName = state.Key;
+                    var fieldErrors = state.Value.Errors; 
 
                     foreach (var error in fieldErrors)
                     {
@@ -318,17 +231,16 @@ namespace BordspellenApplicatie.Controllers
         [Authorize]
         public async Task<IActionResult> SignUp(int gameNightId)
         {
-            var identityUser = await _userManager.GetUserAsync(User); // Get the IdentityUser
+            var identityUser = await _userManager.GetUserAsync(User); 
             if (identityUser == null)
             {
                 return Unauthorized();
             }
 
-            // Assuming you have a repository or service to retrieve the User model by IdentityUser.Id
             var user = await _userRepository.GetUserByIdentityIdAsync(identityUser.Id);
             if (user == null)
             {
-                return NotFound(); // Handle case when User doesn't exist in your own user table
+                return NotFound();
             }
 
             var gameNight = _boardGameNightRepository.GetById(gameNightId);
@@ -337,8 +249,23 @@ namespace BordspellenApplicatie.Controllers
                 return NotFound();
             }
 
-            // Check if the user is already signed up for the game night using the repository method
-            var existingRegistration = await _userBoardGameNightRepository.IsUserRegisteredForBoardGameNightAsync(gameNightId, identityUser.Id);
+            var today = DateTime.Today;
+            var age = today.Year - user.DateOfBirth.Year;
+            if (user.DateOfBirth.Date > today.AddYears(-age)) age--;
+
+            if (gameNight.Is18Plus && age < 18)
+            {
+                TempData["ErrorMessage"] = "Je moet 18 jaar of ouder zijn om je in te schrijven voor deze avond.";
+                return RedirectToAction("Details", new { id = gameNightId });
+            }
+
+            if (gameNight.Organizer != null && gameNight.Organizer.Id == user.Id)
+            {
+                TempData["ErrorMessage"] = "Je kan niet inschrijven voor een door jou georganiseerde avond.";
+                return RedirectToAction("Details", new { id = gameNightId });
+            }
+
+            var existingRegistration = await _userBoardGameNightRepository.IsUserRegisteredForBoardGameNightAsync(gameNightId, user.Id);
 
             if (existingRegistration)
             {
@@ -349,13 +276,12 @@ namespace BordspellenApplicatie.Controllers
             var userGameNight = new UserBoardGameNight
             {
                 BoardGameNightId = gameNightId,
-                UserId = user.Id // This works because user.Id is an int
+                UserId = user.Id 
             };
 
-            // Add the new record to the database using the repository method
             await _userBoardGameNightRepository.AddUserBoardGameNightAsync(userGameNight);
 
-            // Redirect to the event details page or display a success message
+            TempData["SuccessMessage"] = "Je bent succesvol ingeschreven voor deze avond!";
             return RedirectToAction("Details", "BoardGameNight", new { id = gameNightId });
         }
 
@@ -370,11 +296,11 @@ namespace BordspellenApplicatie.Controllers
                 return Unauthorized();
             }
 
+
             var boardGameNight = _boardGameNightRepository.GetById(gameNightId);
 
-            //await _userBoardGameNightRepository.DeleteUserGameNightAsync(gameNightId, user.Id);
-            _boardGameNightRepository.Delete(boardGameNight);
-            //return Ok();
+            await _userBoardGameNightRepository.DeleteUserGameNightAsync(gameNightId, user.Id);
+
             return RedirectToAction("BoardGameNight", "Overview");
         }
     }

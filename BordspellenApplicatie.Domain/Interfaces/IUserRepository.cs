@@ -10,8 +10,6 @@ namespace BordspellenApplicatie.Domain.Interfaces
     public interface IUserRepository
     {
         public IEnumerable<User> GetAll();
-        //public IQueryable<User> GetAllAsync();
-
         public User GetById(int id);
         public User? GetByIdentityId(string identityId);
 

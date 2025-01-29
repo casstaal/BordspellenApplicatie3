@@ -10,15 +10,11 @@ namespace BordspellenApplicatie.Domain.Interfaces
     public interface IUserBoardGameNightRepository
     {
         public IEnumerable<UserBoardGameNight> GetAll(int userId);
-
-        // Gebruik voor inschrijven user
         Task AddUserBoardGameNightAsync(UserBoardGameNight userBoardGameNight);
-
-        //Gebruik voor uitschrijven user
         Task DeleteUserBoardGameNightAsync(UserBoardGameNight userBoardGameNight);
 
 
-        Task<bool> IsUserRegisteredForBoardGameNightAsync(int boardGameNightId, string userId);
+        Task<bool> IsUserRegisteredForBoardGameNightAsync(int boardGameNightId, int userId);
         public Task DeleteUserGameNightAsync(int gamenightId, int userId);
 
     }

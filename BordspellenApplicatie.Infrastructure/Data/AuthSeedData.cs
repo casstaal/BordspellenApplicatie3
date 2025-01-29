@@ -15,7 +15,6 @@ public class AuthSeedData(ILogger<AuthSeedData> logger, RoleManager<IdentityRole
         {
             logger.LogInformation("Preparing to add identity roles");
 
-            // iterate over enum values -->
             foreach (var val in Enum.GetValues<UserRole>())
             {
                 await roleManager.CreateAsync(new IdentityRole(val.ToString()));

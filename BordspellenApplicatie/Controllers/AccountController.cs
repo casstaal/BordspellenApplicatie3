@@ -46,17 +46,10 @@ namespace BordspellenApplicatie.Controllers
             }
             if (!ModelState.IsValid)
             {
-                //foreach (var error in ModelState)
-                //{
-                //    Console.WriteLine($"Key: {error.Key}, Errors: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
-                //}
-                //return View(registerVM); // Pass the model back to the view for repopulation
-                //var errors = ModelState.Values.SelectMany(v => v.Errors);
-
                 foreach (var state in ModelState)
                 {
-                    var fieldName = state.Key; // The field (e.g., "Email", "Password")
-                    var fieldErrors = state.Value.Errors; // The errors associated with that field
+                    var fieldName = state.Key;
+                    var fieldErrors = state.Value.Errors; 
 
                     foreach (var error in fieldErrors)
                     {
@@ -77,11 +70,9 @@ namespace BordspellenApplicatie.Controllers
 
             if (registerResult.Succeeded)
             {
-                // Een rol is een claim. Claims zijn algemener, rollen zijn iets makkelijker te gebruiken -->
                 await userManager.AddClaimAsync(user, new Claim("UserType", "user"));
                 await userManager.AddToRoleAsync(user, registerVM.Role.ToString());
 
-                //BordspellenApplicatie.Domain.Models.User appUser = new BordspellenApplicatie.Domain.Models.User()
                 User appUser = new()
                 {
                     FirstName = registerVM.FirstName,
@@ -128,15 +119,11 @@ namespace BordspellenApplicatie.Controllers
                 {
                     await signInManager.SignOutAsync();
 
-                    //var signInResult = await signInManager.PasswordSignInAsync(user, loginVM.Password, false, false);
 
                     if ((await signInManager.PasswordSignInAsync(user,
                         loginVM.Password, false, false)).Succeeded)
                     {
                         return Redirect(loginVM.ReturnUrl);
-                        //return RedirectToAction(nameof(Details), loginVM);
-                        //return RedirectToAction(nameof(Details));
-                        //return Redirect(loginVM?.ReturnUrl ?? "/Guest/List");
                     }
                 }
             }
@@ -145,10 +132,6 @@ namespace BordspellenApplicatie.Controllers
             return View();
         }
 
-        //public IActionResult Details()
-        //{
-        //    return View(); 
-        //}
         public async Task<IActionResult> DetailsAsync()
         {
             if (User != null && User.Identity != null && User.Identity.IsAuthenticated)
@@ -181,9 +164,63 @@ namespace BordspellenApplicatie.Controllers
             return Redirect(returnUrl);
         }
 
-        public IActionResult Registered()
+        private BoardGameNightDetailsViewModel MapToViewModel(UserBoardGameNight userBoardGameNight)
         {
-            return View(); 
+            if (userBoardGameNight.GameNight == null)
+            {
+                throw new ArgumentNullException(nameof(userBoardGameNight.GameNight), "GameNight cannot be null.");
+            }
+
+            var organizer = userBoardGameNight.GameNight.Organizer;
+
+            return new BoardGameNightDetailsViewModel
+            {
+                Id = userBoardGameNight.GameNight.Id,
+                Title = userBoardGameNight.GameNight.Title ?? "No Title",
+                Organizer = organizer != null
+                    ? $"{organizer.FirstName} {organizer.LastName}"
+                    : "Unknown Organizer", 
+                Description = userBoardGameNight.GameNight.Description ?? "No Description",
+                DateTime = userBoardGameNight.GameNight.DateTime,
+                MaxPlayers = userBoardGameNight.GameNight.MaxPlayers,
+                Food = userBoardGameNight.GameNight.Food ?? "No Food Information",
+                Is18Plus = userBoardGameNight.GameNight.Is18Plus,
+                IsLactoseIntoleranceFriendly = userBoardGameNight.GameNight.IsLactoseIntoleranceFriendly,
+                IsNutAllergyFriendly = userBoardGameNight.GameNight.IsNutAllergyFriendly,
+                IsNonAlcoholicFriendly = userBoardGameNight.GameNight.IsNonAlcoholicFriendly,
+                IsVegetarianFriendly = userBoardGameNight.GameNight.IsVegetarianFriendly,
+                IsSignedUp = true,
+                Games = userBoardGameNight.GameNight.Games?.ToList() ?? new List<Boardgame>(),
+                RegisteredUsersCount = userBoardGameNight.GameNight.RegisteredUsers?.Count ?? 0
+            };
+        }
+
+        public async Task<IActionResult> Registered()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var userId = userManager.GetUserId(User);
+            var user = await userRepository.GetUserByIdentityIdAsync(userId);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized();
+            }
+
+            var userGameNights = _userBoardGameNightRepository.GetAll(user.Id);
+
+            if (userGameNights == null || !userGameNights.Any())
+            {
+                ViewBag.Message = "You are not signed up for any game nights yet.";
+                return View(Enumerable.Empty<BoardGameNightDetailsViewModel>());
+            }
+
+            var viewModel = userGameNights.Select(MapToViewModel).ToList();
+
+            return View(viewModel);
         }
 
         public async Task<IActionResult> Organized()
@@ -209,7 +246,6 @@ namespace BordspellenApplicatie.Controllers
 
                     if (appUser != null)
                     {
-                        // Pass the appUser model to the view
                         return View(appUser);
                     }
                 }
@@ -227,17 +263,6 @@ namespace BordspellenApplicatie.Controllers
         [HttpPost]
         public IActionResult UpdateDetails(User model)
         {
-            //if (ModelState.IsValid)
-            //{
-            //    // Update the user's details in the database
-            //    userRepository.Update(model); // Assume a service is used to update user details
-
-            //    // Redirect to a confirmation or the My Details page again
-            //    return RedirectToAction("Details", "Account");
-            //}
-
-            //// If the model is invalid, return to the view with validation errors
-            //return View("Details", model);
             var userBoardgameNights = _userBoardGameNightRepository.GetAll(model.Id);
 
             if (!ModelState.IsValid)
@@ -245,14 +270,12 @@ namespace BordspellenApplicatie.Controllers
                 return View("Details", model);
             }
 
-            // Get the existing game night using the ID from the model
             var userToUpdate = userRepository.GetById(model.Id);
             if (userToUpdate == null)
             {
                 return NotFound();
             }
 
-            // Update fields directly from the model
             userToUpdate.FirstName = model.FirstName;
             userToUpdate.LastName = model.LastName;
             userToUpdate.DateOfBirth = model.DateOfBirth;
@@ -261,10 +284,9 @@ namespace BordspellenApplicatie.Controllers
             userToUpdate.Address.City = model.Address.City;
             userToUpdate.UserBoardGameNights = userBoardgameNights.ToList();
 
-            // Save changes to the repository
             userRepository.UpdateAsync(userToUpdate);
 
-            return RedirectToAction("Details", "Account"); // Redirect after update
+            return RedirectToAction("Details", "Account");
         }
 
 

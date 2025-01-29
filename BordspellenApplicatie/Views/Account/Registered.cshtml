@@ -12,29 +12,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Board Game Nights</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    @*     <link rel="stylesheet" href="/css/style.css"/> *@
 </head>
 <body>
     <div class="page-wrapper">
         <vc:header></vc:header>
         <div class="container-fluid content">
-            <div class="navigation">
-                <p>
-                    Homepage / My Account / <b>Aangemelde bordspelavonden</b>
+            <div class="row ml-5 mt-2">
+                <p class="col-12">
+                    Home / Mijn Account / <b>Aangemelde bordspelavonden</b>
                 </p>
-                <h1>
-                    My Account
+                <h1 class="col-12">
+                    Mijn Account
                 </h1>
             </div>
-            <div class="accountChoises">
-                @Html.ActionLink("My details", "Details", "Account", null, new { @class = "account-link" })<br />
-                @Html.ActionLink("Aangemelde bordspelavonden", "Registered", "Account", null, new { @class = "account-link-selected", @style = "background-color: #0FA4AF; color: white;" })<br />
-                @Html.ActionLink("Georganiseerde bordspelavonden", "Organized", "Account", null, new { @class = "account-link" })<br />
-                @Html.ActionLink("Dieetwensen en allergieen", "Allergies", "Account", null, new { @class = "account-link" })<br />
-                @Html.ActionLink("Account settings", "Settings", "Account", null, new { @class = "account-link" })
-            </div>
-            <div class="registeredGameNights">
-                <h3 style="margin-top: 20px; margin-bottom: 20px;">Registered Game nights</h3>
+
+            <div class="row ml-5 mt-4">
+                <div class="col-4">
+                    @Html.ActionLink("Mijn details", "Details", "Account", null, new { @class = "account-link" })<br />
+                    @Html.ActionLink("Aangemelde bordspelavonden", "Registered", "Account", null, new { @class = "account-link-selected", @style = "background-color: #0FA4AF; color: white;" })<br />
+                    @Html.ActionLink("Georganiseerde bordspelavonden", "Organized", "Account", null, new { @class = "account-link" })<br />
+                    @Html.ActionLink("Dieetwensen en allergieen", "Allergies", "Account", null, new { @class = "account-link" })<br />
+                </div>
+                <div class="col-1"></div>
+                <div class="col-6 registeredGameNights mb-5">
+                    <h3 style="margin-top: 20px; margin-bottom: 20px;">Registered Game nights</h3>
+                    <div class="scroll-container pb-4">
+                        @if (Model != null)
+                        {
+                            @foreach (var gameEvent in Model)
+                            {
+                                <a class="gameNightLink" href="@Url.Action("Details", "BoardGameNight", new { id = gameEvent.Id, title = gameEvent.Title, date = gameEvent.DateTime.ToString("yyyy-MM-dd") })">
+                                    <div class="scroll-item card text-center mb-2">
+                                        <div class="card-body d-flex justify-content-between align-items-center">
+                                            <h5 class="card-title mb-0">@gameEvent.Title</h5>
+                                            @if (gameEvent.Is18Plus)
+                                            {
+                                                <span class="age-indicator">18+</span>
+                                            }
+                                            <p class="card-text mb-0">Date: @gameEvent.DateTime.ToString("dd MMM yyyy")</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            <p>Geen bordspelavonden gevonden.</p>
+                        }
+                    </div>
+                </div>
             </div>
         </div>
         <vc:footer></vc:footer>
@@ -62,45 +88,37 @@
         flex: 1;
     }
 
-    .container-fluid {
-        display: grid;
-        grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
-        grid-template-columns: 1fr 0.5fr 1fr 1fr 0.5fr;
-        gap: 10px;
-        height: 100vh;
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
     }
 
-    .navigation {
-        grid-column: 1 / 2;
-        grid-row: 2 / 3;
-        padding-left: 50px;
-    }
-
-    .accountChoises {
-        grid-column: 1 / 2;
-        grid-row: 3 / 4;
-        padding-left: 50px;
-        margin-top: 20px;
-    }
-
-    .registeredGameNights {
-        grid-column: 3 / 5;
-        grid-row: 3 / 5;
+     .registeredGameNights {
         background-color: #0FA4AF;
         border-radius: 10px;
-        margin-left: 50px;
-        padding-left: 40px;
-        margin-top: 20px;
-        margin-right: 50px;
-        margin-bottom: 70px;
         color: black;
         font-weight: bold;
-    }
+    } 
 
 
     .account-link {
         color: black;
         display: block;
+    }
+
+    .card {
+        background-color: darkcyan;
+        color: white;
+        transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .gameNightLink:hover {
+        text-decoration: none;
     }
 
     .account-link-selected {
@@ -114,18 +132,21 @@
         margin-right: 100px;
     }
 
+    .account-link-selected:hover {
+        text-decoration: none;
+    }
+
 
         .account-link:hover {
             background-color: #0FA4AF;
             color: white;
-            display: block;
             padding-left: 5px;
             margin-left: -5px;
             border-radius: 5px;
             padding-top: 2px;
             padding-bottom: 2px;
-            margin-right: 100px;
             text-decoration: none;
+            margin-right: 100px;
         }
 </style>
 

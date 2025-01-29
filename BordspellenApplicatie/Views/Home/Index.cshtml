@@ -3,7 +3,6 @@
 @{
     Layout = null;
     var bannerUrl = ViewBag.BannerUrl as string;
-    // var infoText = ViewBag.InfoText as string;
     var futureEvents = ViewBag.FutureEvents as List<BordspellenApplicatie.Domain.Models.BoardGameNight>;
 }
 
@@ -13,8 +12,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Board Game Nights</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-@*     <link rel="stylesheet" href="/css/style.css"/> *@
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="icon" href="/icon.ico" type="image/x-icon">
 </head>
 <body>
     <vc:header></vc:header>
@@ -37,7 +36,6 @@
                 <h3>Toekomstige bordspelavonden</h3>
                 @Html.ActionLink("Toon alle bordspelavonden", "BoardGameNight", "Overview", null, new { @class = "bordspelavonden-link" })
             </div>
-            @*<button class="scroll-button left" onclick="scrollLeft()">Left</button>*@
             <div class="scroll-container">
                 @if (Model != null)
                 {
@@ -65,7 +63,6 @@
                     <p>Geen bordspelavonden gevonden.</p>
                 }
             </div>
-@*             <button class="scroll-button right" onclick="scrollRight()">Right</button> *@        
         </div>
     </div>
     <vc:footer></vc:footer>
@@ -84,7 +81,6 @@
         grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
         grid-template-columns: 1fr 4fr 1fr;
         gap: 10px;
-        /*background-color: aliceblue;*/
     }
 
     .banner {
@@ -101,22 +97,16 @@
         color: white;
     }
 
-/*     .text-banner {
-        position: absolute;
-        bottom: 8px;
-        left: 16px;
-    } */
-
     .text-banner {
         position: absolute;
         bottom: 8px;
         left: 16px;
-        text-align: left; /* Aligns the content to the left */
+        text-align: left; 
     }
 
         .text-banner h1,
         .text-banner p {
-            text-align: left; /* Ensures all text inside text-banner aligns to the left */
+            text-align: left; 
         }
 
     .info-section {
@@ -151,7 +141,6 @@
         overflow-x: auto;
         scroll-behavior: smooth;
         padding: 10px;
-        @*width: calc(100% - 60px);*@
     }
 
         .scroll-container::-webkit-scrollbar {
@@ -196,32 +185,6 @@
         color: white;
     }
 
-
-/*     .scroll-button {
-        background-color: #024950;
-        color: white;
-        border: none;
-        padding: 10px;
-        cursor: pointer;
-        font-size: 24px;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 1;
-    }
-
-        .scroll-button.left {
-            left: 0;
-        }
-
-        .scroll-button.right {
-            right: 0;
-        }
-
-        .scroll-button:hover {
-            background-color: #333;
-        } */
-
     .title-container {
         display: flex;
         align-items: center; 
@@ -236,23 +199,5 @@
     .bordspelavonden-link:hover {
         color: #964734;
     }
-
-/*     .card-body {
-        background-color: darkcyan;
-        color: white;
-        border-radius: 8px;
-    } */
 </style> 
-
-@* <script>
-    function scrollLeft() {
-        const container = document.querySelector('.scroll-container');
-        container.scrollBy({ left: -300, behavior: 'smooth' });
-    }
-
-    function scrollRight() {
-        const container = document.querySelector('.scroll-container');
-        container.scrollBy({ left: 300, behavior: 'smooth' });
-    }
-</script> *@
 

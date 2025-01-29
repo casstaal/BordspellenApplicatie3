@@ -1,7 +1,7 @@
 ﻿<div class="navbar d-flex justify-content-between">
     <div class="navbar-left d-flex align-items-center">
         <a href="/">
-            <img src="/logoBoardgame.jpg" alt="Logo" class="img-fluid" style="max-height: 50px;">
+            <img src="/icon.ico" alt="Logo" class="img-fluid" style="max-height: 50px;">
         </a>
         @Html.ActionLink("Bordspelavonden", "BoardGameNight", "Overview", null, new { @class = "navigation-link mx-3" })
         @if(User.Identity.IsAuthenticated)
@@ -13,6 +13,7 @@
 
     <div class="navbar-right d-flex align-items-center">
         @if (User.Identity.IsAuthenticated)
+
 
         {
             <a asp-controller="Account" asp-action="Logout" class="logoutButton mx-3">Logout</a>

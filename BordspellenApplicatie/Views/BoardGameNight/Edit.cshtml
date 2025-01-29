@@ -12,7 +12,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Board Game Nights</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    @*     <link rel="stylesheet" href="/css/style.css"/> *@
 </head>
 <body>
     <vc:header></vc:header>
@@ -20,8 +19,8 @@
         <div class="title">
             <h1>Pas bordspelavond aan</h1>
         </div>
-        <button class="back-button" onclick="window.history.back();">Back</button>
-        <form class="createBoardgamenightForm" asp-action="Edit" asp-controller="BoardGameNight" method="post" onsubmit="return confirm('Are you sure you want to edit this?');">
+        <button class="back-button" onclick="window.history.back();">Terug</button>
+        <form class="createBoardgamenightForm" asp-action="Edit" asp-controller="BoardGameNight" method="post" onsubmit="return confirm('Weet je zeker dat je deze bordspelavond wilt editen?');">
             <div class="row">
                 <div class="mt-3 col-md-12">
                     <label asp-for="Organizer">Naam organisator</label>
@@ -164,11 +163,6 @@
             margin-top: 10px;
             margin-bottom: 20px;
         }
-
-    /*     .saveButton {
-            width: 100%;
-            max-width: 200px;
-        } */
 
         .saveButton {
             padding: 7px 20px;

@@ -28,8 +28,8 @@ namespace BordspellenApplicatie.Controllers
             {
                 foreach (var state in ModelState)
                 {
-                    var fieldName = state.Key; // The field (e.g., "Email", "Password")
-                    var fieldErrors = state.Value.Errors; // The errors associated with that field
+                    var fieldName = state.Key;
+                    var fieldErrors = state.Value.Errors;
 
                     foreach (var error in fieldErrors)
                     {
@@ -69,7 +69,7 @@ namespace BordspellenApplicatie.Controllers
 
             _reviewRepository.Add(review);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("overview", "RegisteredBoardGameNights");
         }
     }
 }
