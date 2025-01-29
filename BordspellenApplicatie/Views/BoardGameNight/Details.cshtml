@@ -11,123 +11,175 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Board Game Nights</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    @*     <link rel="stylesheet" href="/css/style.css"/> *@
 </head>
 <body>
     <vc:header></vc:header>
     <div class="container-fluid">
-            <h2 class="title">@Model.Title</h2>
-            <div class="scroll-container">
-                @if (Model != null)
-                {
-                    @foreach (var gameEvent in Model.Games)
+            <div class="row mb-2">
+                <div class="col-2"></div>
+                <h1 class="title col-10">@Model.Title</h1>
+            </div>
+            <div class="row mb-5">
+                <div class="col-2"></div>
+                <div class="col-8">
+                @if (Model.Organizer.Equals(User.Identity.Name))
                     {
-                        <div class="scroll-item card text-center">
-                            <div class="card-body">
-                                <img src="/banner6.jpg" alt="Usert Icon" class="card-img" style="max-height: 100px;">
-                                <h5 class="card-title">@gameEvent.Name</h5>
-                                <p class="card-text">Date: @gameEvent.Description</p>
-                            </div>
+                        <div class="row" style="margin-left: -2px; margin-bottom: 20px;">
+                            <form asp-action="DeleteUserGameNight" asp-controller="BoardGameNight" method="post" onsubmit="return confirm('Are you sure you want to delete this?');">
+                                <input type="hidden" name="gameNightId" value="@Model.Id" />
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                            <a class="gameNightLink btn" style="background-color:#964734; color:white; margin-left: 10px" href="@Url.Action("Edit", "BoardGameNight", new { id = Model.Id })">
+                                Edit
+                            </a>
                         </div>
                     }
-                }
-                else
+
+                @if (Model.UserBoardGameNights?.Any(ubgn => ubgn.User.Email == User.Identity.Name) ?? false)
                 {
-                    <p>Geen bordspelavonden gevonden.</p>
+                    <a class="btn" style="background-color:#964734; color:white;" href="@Url.Action("create", "review", new { id = Model.Id })">
+                        Plaats review
+                    </a>
                 }
+                <h3 class="col-12" style="margin-left: -20px; margin-bottom: -10px;">Geplande Bordspellen</h3>
+
+                </div>
+                <div class="col-2"></div>
+                <div class="col-2"></div>
+                <div class="scroll-container col-8">
+                    <div class="row">
+                        <div class="col-12 scroll-container">
+                            @if (Model != null)
+                            {
+                                @foreach (var gameEvent in Model.Games)
+                                {
+                                    <div class="scroll-item card">
+                                        <div class="card-body">
+                                            <img src="/banner6.jpg" alt="Usert Icon" class="card-img" style="max-height: 100px;">
+                                            <div class="title-container">
+                                                <h5 class="card-title">@gameEvent.Name</h5>
+                                                @if (!gameEvent.Is18Plus)
+                                                {
+                                                    <span class="age-indicator">18+</span>
+                                                }
+                                            </div>
+                                            <p>Genre: @gameEvent.Genre</p>
+                                            <p class="card-text">Beschrijving: <br /> @gameEvent.Description</p>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p>Geen bordspelavonden gevonden.</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2"></div>
             </div>
-            <div class="description-BoardgameNight">
-                <h5>Beschrijving bordspelavond</h5>
-                <p>@Model.Description</p>
+            <div class="row mb-5">
+                <div class="col-2"></div>
+                <div class="boardGameNightInformation col-8 p-4">
+                    <div class="row">
+                        <div class="row col-lg-6 col-md-6 col-sm-12">
+                            <div class="descriptionBoardGameNight col-12">
+                                <h5>Beschrijving bordspelavond</h5>
+                                <p>@Model.Description</p>
+                            </div>
+                            <div class="extraInformation col-12 pt-3">
+                                @if (@Model.Is18Plus == true)
+                                {
+                                    <p><b>Organisator: </b>@Model.Organizer</p>
+                                    <p><b>Date: </b> @Model.DateTime</p>
+                                    <p><b>Leeftijd: </b> 18+</p>
+                                }
+                                else
+                                {
+                                    <p><b>Organisator: </b>@Model.Organizer</p>
+                                    <p><b>Date: </b> @Model.DateTime</p>
+                                    <p><b>Leeftijd: </b> 16+</p>
+                                }
+                                <p><b>Aantal plekken: </b> @Model.MaxPlayers</p>
+                                <p><b>Aantal open plekken: </b> @(Model.MaxPlayers - Model.UserBoardGameNights.Count())</p>
+                            </div>
+                            <div class="addressInformation col-12 pt-3">
+                                <h5>Adress</h5>
+                                <p><b>Straat: </b>Hogeschoollaan 29</p>
+                                <p><b>Postcode: </b>2839PK</p>
+                                <p><b>Breda: </b>Breda</p>
+                            </div>
+                        </div>
+                        <div class="row col-lg-6 col-md-6 col-sm-12">
+                            <h5>Beschrijving drinken en eten</h5>
+                            <p>
+                                Tijdens de bordspelavond is er niet alleen volop spelplezier, maar kun je ook genieten van een selectie heerlijke snacks en verfrissende drankjes! We zorgen voor een gevarieerd aanbod, zodat er voor iedereen wat lekkers is.
+                            </p>
+                            <div>
+                                @Model.Food
+                            </div><br />
+                            <ul>
+                                <li>
+                                    Eten is lactose vrij: @Model.IsLactoseIntoleranceFriendly
+                                </li>
+                                <li>
+                                    Eten is vegetarisch: @Model.IsVegetarianFriendly
+                                </li>
+                                <li>
+                                    Eten bevat geen noten: @Model.IsNutAllergyFriendly
+                                </li>
+                                <li>
+                                    Drinken is alcohol vrij: @Model.IsNonAlcoholicFriendly
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2"></div>
             </div>
-            <div class="extra-information">
-                @if(@Model.Is18Plus == true)
-                {
-                    <p><b>Organisator: </b>@Model.Organizer <b>Date: </b> @Model.DateTime <b>Leeftijd: </b> 18+</p>
-                } else
-                {
-                    <p><b>Organisator: </b>@Model.Organizer <b>Date: </b> @Model.DateTime <b>Leeftijd: </b> 16+</p>
-                }
-                <p><b>Aantal plekken: </b> @Model.MaxPlayers</p>
-                <p><b>Aantal open plekken: </b> nog maken</p>
+            <div class="row mb-5">
+                <div class="col-2"></div>
+                <div class="col-8 playersSignedUp p-4">
+                    <div class="row">
+                        <h3 class="col-9">Aangemelde spelers</h3>
+                    @if (!(Model.Organizer.Equals(User.Identity.Name)) &&
+                    !(Model.UserBoardGameNights?.Any(ubgn => ubgn.User.Email == User.Identity.Name) ?? false))
+                    {
+                        <form asp-action="SignUp" asp-controller="BoardGameNight" method="post" onsubmit="return confirm('Weet je zeker dat je je voor deze bordspelavond wilt inschrijven?');">
+                            <input type="hidden" name="gameNightId" value="@Model.Id" />
+                            <button class="col-3 back-button">Inschrijven</button>
+                        </form>
+                    }
+                    @if (Model.UserBoardGameNights?.Any(ubgn => ubgn.User.Email == User.Identity.Name) ?? false)
+                    {
+                        <form asp-action="DeleteUserGameNight" asp-controller="BoardGameNight" method="post" onsubmit="return confirm('Weet je zeker dat je je voor deze bordspelavond wilt uitschrijven?');">
+                            <input type="hidden" name="gameNightId" value="@Model.Id" />
+                            <button class="col-3 back-button">Uitschrijven</button>
+                        </form>
+                    }
+
+                    @if (Model.UserBoardGameNights.Count() == Model.MaxPlayers)
+                    {
+                        <p class="ml-3">Deze bordspelavond zit vol. U kunt niet meer inschrijven</p>
+                    }
+                </div>
+                    <div>
+                    @if (Model.UserBoardGameNights != null && Model.UserBoardGameNights.Any())
+                        {
+                            @foreach (var userBoardGameNight in Model.UserBoardGameNights)
+                            {
+                                <div>- @userBoardGameNight.User.FirstName @userBoardGameNight.User.LastName</div>
+                            }
+                        }
+                        else
+                        {
+                            <p>Nog geen aangemelde spelers</p>
+                        }
+                    </div>
+                </div>
+                <div class="col-2"></div>
             </div>
 
-@*             <div class="address-information">
-                <h5>Adresinformatie</h5>
-                <p><b>Straat + huisnummer: </b>@Model.Address.Street @Model.Address.Number</p>
-                <p><b>Stad:</b> @Model.Address.City</p>
-            </div> *@
-         @if (Model.IsSignedUp)
-        {
-@*             <button class="unsubscribe-button" onclick="deleteUserGameNight(@Model.Id)">Uitschrijven</button>
- *@
-            <form asp-action="DeleteUserGameNight" method="post">
-                <input type="hidden" name="gameNightId" value="@Model.Id" />
-                <button type="submit" class="btn btn-danger">Uitschrijven</button>
-            </form>
-        } else
-        {
-            <form asp-action="SignUp" method="post">
-                <input type="hidden" name="gameNightId" value="@Model.Id" />
-                <button type="submit" @(Model.IsSignedUp ? "disabled" : "")>Inschrijven</button>
-            </form>
-        } 
-
-@*             <form asp-action="SignUp" method="post">
-                <input type="hidden" name="gameNightId" value="@Model.Id" />
-                <button type="submit" @(Model.IsSignedUp ? "disabled" : "")>Inschrijven</button>
-            </form> *@
-            <div class="description-food-drinks">
-                <h5>Beschrijving drinken en eten</h5>
-                <p>
-                    Tijdens de bordspelavond is er niet alleen volop spelplezier, maar kun je ook genieten van een selectie heerlijke snacks en verfrissende drankjes! We zorgen voor een gevarieerd aanbod, zodat er voor iedereen wat lekkers is.
-                </p>
-                <h7>Hartige snacks</h7>
-                <ul>
-                    <li>
-                        Mini-sandwiches met verschillende belegopties zoals kaas, kipfilet en hummus.
-                    </li>
-                    <li>
-                        Kaasblokjes, worstjes en olijven om gemakkelijk tussendoor te snacken.
-                    </li>
-                    <li>
-                        Zoute crackers en chips voor de liefhebbers van iets knapperigs.
-                    </li>
-                </ul>
-                <h7>Zoete tussendoortjes</h7>
-                <ul>
-                    <li>
-                        Vers fruit zoals appelpartjes, druiven en mandarijntjes.
-                    </li>
-                    <li>
-                        Chocolade en koekjes om de zoetekauw in jou te plezieren.
-                    </li>
-                    <li>
-                        Kleine gebakjes of cakejes voor een extra traktatie.
-                    </li>
-                </ul>
-                <h7>Drankjes</h7>
-                <ul>
-                    <li>
-                        Verfrissende frisdranken zoals cola, sinas, en bruiswater.
-                    </li>
-                    <li>
-                        Vruchtensappen zoals sinaasappel- en appelsap.
-                    </li>
-                    <li>
-                        Koffie en thee voor een warme opkikker tijdens het spelen.
-                    </li>
-                    <li>
-                        Water voor iedereen die iets lichts wil drinken.
-                    </li>
-                </ul>
-            </div>
-            <div class="review">
-                <h5>Review</h5>
-                <p>Mocht u uw mening willen delen over deze bordspelavond, kunt u hieronder uw review achterlaten</p>
-@*                 <button onclick="location.href='@Url.Action("Create", "Review", new { boardGameNightId = Model.Id })'">Plaats review</button>
- *@                <button onclick="location.href='@Url.Action("Create", "Review")'">Plaats review</button>
-            </div>
         </div>
     <vc:footer></vc:footer>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
@@ -135,11 +187,13 @@
 </body>
 </html>
 <style>
-    .container-fluid {
-        display: grid;
-        grid-template-rows: 0.5fr 1fr, 1fr, 1fr, 1fr, 1fr;
-        grid-template-columns: 1fr 3fr 0.5fr 3fr 1fr;
-        gap: 10px;
+
+    html, body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        background-color: #AFDDE5;
     }
 
     .title {
@@ -155,58 +209,60 @@
             text-decoration: none;
         }
 
-    .scroll-container {
-        grid-column: 2 / 5;
-        grid-row: 2 / 3; 
-        margin: 40px 40px 120px 40px;
+    .boardGameNightInformation {
+        background-color: #0FA4AF;
+        border-radius: 8px;
     }
 
-    .description-BoardgameNight {
-        grid-column: 2/3;
-        grid-row: 3/4;
-    }
-
-    .extra-information {
-        grid-column: 2/3;
-        grid-row: 4/5;
-    }
-
-    .address-information {
-        grid-column: 2/3;
-        grid-row: 5/6;
-    }
-
-    .description-food-drinks {
-        grid-column: 4/5;
-        grid-row: 3/6;
-    }
-
-    .signUpButton {
-        grid-column: 2/3;
-        grid-row: 6/7;
-    }
-
-    .review {
-        grid-column: 4/5;
-        grid-row: 6/7;
-        margin-bottom: 50px;
+    .age-indicator {
+        font-size: 1.1em;
+        font-weight: bold;
+        color: white;
+        margin-left: 10px;
+        margin-bottom: 5px;
     }
 
     .scroll-container {
         display: flex;
-        flex-wrap: nowrap;
         overflow-x: auto;
+        flex-wrap: nowrap;
         scroll-behavior: smooth;
         padding: 10px;
-        border: 1px solid #ddd;
+    }
+
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+
+    .playersSignedUp {
+        min-height: 200px;
+        background-color: #0FA4AF;
+        border-radius: 8px;
+    }
+
+    .title-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .back-button {
+        background-color: #964734;
+        color: white;
+        border-radius: 4px;
+        padding-right: 100px;
     }
 
     .scroll-item {
-        flex: 0 0 250px;
         margin-right: 15px;
-        transition: transform 0.3s;
         width: 200px;
-        background-color: aliceblue;
+        background-color: darkcyan;
+        color: white;
+        text-align: left;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        transition: transform 0.2s ease;
     }
 
         .scroll-item:hover {

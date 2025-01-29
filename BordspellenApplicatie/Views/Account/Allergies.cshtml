@@ -1,6 +1,4 @@
-﻿@* @model BordspellenApplicatie.Models.DieetAndAllergiesResponse
- *@
-@model BordspellenApplicatie.Domain.Models.User
+﻿@model BordspellenApplicatie.Domain.Models.User
 
 @{
     Layout = null;
@@ -13,54 +11,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Board Game Nights</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    @*     <link rel="stylesheet" href="/css/style.css"/> *@
 </head>
 <body>
     <div class="page-wrapper">
         <vc:header></vc:header>
         <div class="container-fluid content">
-            <div class="navigation">
-                <p>
-                    Homepage / My Account / <b>Allergieen</b>
+            <div class="row ml-5 mt-2">
+                <p class="col-12">
+                    Home / Mijn Account / <b>Allergieen</b>
                 </p>
-                <h1>
-                    My Account
+                <h1 class="col-12">
+                    Mijn Account
                 </h1>
             </div>
-            <div class="accountChoises">
-                <ul>
-                    @Html.ActionLink("My details", "Details", "Account", null, new { @class = "account-link" })
-                    <br />
-                    @Html.ActionLink("Aangemelde bordspelavonden", "Registered", "Account", null, new { @class = "account-link" })
-                    <br />
-                    @Html.ActionLink("Georganiseerde bordspelavonden", "Organized", "Account", null, new { @class = "account-link" })
-                    <br />
-                    @Html.ActionLink("Dieetwensen en allergieen", "Allergies", "Account", null, new { @class = "account-link-selected", @style = "background-color: #0FA4AF; color: white;" })
-                    <br />
-                    @Html.ActionLink("Account settings", "Settings", "Account", null, new { @class = "account-link"})
-                </ul>
-            </div>
-            <div class="detailsForm">
-                <h3 style="margin-top: 20px; margin-bottom: 20px;">Allergieen</h3>
-                <form>
-                    <div>
-                        <label asp-for="IsLactoseIntolerant">Lactose Allergy</label>
-                         <input asp-for="IsLactoseIntolerant" type="checkbox" />
-                    </div>
-                    <div>
-                        <label asp-for="HasNutAllergy">Nut Allergy</label>
-                        <input asp-for="HasNutAllergy" type="checkbox" />
-                    </div>
-                    <div>
-                        <label asp-for="IsVegetarian">Vegan</label>
-                        <input asp-for="IsVegetarian" type="checkbox" />
-                    </div>
-                    <div>
-                        <label asp-for="DrinksAlcohol">Drinks Alcohol</label>
-                        <input asp-for="DrinksAlcohol" type="checkbox" />
-                    </div>
-                    <button class="saveButton" type="submit">Save</button>
-                </form>
+            <div class="row ml-5 mt-4">
+                <div class="col-4">
+                        @Html.ActionLink("Mijn details", "Details", "Account", null, new { @class = "account-link" })
+                        <br />
+                        @Html.ActionLink("Aangemelde bordspelavonden", "Registered", "Account", null, new { @class = "account-link" })
+                        <br />
+                        @Html.ActionLink("Georganiseerde bordspelavonden", "Organized", "Account", null, new { @class = "account-link" })
+                        <br />
+                        @Html.ActionLink("Dieetwensen en allergieen", "Allergies", "Account", null, new { @class = "account-link-selected", @style = "background-color: #0FA4AF; color: white;" })
+                        <br />
+                </div>
+                <div class="col-1"></div>
+                <div class="col-6 detailsForm mb-5">
+                    <h3 style="margin-top: 20px; margin-bottom: 20px;">Allergieen</h3>
+                    <form>
+                        <div>
+                            <label asp-for="IsLactoseIntolerant">Lactose Allergy</label>
+                            <input asp-for="IsLactoseIntolerant" type="checkbox" />
+                        </div>
+                        <div>
+                            <label asp-for="HasNutAllergy">Nut Allergy</label>
+                            <input asp-for="HasNutAllergy" type="checkbox" />
+                        </div>
+                        <div>
+                            <label asp-for="IsVegetarian">Vegan</label>
+                            <input asp-for="IsVegetarian" type="checkbox" />
+                        </div>
+                        <div>
+                            <label asp-for="DrinksAlcohol">Drinks Alcohol</label>
+                            <input asp-for="DrinksAlcohol" type="checkbox" />
+                        </div>
+                        <button class="saveButton" type="submit">Opslaan</button>
+                    </form>
+                </div>
             </div>
         </div>
         <vc:footer></vc:footer>
@@ -88,38 +85,17 @@
         flex: 1;
     }
 
-    .container-fluid {
-        display: grid;
-        grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
-        grid-template-columns: 1fr 0.5fr 1fr 1fr 0.5fr;
-        gap: 10px;
-        height: 100vh;
-    }
-
-    .navigation {
-        grid-column: 1 / 2;
-        grid-row: 2 / 3;
-        padding-left: 50px;
-    }
-
-    .accountChoises {
-        grid-column: 1 / 2;
-        grid-row: 3 / 4;
-        padding-left: 50px;
-        margin-top: 20px;
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
     }
 
     .detailsForm {
-        grid-column: 3 / 5;
-        grid-row: 3 / 5;
         background-color: #0FA4AF;
         border-radius: 10px;
-        margin-left: 50px;
-        padding-left: 40px;
-        margin-top: 20px;
-        margin-right: 50px;
-        margin-bottom: 70px;
-        color: white;
+        color: black;
+        font-weight: bold;
     }
 
     .account-link {
@@ -128,29 +104,31 @@
     }
 
     .account-link-selected {
+        color: black;
         display: block;
         padding-left: 5px;
         margin-left: -5px;
         border-radius: 5px;
         padding-top: 2px;
         padding-bottom: 2px;
-        margin-right: 70px;
+        margin-right: 100px;
     }
 
-    .account-link-selected:hover {
-        text-decoration: none;
-    }
+        .account-link-selected:hover {
+            text-decoration: none;
+        }
+
 
     .account-link:hover {
         background-color: #0FA4AF;
         color: white;
-        text-decoration: none;
-        border-radius: 5px;
-        margin-left: -5px;
         padding-left: 5px;
+        margin-left: -5px;
+        border-radius: 5px;
         padding-top: 2px;
         padding-bottom: 2px;
-        margin-right: 70px;
+        text-decoration: none;
+        margin-right: 100px;
     }
 
     .saveButton {

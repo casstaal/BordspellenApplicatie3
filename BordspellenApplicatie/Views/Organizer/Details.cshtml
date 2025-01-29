@@ -1,0 +1,39 @@
+﻿@model BordspellenApplicatie.Domain.Models.User
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Board Game Nights</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <vc:header></vc:header>
+        <div class="container-fluid">
+            <h1>Organisator details</h1>
+            <div class="organizerDetails">
+                <p><strong>Naam:</strong> @Model.FirstName @Model.LastName</p>
+                <p><strong>Geboortedatum:</strong> @Model.DateOfBirth</p>
+                <p><strong>Gemiddelde review:</strong> </p>
+            </div>
+        </div>
+    <vc:footer></vc:footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        background-color: #AFDDE5;
+    }
+</style>
+

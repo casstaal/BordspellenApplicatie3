@@ -12,7 +12,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Board Game Nights</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    @*     <link rel="stylesheet" href="/css/style.css"/> *@
 </head>
 <body>
     <vc:header></vc:header>
@@ -20,6 +19,7 @@
         <div class="title">
             <h1>Maak review aan</h1>
         </div>
+        <button class="back-button" onclick="window.history.back();">Terug</button>
         <form class="reviewForm" asp-action="create" asp-controller="Review" method="post">
             <div asp-validation-summary="All">
             </div>
@@ -41,7 +41,7 @@
                 <textarea class="textareaDescription" asp-for="TextReview" rows="4"></textarea>
             </div>
             <div class="buttonContainer">
-                <button class="saveButton" type="submit">Create review</button>
+                <button class="saveButton" type="submit">Maak review aan</button>
             </div>
         </form>
     </div>
@@ -106,6 +106,16 @@
         padding: 7px 20px;
         font-size: 16px;
         cursor: pointer;
+    }
+
+    .back-button {
+        background-color: #964734;
+        color: white;
+        width: 20%;
+        height: 30%;
+        margin-top: 20px;
+        margin-left: 65px;
+        border-radius: 8px;
     }
 </style>
 

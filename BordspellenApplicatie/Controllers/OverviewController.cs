@@ -47,7 +47,7 @@ namespace BordspellenApplicatie.Controllers
                 Title = userBoardGameNight.GameNight.Title ?? "No Title",
                 Organizer = organizer != null
                     ? $"{organizer.FirstName} {organizer.LastName}"
-                    : "Unknown Organizer", // Only set "Unknown Organizer" if no organizer is found
+                    : "Unknown Organizer",
                 Description = userBoardGameNight.GameNight.Description ?? "No Description",
                 DateTime = userBoardGameNight.GameNight.DateTime,
                 MaxPlayers = userBoardGameNight.GameNight.MaxPlayers,

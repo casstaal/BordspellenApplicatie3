@@ -1,10 +1,7 @@
-﻿@model IEnumerable<BordspellenApplicatie.Models.BoardGameNightDetailsViewModel>
+﻿ @model IEnumerable<BordspellenApplicatie.Models.BoardGameNightDetailsViewModel>
 
 @{
     Layout = null;
-    var bannerUrl = ViewBag.BannerUrl as string;
-    var infoText = ViewBag.InfoText as string;
-    var futureEvents = ViewBag.FutureEvents as List<BordspellenApplicatie.Domain.Models.BoardGameNight>;
 }
 
 <!DOCTYPE html>
@@ -14,13 +11,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Board Game Nights</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    @*     <link rel="stylesheet" href="/css/style.css"/> *@
 </head>
 <body>
     <div class="page-wrapper">
         <vc:header></vc:header>
         <div class="container-fluid content">
-            <div class="navigation">
+            <div style="margin-top: 10px; margin-left: 50px;" class="navigation">
                 <p>
                     Homepage / <b>Overzicht aangemelde bordspellenavonden</b>
                 </p>
@@ -33,15 +29,22 @@
                 {
                     foreach (var boardGameNight in Model)
                     {
-                        <a class="gameNightLink" href="@Url.Action("Details", "BoardGameNight", new { id = boardGameNight.Id, title = boardGameNight.Title, date = boardGameNight.DateTime.ToString("yyyy-MM-dd") })">
-                            <div class="card">
-                                <img src="/banner6.jpg" alt="User Icon" class="card-img" style="max-height: 100px;">
+                        <div class="card">
+                            <img src="/banner6.jpg" alt="User Icon" class="card-img" style="max-height: 100px;">
+                            <div class="title-container">
                                 <h5 class="card-title">@boardGameNight.Title</h5>
-                                <p class="card-text">
-                                    Date: @boardGameNight.DateTime.ToString("MMMM dd, yyyy")<br />
-                                </p>
+                                @if (!boardGameNight.Is18Plus)
+                                {
+                                    <span class="age-indicator">18+</span>
+                                }
                             </div>
-                        </a>
+                            <p class="card-text">
+                                Date: @boardGameNight.DateTime.ToString("MMMM dd, yyyy")<br />
+                            </p>
+                            <a class="gameNightLink btn" style="background-color:#964734; color:white" href="@Url.Action("Details", "BoardGameNight", new { id = boardGameNight.Id, title = boardGameNight.Title, date = boardGameNight.DateTime.ToString("yyyy-MM-dd") })">
+                                Zie details
+                            </a>
+                        </div>
                     }
                 }
                 else
@@ -63,6 +66,7 @@
         display: flex;
         flex-direction: column;
         background-color: #AFDDE5;
+        font-family: Calibri;
     }
 
     .page-wrapper {
@@ -87,29 +91,49 @@
 
     .grid-container {
         display: grid;
-        grid-template-columns: repeat(5, 1fr); /* 5 columns */
-        grid-template-rows: repeat(2, auto); /* 2 rows */
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(2, auto);
         gap: 20px;
         margin-top: 20px;
+        margin-left: 50px;
     }
 
     .card {
-        background-color: #f4f4f4;
+        background-color: darkcyan;
         padding: 20px;
-        border: 1px solid #ddd;
         border-radius: 8px;
-        text-align: center;
+        text-align: left;
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease;
+        color: white;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+    .title-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .age-indicator {
+        font-size: 1.1em;
+        font-weight: bold;
+        color: white;
+        margin-left: 10px;
     }
 
     .card-title {
         font-size: 1.25em;
-        margin-bottom: 10px;
+        margin-top: 7px;
     }
 
     .card-text {
         font-size: 0.95em;
-        color: #555;
+        color: white;
     }
 </style>
 

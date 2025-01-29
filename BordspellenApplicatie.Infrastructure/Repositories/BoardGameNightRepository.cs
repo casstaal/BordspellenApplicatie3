@@ -23,6 +23,12 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
+        public void Delete(BoardGameNight boardGameNight)
+        {
+            dBContext.BoardGameNights.Remove(boardGameNight);
+            dBContext.SaveChanges();
+        }
+
         public IEnumerable<BoardGameNight> GetAll()
         {
             return dBContext.BoardGameNights
@@ -50,7 +56,7 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
         public void Update(BoardGameNight boardGameNight)
         {
             dBContext.Update(boardGameNight);
-            dBContext.SaveChanges(); ;
+            dBContext.SaveChanges();
         }
 
         public IEnumerable<Boardgame> GetAllGames(BoardGameNight boardGameNight)

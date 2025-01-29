@@ -12,83 +12,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Board Game Nights</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    @*     <link rel="stylesheet" href="/css/style.css"/> *@
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="navbar d-flex justify-content-between align-items-center">
-            <a href="/">
-                <div class="logo">
-                    <img src="/logoBoardgame.jpg" alt="Logo" class="img-fluid" style="max-height: 50px;">
+    <div class="page-wrapper">
+        <vc:header></vc:header>
+        <div class="container-fluid content">
+            <div class="row ml-5 mt-2">
+                <p class="col-12">
+                    Home / Mijn Account / <b>Aangemelde bordspelavonden</b>
+                </p>
+                <h1 class="col-12">
+                    Mijn Account
+                </h1>
+            </div>
+
+            <div class="row ml-5 mt-4">
+                <div class="col-4">
+                    @Html.ActionLink("Mijn details", "Details", "Account", null, new { @class = "account-link" })<br />
+                    @Html.ActionLink("Aangemelde bordspelavonden", "Registered", "Account", null, new { @class = "account-link-selected", @style = "background-color: #0FA4AF; color: white;" })<br />
+                    @Html.ActionLink("Georganiseerde bordspelavonden", "Organized", "Account", null, new { @class = "account-link" })<br />
+                    @Html.ActionLink("Dieetwensen en allergieen", "Allergies", "Account", null, new { @class = "account-link" })<br />
                 </div>
-            </a>
-            <a href="/home/account">
-                <img src="/userIcon.png" alt="User Icon" class="img-fluid" style="max-height: 40px;">
-            </a>
+                <div class="col-1"></div>
+                <div class="col-6 registeredGameNights mb-5">
+                    <h3 style="margin-top: 20px; margin-bottom: 20px;">Registered Game nights</h3>
+                    <div class="scroll-container pb-4">
+                        @if (Model != null)
+                        {
+                            @foreach (var gameEvent in Model)
+                            {
+                                <a class="gameNightLink" href="@Url.Action("Details", "BoardGameNight", new { id = gameEvent.Id, title = gameEvent.Title, date = gameEvent.DateTime.ToString("yyyy-MM-dd") })">
+                                    <div class="scroll-item card text-center mb-2">
+                                        <div class="card-body d-flex justify-content-between align-items-center">
+                                            <h5 class="card-title mb-0">@gameEvent.Title</h5>
+                                            @if (gameEvent.Is18Plus)
+                                            {
+                                                <span class="age-indicator">18+</span>
+                                            }
+                                            <p class="card-text mb-0">Date: @gameEvent.DateTime.ToString("dd MMM yyyy")</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            }
+                        }
+                        else
+                        {
+                            <p>Geen bordspelavonden gevonden.</p>
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="navigation">
-            <p>
-                Homepage / My Account / <b>Aangemelde bordspelavonden</b>
-            </p>
-            <h1>
-                My Account
-            </h1>
-        </div>
-        <div class="accountChoises">
-            @Html.ActionLink("My details", "Details", "Account", null, new { @class = "account-link" })<br />
-            @Html.ActionLink("Aangemelde bordspelavonden", "Registered", "Account", null, new { @class = "account-link", @style = "background-color: lightsteelblue" })<br />
-            @Html.ActionLink("Georganiseerde bordspelavonden", "Organized", "Account", null, new { @class = "account-link" })<br />
-            @Html.ActionLink("Dieetwensen en allergieen", "Allergies", "Account", null, new { @class = "account-link" })<br />
-            @Html.ActionLink("Account settings", "Settings", "Account", null, new { @class = "account-link" })
-        </div>
-        <div class="detailsForm">
-            <h3 style="margin-top: 20px; margin-bottom: 20px;">Registered Game nights</h3>
-        </div>
+        <vc:footer></vc:footer>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 <style>
-    .container-fluid {
-        display: grid;
-        grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 10px;
-        background-color: aliceblue;
+    html, body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        background-color: #AFDDE5;
     }
 
-    .navbar {
-        grid-column: 1 / 5;
-        grid-row: 1 / 2;
-        background-color: lightgrey;
-        padding: 10px;
-        background-color: lightsteelblue;
+    .page-wrapper {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
     }
 
-    .navigation {
-        grid-column: 1 / 2;
-        grid-row: 2 / 3;
-        padding-left: 50px;
+    .content {
+        flex: 1;
     }
 
-    .accountChoises {
-        grid-column: 1 / 2;
-        grid-row: 3 / 4;
-        padding-left: 50px;
-        margin-top: 20px;
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
     }
 
-    .detailsForm {
-        grid-column: 2 / 4;
-        grid-row: 3 / 5;
-        background-color: white;
-        border-style: solid;
-        margin-left: 50px;
-        padding-left: 40px;
-        margin-top: 20px;
-        margin-right: 50px;
-    }
+     .registeredGameNights {
+        background-color: #0FA4AF;
+        border-radius: 10px;
+        color: black;
+        font-weight: bold;
+    } 
 
 
     .account-link {
@@ -96,10 +107,46 @@
         display: block;
     }
 
-    .account-link:hover {
-        background-color: lightsteelblue;
-        color: black;
+    .card {
+        background-color: darkcyan;
+        color: white;
+        transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .gameNightLink:hover {
         text-decoration: none;
     }
+
+    .account-link-selected {
+        color: black;
+        display: block;
+        padding-left: 5px;
+        margin-left: -5px;
+        border-radius: 5px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        margin-right: 100px;
+    }
+
+    .account-link-selected:hover {
+        text-decoration: none;
+    }
+
+
+        .account-link:hover {
+            background-color: #0FA4AF;
+            color: white;
+            padding-left: 5px;
+            margin-left: -5px;
+            border-radius: 5px;
+            padding-top: 2px;
+            padding-bottom: 2px;
+            text-decoration: none;
+            margin-right: 100px;
+        }
 </style>
 

@@ -11,7 +11,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Board Game Nights</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    @*     <link rel="stylesheet" href="/css/style.css"/> *@
 </head>
 <body>
     <div class="page-wrapper">
@@ -25,27 +24,14 @@
                     <input asp-for="Name" type="text" />
                 </div>
                 <div style="margin-top: 15px;">
-                    <label asp-for="Password">Password</label><br />
+                    <label asp-for="Password">Wachtwoord</label><br />
                     <input asp-for="Password" type="password" />
                 </div>
-                @*             <div>
-                <p style="text-align: center; margin-top: 10px;">Wachtwoord vergeten</p>
-                </div>
-                <div class="buttonContainer">
-                <button class="saveButton" type="submit">Login</button>
-                </div> *@
                 <div asp-validation-summary="All"></div>
                 <div class="buttonContainer">
                     <button class="saveButton" type="submit">Login</button>
                 </div>
             </form>
-
-            @*         <div class="signUp">
-            <p style="text-align: center;">Ik heb nog geen account</p>
-            <div class="buttonContainer">
-            <button class="signUpButton">Sign Up</button>
-            </div>
-            </div> *@
         </div>
         <vc:footer></vc:footer>
     </div>

@@ -27,23 +27,21 @@ namespace BordspellenApplicatie.Infrastructure.Data
         {
             modelBuilder.HasDefaultSchema(SqlSchema);
 
-            // Configure User to UserGameNight relationship
             modelBuilder.Entity<UserBoardGameNight>()
                 .HasOne(ug => ug.User)
                 .WithMany(u => u.UserBoardGameNights)
                 .HasForeignKey(ug => ug.UserId)
-                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+                .OnDelete(DeleteBehavior.Restrict);
 
-            // Configure GameNight to UserGameNight relationship
             modelBuilder.Entity<UserBoardGameNight>()
                 .HasOne(ug => ug.GameNight)
                 .WithMany(g => g.UserBoardGameNights)
                 .HasForeignKey(ug => ug.BoardGameNightId)
-                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+                .OnDelete(DeleteBehavior.Restrict); 
 
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.BoardGameNight)
-                .WithMany(b => b.Reviews) // Assuming a BoardGameNight can have many Reviews
+                .WithMany(b => b.Reviews) 
                 .HasForeignKey(r => r.BoardGameNightId)
                 .OnDelete(DeleteBehavior.Restrict);
 

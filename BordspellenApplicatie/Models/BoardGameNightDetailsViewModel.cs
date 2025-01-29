@@ -6,9 +6,6 @@ namespace BordspellenApplicatie.Models
 {
     public class BoardGameNightDetailsViewModel
     {
-        //public BoardGameNight CurrentEvent { get; set; }
-        //public List<BoardGameNight> FutureEvents { get; set; }
-
         public string Organizer { get; set; } = null!;
         public DateTime DateTime { get; set; }
         public Address Address { get; set; } = null!;

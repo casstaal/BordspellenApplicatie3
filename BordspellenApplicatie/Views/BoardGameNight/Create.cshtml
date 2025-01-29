@@ -12,7 +12,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Board Game Nights</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    @*     <link rel="stylesheet" href="/css/style.css"/> *@
 </head>
 <body>
     <vc:header></vc:header>
@@ -20,47 +19,66 @@
         <div class="title">
             <h1>Maak bordspelavond aan</h1>
         </div>
+        <button class="back-button" onclick="window.history.back();">Terug</button>
         <form class="createBoardgamenightForm" asp-action="Create" asp-controller="BoardGameNight" method="post">
-            <div style="margin-top: 15px;">
-                 <label asp-for="Organizer">Naam organisator</label>
-                 <input type="text" value="@User.Identity.Name" disabled />
-                 <input type="hidden" asp-for="Organizer" value="@User.Identity.Name" />
-            </div> 
-            <div style="margin-top: 15px;">
-                <label asp-for="DateTime">Datum</label>
-                <input type="date" asp-for=DateTime />
+            <div class="row">
+                <div class="mt-3 col-md-12">
+                    <label asp-for="Organizer">Naam organisator</label>
+                    <input type="text" value="@User.Identity.Name" disabled class="form-control" />
+                    <input type="hidden" asp-for="Organizer" value="@User.Identity.Name" class="form-control" />
+                </div>
             </div>
-            <div style="margin-top: 15px;">
-                <label asp-for="Is18Plus">18+</label><br />
-                <input style="transform: scale(0.7);" asp-for="Is18Plus" type="checkbox" />
+            <div class="row">
+                <div class="mt-3 col-md-12">
+                    <label asp-for="DateTime">Datum</label>
+                    <input type="date" asp-for=DateTime class="form-control" />
+                </div>
             </div>
-            <div style="margin-top: 15px;">
-                <label asp-for="Title">Title</label>
-                <input type="text" asp-for="Title" />
+            <div class="row">
+                <div class="mt-3 col-md-12">
+                    <label asp-for="Is18Plus">18+</label><br />
+                    <input style="transform: scale(0.7);" asp-for="Is18Plus" type="checkbox" class="form-control" />
+                </div>
             </div>
-            <div style ="margin-top: 15px;">
-                <label asp-for="Description">Description</label><br />
-                <textarea class="textareaDescription" asp-for="Description" rows="4"></textarea>
+            <div class="row">
+                <div class="mt-3 col-md-12">
+                    <label asp-for="Title">Title</label>
+                    <input type="text" asp-for="Title" class="form-control" />
+                </div>
             </div>
-            <div style="margin-top: 15px;">
-                <label asp-for="MaxPlayers">Max aantal spelers</label>
-                <input type="number" asp-for="MaxPlayers" />
+            <div class="row">
+                <div class="mt-3 col-md-12">
+                    <label asp-for="Description">Description</label><br />
+                    <textarea class="textareaDescription form-control" asp-for="Description" rows="4"></textarea>
+                </div>
             </div>
-            <div style="margin-top: 15px;">
-                <label asp-for="Food">Eten & Drinken</label>
-                <textarea class="textareaFood" asp-for="Food" rows="4"></textarea>
+            <div class="row">
+                <div class="mt-3 col-md-12">
+                    <label asp-for="MaxPlayers">Max aantal spelers</label>
+                    <input type="number" asp-for="MaxPlayers" class="form-control" />
+                </div>
             </div>
-            <div style="margin-top: 15px;">
-                <label asp-for="Address.Street">Street</label><br />
-                <input asp-for="Address.Street" type="text" />
+            <div class="row">
+                <div class="mt-3 col-md-12">
+                    <label asp-for="Food">Eten & Drinken</label>
+                    <textarea class="textareaFood form-control" asp-for="Food" rows="4"></textarea>
+                </div>
             </div>
-            <div style="margin-top: 15px;">
-                <label asp-for="Address.Number">Number</label>
-                <input asp-for="Address.Number" type="text" />
+            <div class="row">
+                <div class="mt-3 col-md-8">
+                    <label asp-for="Address.Street">Street</label><br />
+                    <input asp-for="Address.Street" type="text" class="form-control" />
+                </div>
+                <div class="mt-3 col-md-4">
+                    <label asp-for="Address.Number">Number</label>
+                    <input asp-for="Address.Number" type="text" class="form-control" />
+                </div>
             </div>
-            <div style="margin-top: 15px;">
-                <label asp-for="Address.City">City</label>
-                <input asp-for="Address.City" type="text" />
+            <div class="row">
+                <div class="mt-3 col-md-12">
+                    <label asp-for="Address.City">City</label>
+                    <input asp-for="Address.City" type="text" class="form-control" />
+                </div>
             </div>
             <div class="allergiesCheckbox">
                 <h5>Allergieen</h5>
@@ -82,12 +100,12 @@
                 </label>
                 <label class="container">
                     <input asp-for="IsNonAlcoholicFriendly" type="checkbox">
-                    Drinkt geen alcohol
+                    Alcohol
                     <span class="checkmark"></span>
                 </label>
             </div>
             <div class="buttonContainer">
-                <button class="saveButton" type="submit">Create bordspelavond</button>
+                <button class="saveButton" type="submit">Maak bordspelavond aan</button>
             </div>
         </form>
     </div>
@@ -97,6 +115,14 @@
 </body>
 </html>
 <style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        background-color: #AFDDE5;
+    }
+
     .container-fluid {
         display: grid;
         grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
@@ -114,6 +140,12 @@
     .createBoardgamenightForm {
         grid-column: 2/3;
         grid-row: 2/3;
+        background-color: #0FA4AF;
+        border-radius: 10px;
+        color: black;
+        font-weight: bold;
+        padding: 10px 50px;
+        margin-bottom: 50px;
     }
 
     input {
@@ -129,18 +161,23 @@
         display: flex;
         justify-content: center;
         margin-top: 10px;
-        margin-bottom: 50px;
-    }
-
-    .saveButton {
-        width: 100%;
-        max-width: 200px; 
+        margin-bottom: 20px;
     }
 
     .saveButton {
         padding: 7px 20px;
         font-size: 16px;
         cursor: pointer;
+    }
+
+    .back-button {
+        background-color:#964734; 
+        color:white; 
+        width: 20%; 
+        height: 30%;
+        margin-top: 20px;
+        margin-left: 65px;
+        border-radius: 8px;
     }
 
     .allergiesCheckbox {

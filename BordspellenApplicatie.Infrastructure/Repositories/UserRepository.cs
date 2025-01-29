@@ -48,7 +48,6 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
         public async Task UpdateAsync(User user)
         {
             var userToUpdate = await dBContext.Users
-                //.Include(u => u.UserBoardGameNights)  // Load the collection
                 .Include(bgn => bgn.Address)
                 .FirstOrDefaultAsync(bgn => bgn.Id == user.Id);
 
