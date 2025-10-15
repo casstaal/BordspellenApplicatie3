@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BordspellenApplicatie.Domai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BordspellenApplicatie.Infrastructure", "BordspellenApplicatie.Infrastructure\BordspellenApplicatie.Infrastructure.csproj", "{3E63E341-0E60-405F-874B-D05B4B202861}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bordspellenapplicatie.WebAPI", "Bordspellenapplicatie.WebAPI\Bordspellenapplicatie.WebAPI.csproj", "{45C99326-15A4-46AE-9381-13CA27D2B59A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{3E63E341-0E60-405F-874B-D05B4B202861}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E63E341-0E60-405F-874B-D05B4B202861}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E63E341-0E60-405F-874B-D05B4B202861}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45C99326-15A4-46AE-9381-13CA27D2B59A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45C99326-15A4-46AE-9381-13CA27D2B59A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45C99326-15A4-46AE-9381-13CA27D2B59A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45C99326-15A4-46AE-9381-13CA27D2B59A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
