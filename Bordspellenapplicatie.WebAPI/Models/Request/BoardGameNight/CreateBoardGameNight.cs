@@ -1,7 +1,7 @@
 ﻿using BordspellenApplicatie.Domain.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace Bordspellenapplicatie.WebAPI.Models.Request
+namespace Bordspellenapplicatie.WebAPI.Models.Request.BoardGameNight
 {
     public class CreateBoardGameNight
     {

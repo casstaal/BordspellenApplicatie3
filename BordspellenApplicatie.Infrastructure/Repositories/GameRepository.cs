@@ -12,29 +12,61 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
 {
     public class GameRepository(BordspellenavondDBContext dBContext) : IGameRepository
     {
-        public void Add(Boardgame boardgame)
+        public async Task<Boardgame> Add(Boardgame boardgame)
         {
-            throw new NotImplementedException();
+            await dBContext.Games.AddAsync(boardgame);
+            await dBContext.SaveChangesAsync();
+            return boardgame;
         }
 
-        public void Delete(Guid id)
+        public async Task<Boardgame?> Delete(Guid id)
         {
-            throw new NotImplementedException();
+            var existingBoardgame = await dBContext.Games.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existingBoardgame == null)
+            {
+                return null;
+            }
+
+            dBContext.Games.Remove(existingBoardgame);
+            await dBContext.SaveChangesAsync();
+            return existingBoardgame;
         }
 
-        public IEnumerable<Boardgame> GetAll()
+        public async Task<List<Boardgame>> GetAll()
         {
-            return dBContext.Games.ToList();
+            return await dBContext.Games.ToListAsync();
         }
 
-        public Boardgame GetById(Guid id)
+        public async Task<List<Boardgame>?> GetByBoardGameNightId(int id)
         {
-            throw new NotImplementedException();
+            return await dBContext.Games.Where(x => x.BoardGameNightId == id).ToListAsync();
         }
 
-        public void Update(Boardgame boardgame)
+        public async Task<Boardgame?> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            return await dBContext.Games.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<Boardgame?> Update(Guid id, Boardgame boardgame)
+        {
+            var existingBoardgame = await dBContext.Games.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existingBoardgame == null)
+            {
+                return null;
+            }
+
+            existingBoardgame.Name = boardgame.Name;
+            existingBoardgame.Description = boardgame.Description;
+            existingBoardgame.Genre = boardgame.Genre;
+            existingBoardgame.Is18Plus = boardgame.Is18Plus;
+            existingBoardgame.ImageUrl = boardgame.ImageUrl;
+            existingBoardgame.Type = boardgame.Type;
+
+            await dBContext.SaveChangesAsync();
+
+            return existingBoardgame;
         }
     }
 }

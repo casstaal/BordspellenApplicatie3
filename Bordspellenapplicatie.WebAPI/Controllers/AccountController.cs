@@ -1,5 +1,4 @@
-﻿using Bordspellenapplicatie.WebAPI.Models.Request;
-using BordspellenApplicatie.Domain.Interfaces;
+﻿using BordspellenApplicatie.Domain.Interfaces;
 using BordspellenApplicatie.Domain.Models;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Authorization;
@@ -34,7 +33,7 @@ namespace Bordspellenapplicatie.WebAPI.Controllers
         [AllowAnonymous]
         [ProducesResponseType(typeof(AccessTokenResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>> Login([FromBody] Models.Request.LoginRequest loginRequest, [FromQuery] bool? useCookies, [FromQuery] bool? useSessionCookies)
+        public async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>> Login([FromBody] Models.Request.Auth.LoginRequest loginRequest, [FromQuery] bool? useCookies, [FromQuery] bool? useSessionCookies)
         {
             var useCookieScheme = (useCookies == true) || (useSessionCookies == true);
             var isPersistent = (useCookies == true) && (useSessionCookies != true);
@@ -56,7 +55,7 @@ namespace Bordspellenapplicatie.WebAPI.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<Results<Created, ValidationProblem, ProblemHttpResult>> Register([FromBody] Models.Request.RegisterRequest registerRequest)
+        public async Task<Results<Created, ValidationProblem, ProblemHttpResult>> Register([FromBody] Models.Request.Auth.RegisterRequest registerRequest)
         {
             var emailAddressAttribute = new EmailAddressAttribute();
             if (string.IsNullOrEmpty(registerRequest.Email) || !emailAddressAttribute.IsValid(registerRequest.Email))

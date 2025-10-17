@@ -1,6 +1,6 @@
 ﻿using BordspellenApplicatie.Domain.Models;
 
-namespace Bordspellenapplicatie.WebAPI.Models.Request
+namespace Bordspellenapplicatie.WebAPI.Models.Request.BoardGameNight
 {
     public class UpdateBoardGameNightRequest
     {

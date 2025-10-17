@@ -5,6 +5,7 @@ namespace BordspellenApplicatie.Domain.Models
     public class BoardGameNight
     {
         public int Id { get; set; }
+        public int OrganizerId { get; set; }
         public User Organizer { get; set; }
         public DateTime DateTime { get; set; }
         public Address Address { get; set; }

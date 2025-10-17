@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Bordspellenapplicatie.WebAPI.Models.DTO;
-using Bordspellenapplicatie.WebAPI.Models.Request;
+using Bordspellenapplicatie.WebAPI.Models.Request.BoardGameNight;
 using Bordspellenapplicatie.WebAPI.Models.Response;
 using BordspellenApplicatie.Domain.Interfaces;
 using BordspellenApplicatie.Domain.Models;
@@ -12,7 +12,7 @@ namespace Bordspellenapplicatie.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BoardGameNightController
+    public class BoardGameNightController : ControllerBase
     {
         private readonly IMapper mapper;
         private readonly IBoardGameNightRepository boardGameNightRepository;
@@ -29,7 +29,6 @@ namespace Bordspellenapplicatie.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<Results<Ok<BoardGameNightsResponse>, EmptyHttpResult, ProblemHttpResult>> GetBoardGameNights()
         {
-            //IEnumerable<BoardGameNight> boardGameNights = boardGameNightRepository.GetAll();
             var boardGameNightDomain = await boardGameNightRepository.GetAll();
 
             return TypedResults.Ok(new BoardGameNightsResponse() { BoardGameNights = mapper.Map<IEnumerable<BoardGameNightDto>>(boardGameNightDomain) });
@@ -76,19 +75,28 @@ namespace Bordspellenapplicatie.WebAPI.Controllers
            
         }
 
-        //[HttpPost]
-        //[ProducesResponseType(typeof(BoardGameNightResponse), StatusCodes.Status201Created)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //public async Task<Results<Created<BoardGameNightResponse>, BadRequest, ProblemHttpResult>> CreateBoardGameNight([FromBody] Models.Request.CreateBoardGameNight request)
-        //{
-        //    if (request == null) 
-        //    {
-        //        return TypedResults.BadRequest();
-        //    }
+        [HttpPost]
+        [ProducesResponseType(typeof(BoardGameNightResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<Results<Created<BoardGameNightResponse>, BadRequest, ProblemHttpResult>> CreateBoardGameNight([FromBody] CreateBoardGameNight request)
+        {
+            if (request == null)
+            {
+                return TypedResults.BadRequest();
+            }
 
+            var boardGameNightDomainModel = mapper.Map<BoardGameNight>(request);
 
-        //}
+            await boardGameNightRepository.Add(boardGameNightDomainModel);
+
+            var response = new BoardGameNightResponse
+            {
+                BoardGameNight = mapper.Map<BoardGameNightDto>(boardGameNightDomainModel)
+            };
+
+            return TypedResults.Created($"https://localhost:7287/api/BoardGameNight/{boardGameNightDomainModel.Id}", response);
+        }
 
         [HttpPut]
         [Route("{id:int}")]

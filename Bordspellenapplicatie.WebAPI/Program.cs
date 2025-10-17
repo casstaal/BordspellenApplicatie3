@@ -61,6 +61,8 @@ builder.Services.AddControllers()
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IBoardGameNightRepository, BoardGameNightRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IGameRepository, GameRepository>();
 
 var app = builder.Build();
 // app.UseHttpLogging();

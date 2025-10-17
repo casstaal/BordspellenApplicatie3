@@ -3,6 +3,8 @@
     public class Boardgame
     {
         public Guid Id { get; set; }
+        public BoardGameNight BoardGameNight { get; set; }
+        public int? BoardGameNightId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }  
         public GenreEnum Genre { get; set; }

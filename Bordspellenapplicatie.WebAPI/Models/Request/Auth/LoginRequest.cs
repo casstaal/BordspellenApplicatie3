@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Bordspellenapplicatie.WebAPI.Models.Request
+namespace Bordspellenapplicatie.WebAPI.Models.Request.Auth
 {
     public class LoginRequest
     {

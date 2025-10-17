@@ -9,10 +9,11 @@ namespace BordspellenApplicatie.Domain.Interfaces
 {
     public interface IGameRepository
     {
-        public IEnumerable<Boardgame> GetAll();
-        public Boardgame GetById(Guid id);
-        public void Add(Boardgame boardgame);
-        public void Update(Boardgame boardgame);
-        public void Delete(Guid id);
+        Task<List<Boardgame>> GetAll();
+        Task<Boardgame?> GetById(Guid id);
+        Task<List<Boardgame>?> GetByBoardGameNightId(int id);
+        Task<Boardgame> Add(Boardgame boardgame);
+        Task<Boardgame?> Update(Guid id, Boardgame boardgame);
+        Task<Boardgame?> Delete(Guid id);
     }
 }
