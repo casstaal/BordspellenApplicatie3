@@ -14,8 +14,9 @@ namespace Bordspellenapplicatie.WebAPI.Mappings
         {
             CreateMap<BoardGameNight, BoardGameNightDto>()
             .ForMember(dest => dest.RegisteredUsersId, opt => opt.MapFrom(src => src.RegisteredUsers.Select(user => user.Id)))
-            .ForMember(dest => dest.OrganizerId, opt => opt.MapFrom(src => src.Organizer.Id))
+            .ForMember(dest => dest.Organizer, opt => opt.MapFrom(src => src.Organizer))
             .ForMember(dest => dest.ReviewIds, opt => opt.MapFrom(src => src.Reviews.Select(review => review.Id)))
+            .ForMember(dest => dest.GamesId, opt => opt.MapFrom(src => src.Games.Select(game => game.Id)))
             .ForMember(dest => dest.UserBoardGameNightIds, opt => opt.MapFrom(src => src.UserBoardGameNights.Select(userBoardGameNight => userBoardGameNight.Id)))
             .ReverseMap();
 

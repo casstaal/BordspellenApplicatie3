@@ -59,7 +59,7 @@ namespace BordspellenApplicatie.Controllers
                 IsVegetarianFriendly = userBoardGameNight.GameNight.IsVegetarianFriendly,
                 IsSignedUp = true,
                 Games = userBoardGameNight.GameNight.Games?.ToList() ?? new List<Boardgame>(),
-                RegisteredUsersCount = userBoardGameNight.GameNight.RegisteredUsers?.Count ?? 0
+                RegisteredUsersCount =  0
             };
         }
 

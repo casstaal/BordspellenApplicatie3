@@ -56,6 +56,8 @@ builder.Services.AddScoped<IBoardGameNightRepository, BoardGameNightRepository>(
 builder.Services.AddScoped<IUserBoardGameNightRepository, UserBoardGameNightRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 
+builder.Services.AddHttpClient();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())

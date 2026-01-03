@@ -5,6 +5,7 @@ namespace Bordspellenapplicatie.WebAPI.Models.DTO
     public class BoardGameNightDto
     {
         public int Id { get; set; }
+        public User? Organizer { get; set; }
         public int OrganizerId { get; set; }
         public DateTime DateTime { get; set; }
         public Address Address { get; set; }
@@ -18,7 +19,7 @@ namespace Bordspellenapplicatie.WebAPI.Models.DTO
         public bool IsVegetarianFriendly { get; set; }
         public bool IsNutAllergyFriendly { get; set; }
         public bool IsNonAlcoholicFriendly { get; set; }
-        public List<Boardgame> Games { get; set; } = new List<Boardgame>();
+        public List<Guid> GamesId { get; set; } = new List<Guid>();
         public IEnumerable<int> RegisteredUsersId { get; set; }
 
         public List<int> ReviewIds { get; set; }

@@ -64,7 +64,7 @@ namespace BordspellenApplicatie.Controllers
                 TextReview = model.TextReview,
                 Author = user,
                 Date = model.Date,
-                BoardGameNight = boardGameNight 
+                BoardGameNightId = boardGameNight.Id 
             };
 
             _reviewRepository.Add(review);
