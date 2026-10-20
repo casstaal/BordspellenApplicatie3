@@ -100,6 +100,7 @@ namespace BordspellenApplicatie.Controllers
             return View();
         }
 
+        [HttpGet]
         [AllowAnonymous]
         public IActionResult Login(string returnUrl = "")
         {

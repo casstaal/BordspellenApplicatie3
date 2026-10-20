@@ -19,31 +19,12 @@ namespace BordspellenApplicatie.Controllers
         private readonly ILogger<HomeController> _logger = logger;
         private readonly IHttpClientFactory httpClientFactory = httpClientFactory;
 
-        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            List<BoardGameNightDto> response = new List<BoardGameNightDto>();
-
-            try
-            {
-                var client = httpClientFactory.CreateClient();
-
-                var httpResponseMessage = await client.GetAsync("https://localhost:7287/api/BoardGameNight");
-
-                httpResponseMessage.EnsureSuccessStatusCode();
-
-                var result = await httpResponseMessage.Content.ReadFromJsonAsync<BoardGameNightsResponse>();
-
-                response = result?.BoardGameNights ?? new List<BoardGameNightDto>();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error fetching board game nights from API.");
-            }
-
+            var boardGameNights = await _boardGameNightRepository.GetAll();
             ViewBag.BannerUrl = "/banner7.jpg";
 
-            return View(response);
+            return View(boardGameNights);
         }
 
         public IActionResult Privacy()

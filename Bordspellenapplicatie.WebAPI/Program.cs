@@ -1,3 +1,4 @@
+using Bordspellenapplicatie.WebAPI.GraphQL;
 using Bordspellenapplicatie.WebAPI.Mappings;
 using BordspellenApplicatie.Domain.Interfaces;
 using BordspellenApplicatie.Infrastructure.Data;
@@ -35,6 +36,10 @@ builder.Services.AddDbContext<BordspellenavondIdentityDBContext>(options =>
 });
 
 builder.Services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfiles));
+
+builder.Services
+    .AddGraphQLServer()
+    .AddQueryType<Query>();
 
 builder.Services.AddAuthorization();
 
@@ -78,5 +83,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.MapControllers();
+
+app.MapGraphQL("/graphql");
+
 
 app.Run();
