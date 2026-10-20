@@ -11,7 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var dbConnectionString = builder.Configuration.GetValue<string>("ConnectionStringAzureSQL");
+//var dbConnectionString = builder.Configuration.GetValue<string>("ConnectionStringAzureSQL");
+var dbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Database connection string ontbreekt.");
 
 builder.Services.AddDbContext<BordspellenavondDBContext>(options =>
 {
@@ -58,12 +60,12 @@ builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var seedData = scope.ServiceProvider.GetRequiredService<AuthSeedData>();
+//using (var scope = app.Services.CreateScope())
+//{
+//    var seedData = scope.ServiceProvider.GetRequiredService<AuthSeedData>();
 
-    await seedData.SeedDatabase();
-}
+//    await seedData.SeedDatabase();
+//}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
