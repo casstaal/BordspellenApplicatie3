@@ -12,7 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 //var dbConnectionString = builder.Configuration.GetValue<string>("ConnectionStringAzureSQL");
-var dbConnectionString = builder.Configuration.GetValue<string>("ConnectionStringAzureSQL")
+var dbConnectionString =
+    builder.Configuration.GetConnectionString("ConnectionStringAzureSQL")
+    ?? builder.Configuration.GetValue<string>("ConnectionStringAzureSQL")
     ?? throw new InvalidOperationException("Database connection string ontbreekt.");
 
 builder.Services.AddDbContext<BordspellenavondDBContext>(options =>
