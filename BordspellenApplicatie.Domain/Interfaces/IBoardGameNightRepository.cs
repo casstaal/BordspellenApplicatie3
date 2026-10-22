@@ -19,5 +19,6 @@ namespace BordspellenApplicatie.Domain.Interfaces
         public IEnumerable<Boardgame> GetAllGames(BoardGameNight boardGameNight);
 
         public IEnumerable<User> GetRegisteredUsers(BoardGameNight boardGameNight);
+        Task<int> CountByOrganizerIdAsync(int organizerId);
     }
 }

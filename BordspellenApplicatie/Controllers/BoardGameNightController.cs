@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BordspellenApplicatie.Controllers
 {
     [Authorize]
-    public class BoardGameNightController(UserManager<IdentityUser> userManager, IBoardGameNightRepository boardGameNightRepository, IUserRepository userRepository, IUserBoardGameNightRepository userBoardGameNightRepository, IGameRepository gameRepository, ILogger<BoardGameNightController> logger, IHttpClientFactory httpClientFactory) : Controller
+    public class BoardGameNightController(UserManager<IdentityUser> userManager, IBoardGameNightRepository boardGameNightRepository, IUserRepository userRepository, IUserBoardGameNightRepository userBoardGameNightRepository, IGameRepository gameRepository, IReviewRepository reviewRepository, ILogger<BoardGameNightController> logger, IHttpClientFactory httpClientFactory) : Controller
     {
 
         private readonly IUserRepository _userRepository = userRepository;
@@ -16,6 +16,7 @@ namespace BordspellenApplicatie.Controllers
         private readonly IBoardGameNightRepository _boardGameNightRepository = boardGameNightRepository;
         private readonly IUserBoardGameNightRepository _userBoardGameNightRepository = userBoardGameNightRepository;
         private readonly IGameRepository _gameRepository = gameRepository;
+        private readonly IReviewRepository _reviewRepository = reviewRepository;
         private readonly ILogger<BoardGameNightController> _logger = logger;
         private readonly IHttpClientFactory httpClientFactory = httpClientFactory;
 
@@ -34,39 +35,118 @@ namespace BordspellenApplicatie.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var gameNightDetails = _boardGameNightRepository.GetById(id).Result;
+            var gameNightDetails =
+                await _boardGameNightRepository.GetById(id);
 
             if (gameNightDetails == null)
             {
                 return NotFound();
             }
 
+            var currentUser = await GetCurrentUserAsync();
+
+            if (currentUser == null)
+            {
+                return Unauthorized();
+            }
+
             var organizer = gameNightDetails.Organizer;
+
+            var reviews = await _reviewRepository
+    .GetByBoardGameNightId(id) ?? new List<Review>();
+
+            var organizerReviews = await _reviewRepository
+                .GetByOrganizerId(gameNightDetails.OrganizerId);
+
+            var organizerAverageScore = organizerReviews.Any()
+                ? (double?)organizerReviews.Average(r => r.Score)
+                : null;
+
+            var hasReviewed = currentUser != null &&
+                await _reviewRepository.HasUserReviewedGameNightAsync(
+                    id, currentUser.Id);
+
+            var isRegistered = currentUser != null &&
+                gameNightDetails.UserBoardGameNights
+                    .Any(x => x.UserId == currentUser.Id);
+
+            // Reviews pas vanaf de volgende kalenderdag
+            var gameNightHasEnded =
+                gameNightDetails.DateTime.Date < DateTime.Today;
+
+            var canWriteReview =
+                isRegistered &&
+                gameNightHasEnded &&
+                !hasReviewed;
+
+            var organizerGameNightCount = await _boardGameNightRepository
+    .CountByOrganizerIdAsync(gameNightDetails.OrganizerId);
 
             var viewModel = new BoardGameNightDetailsViewModel
             {
                 Id = gameNightDetails.Id,
                 Title = gameNightDetails.Title,
                 Description = gameNightDetails.Description,
+
                 Organizer = organizer != null
-                    ? $"{organizer.Email}"
+                    ? organizer.Email
                     : "Unknown Organizer",
+
                 DateTime = gameNightDetails.DateTime,
                 MaxPlayers = gameNightDetails.MaxPlayers,
                 Food = gameNightDetails.Food,
-                IsLactoseIntoleranceFriendly = gameNightDetails.IsLactoseIntoleranceFriendly,
-                IsNutAllergyFriendly = gameNightDetails.IsNutAllergyFriendly,
-                IsNonAlcoholicFriendly = gameNightDetails.IsNonAlcoholicFriendly,
-                IsVegetarianFriendly = gameNightDetails.IsVegetarianFriendly,
-                IsSignedUp = true,
-                UserBoardGameNights = gameNightDetails.UserBoardGameNights,
+                Address = gameNightDetails.Address,
+
+                IsLactoseIntoleranceFriendly =
+                    gameNightDetails.IsLactoseIntoleranceFriendly,
+
+                IsNutAllergyFriendly =
+                    gameNightDetails.IsNutAllergyFriendly,
+
+                IsNonAlcoholicFriendly =
+                    gameNightDetails.IsNonAlcoholicFriendly,
+
+                IsVegetarianFriendly =
+                    gameNightDetails.IsVegetarianFriendly,
+
+                // Dieetwensen van de ingelogde gebruiker
+                IsLactoseIntolerant =
+                    currentUser.IsLactoseIntolerant,
+
+                HasNutAllergy =
+                    currentUser.HasNutAllergy,
+
+                IsVegetarian =
+                    currentUser.IsVegetarian,
+
+                DrinksAlcohol =
+                    currentUser.DrinksAlcohol,
+
+                UserBoardGameNights =
+                    gameNightDetails.UserBoardGameNights,
+
                 Games = gameNightDetails.Games.ToList(),
-                RegisteredUsersCount = gameNightDetails.UserBoardGameNights.Count(),
-                Is18Plus = gameNightDetails.Is18Plus
+
+                RegisteredUsersCount =
+                    gameNightDetails.UserBoardGameNights.Count,
+
+                IsSignedUp = gameNightDetails.UserBoardGameNights
+                    .Any(x => x.UserId == currentUser.Id),
+
+                Is18Plus = gameNightDetails.Is18Plus,
+
+                Reviews = reviews,
+
+                OrganizerAverageScore = organizerAverageScore,
+                OrganizerReviewCount = organizerReviews.Count,
+                OrganizerGameNightCount = organizerGameNightCount,
+
+                CanWriteReview = canWriteReview
             };
 
             return View(viewModel);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
@@ -424,6 +504,14 @@ namespace BordspellenApplicatie.Controllers
                 return RedirectToAction("Details", new { id = gameNightId });
             }
 
+            if (gameNight.DateTime <= DateTime.Now)
+            {
+                TempData["ErrorMessage"] =
+                    "Je kunt je niet meer inschrijven omdat deze bordspelavond al begonnen is.";
+
+                return RedirectToAction("Details", new { id = gameNightId });
+            }
+
             var registration = new UserBoardGameNight
             {
                 BoardGameNightId = gameNightId,
@@ -465,6 +553,14 @@ namespace BordspellenApplicatie.Controllers
             {
                 TempData["ErrorMessage"] =
                     "Je bent niet ingeschreven voor deze spelavond.";
+
+                return RedirectToAction("Details", new { id = gameNightId });
+            }
+
+            if (gameNight.DateTime <= DateTime.Now)
+            {
+                TempData["ErrorMessage"] =
+                    "Je kunt je niet meer uitschrijven omdat de bordspelavond al heeft plaatsgevonden.";
 
                 return RedirectToAction("Details", new { id = gameNightId });
             }

@@ -62,9 +62,13 @@
                         </div>
                     }
 
-                @if (Model.UserBoardGameNights?.Any(ubgn => ubgn.User.Email == User.Identity.Name) ?? false)
+                @if (Model.CanWriteReview)
                 {
-                    <a class="btn" style="background-color:#964734; color:white;" href="@Url.Action("create", "review", new { id = Model.Id })">
+                    <a class="btn"
+                       style="background-color:#964734; color:white;"
+                       asp-controller="Review"
+                       asp-action="Create"
+                       asp-route-id="@Model.Id">
                         Plaats review
                     </a>
                 }
@@ -117,13 +121,79 @@
                             <div class="extraInformation col-12 pt-3">
                                 @if (@Model.Is18Plus == true)
                                 {
-                                    <p><b>Organisator: </b>@Model.Organizer</p>
+
+                                <div class="mb-3">
+                                    <p class="mb-1">
+                                        <b>Organisator:</b> @Model.Organizer
+                                    </p>
+
+                                    <p class="mb-1">
+                                        <b>Georganiseerde bordspelavonden:</b>
+                                        @Model.OrganizerGameNightCount
+                                    </p>
+
+                                    @if (Model.OrganizerAverageScore.HasValue)
+                                    {
+                                        <p class="mb-1">
+                                            <b>Gemiddelde beoordeling:</b>
+
+                                            <span style="color: #964734; font-weight: bold;">
+                                                ★ @Model.OrganizerAverageScore.Value.ToString("0.0") / 5
+                                            </span>
+
+                                            <small>
+                                                (@Model.OrganizerReviewCount reviews)
+                                            </small>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p class="mb-1">
+                                            <b>Gemiddelde beoordeling:</b>
+                                            Nog geen beoordelingen
+                                        </p>
+                                    }
+                                </div>
+
                                     <p><b>Date: </b> @Model.DateTime</p>
                                     <p><b>Leeftijd: </b> 18+</p>
                                 }
                                 else
                                 {
-                                    <p><b>Organisator: </b>@Model.Organizer</p>
+
+                                <div class="mb-3">
+                                    <p class="mb-1">
+                                        <b>Organisator:</b> @Model.Organizer
+                                    </p>
+
+                                    <p class="mb-1">
+                                        <b>Georganiseerde bordspelavonden:</b>
+                                        @Model.OrganizerGameNightCount
+                                    </p>
+
+                                    @if (Model.OrganizerAverageScore.HasValue)
+                                    {
+                                        <p class="mb-1">
+                                            <b>Gemiddelde beoordeling:</b>
+
+                                            <span style="color: #964734; font-weight: bold;">
+                                                ★ @Model.OrganizerAverageScore.Value.ToString("0.0") / 5
+                                            </span>
+
+                                            <small>
+                                                (@Model.OrganizerReviewCount reviews)
+                                            </small>
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p class="mb-1">
+                                            <b>Gemiddelde beoordeling:</b>
+                                            Nog geen beoordelingen
+                                        </p>
+                                    }
+                                </div>
+
                                     <p><b>Date: </b> @Model.DateTime</p>
                                     <p><b>Leeftijd: </b> 16+</p>
                                 }
@@ -180,17 +250,109 @@
 
                     @if (!isOrganizer)
                     {
-                        if (isRegistered)
+
+                        @if (isRegistered)
                         {
                             <div>
-                                <div class="alert alert-success">
-                                    Je bent ingeschreven voor deze spelavond.
-                                </div>
+                                @if (Model.DateTime <= DateTime.Now)
+                                {
+                                    <div class="alert alert-info">
+                                        Deze bordspelavond heeft al plaatsgevonden.
+                                        Je was aangemeld voor deze avond.
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="alert alert-success">
+                                        Je bent ingeschreven voor deze spelavond.
+                                    </div>
 
-                                <form asp-action="DeleteUserGameNight"
+                                    <form asp-action="DeleteUserGameNight"
+                                          asp-controller="BoardGameNight"
+                                          method="post"
+                                          onsubmit="return confirm('Weet je zeker dat je je wilt uitschrijven?');">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="gameNightId"
+                                               value="@Model.Id" />
+
+                                        <button type="submit" class="btn btn-danger">
+                                            Uitschrijven
+                                        </button>
+                                    </form>
+                                }
+                            </div>
+                        }
+                        else if (Model.DateTime <= DateTime.Now)
+                        {
+                            <div class="alert alert-info">
+                                Deze bordspelavond is al begonnen.
+                                Inschrijven is niet meer mogelijk.
+                            </div>
+                        }
+
+                        else if (isFull)
+                        {
+                            <div class="alert alert-warning">
+                                Deze spelavond zit vol. Inschrijven is niet meer mogelijk.
+                            </div>
+                        }
+
+                        else
+                        {
+                            var dietaryWarnings = new List<string>();
+
+                            if (Model.IsLactoseIntolerant &&
+                            !Model.IsLactoseIntoleranceFriendly)
+                            {
+                                dietaryWarnings.Add(
+                                "Er is geen lactosevrij eten beschikbaar.");
+                            }
+
+                            if (Model.HasNutAllergy &&
+                            !Model.IsNutAllergyFriendly)
+                            {
+                                dietaryWarnings.Add(
+                                "Er is geen notenvrij eten beschikbaar.");
+                            }
+
+                            if (Model.IsVegetarian &&
+                            !Model.IsVegetarianFriendly)
+                            {
+                                dietaryWarnings.Add(
+                                "Er is geen vegetarisch eten beschikbaar.");
+                            }
+
+                            if (!Model.DrinksAlcohol &&
+                            !Model.IsNonAlcoholicFriendly)
+                            {
+                                dietaryWarnings.Add(
+                                "Er zijn geen alcoholvrije dranken beschikbaar.");
+                            }
+
+                            <div>
+                                @if (dietaryWarnings.Any())
+                                {
+                                    <div class="alert alert-warning">
+                                        <strong>Let op!</strong>
+                                        Het eten en drinken sluit mogelijk niet volledig
+                                        aan op jouw dieetwensen of allergieën.
+
+                                        <ul class="mt-2 mb-0">
+                                            @foreach (var warning in dietaryWarnings)
+                                            {
+                                                <li>@warning</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+
+                                <form asp-action="SignUp"
                                       asp-controller="BoardGameNight"
                                       method="post"
-                                      onsubmit="return confirm('Weet je zeker dat je je wilt uitschrijven?');">
+                                      onsubmit="return confirmSignUp(this);">
 
                                     @Html.AntiForgeryToken()
 
@@ -198,36 +360,35 @@
                                            name="gameNightId"
                                            value="@Model.Id" />
 
-                                    <button type="submit" class="btn btn-danger">
-                                        Uitschrijven
+                                    <button type="submit" class="btn btn-primary">
+                                        Inschrijven
                                     </button>
                                 </form>
                             </div>
-                        }
-                        else if (isFull)
-                        {
-                            <div class="alert alert-warning">
-                                Deze spelavond zit vol. Inschrijven is niet meer mogelijk.
-                            </div>
-                        }
-                        else
-                        {
-                            <form asp-action="SignUp"
-                                  asp-controller="BoardGameNight"
-                                  method="post"
-                                  onsubmit="return confirm('Weet je zeker dat je je wilt inschrijven?');">
 
-                                @Html.AntiForgeryToken()
+                            <script>
+                                function confirmSignUp(form) {
+                                    const warnings = @Html.Raw(
+                                                                        System.Text.Json.JsonSerializer.Serialize(dietaryWarnings)
+                                                                );
 
-                                <input type="hidden"
-                                       name="gameNightId"
-                                       value="@Model.Id" />
+                            if (warnings.length > 0) {
+                                const message =
+                                    "Let op! Het eten en drinken sluit niet volledig " +
+                                    "aan op jouw dieetwensen of allergieën.\n\n" +
+                                    warnings.map(w => "• " + w).join("\n") +
+                                    "\n\nWeet je zeker dat je je wilt inschrijven?";
 
-                                <button type="submit" class="btn btn-primary">
-                                    Inschrijven
-                                </button>
-                            </form>
-                        }
+                                        return confirm(message);
+                                    }
+
+                                    return confirm(
+                                        "Weet je zeker dat je je wilt inschrijven?"
+                                    );
+                                }
+                            </script>
+                                        }
+
                     }
                 </div>
                     <div>
@@ -246,6 +407,52 @@
                 </div>
                 <div class="col-2"></div>
             </div>
+
+        <div class="row mb-5">
+            <div class="col-2"></div>
+
+            <div class="col-8 boardGameNightInformation p-4">
+                <h3 class="mb-4">Reviews van deze bordspelavond</h3>
+
+                @if (Model.Reviews != null && Model.Reviews.Any())
+                {
+                    @foreach (var review in Model.Reviews)
+                    {
+                        <div class="card mb-3 p-3"
+                             style="background-color:#AFDDE5; border-radius:8px;">
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-1">
+                                    @review.Author?.FirstName
+                                    @review.Author?.LastName
+                                </h5>
+
+                                <span style="color:#964734; font-weight:bold;">
+                                    ★ @review.Score / 5
+                                </span>
+                            </div>
+
+                            <small class="text-muted mb-2">
+                                @review.Date.ToString("dd-MM-yyyy")
+                            </small>
+
+                            <h6><b>@review.Title</b></h6>
+
+                            <p class="mb-0">
+                                @review.TextReview
+                            </p>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>Er zijn nog geen reviews voor deze bordspelavond.</p>
+                }
+            </div>
+
+            <div class="col-2"></div>
+        </div>
+
 
         </div>
     <vc:footer></vc:footer>

@@ -40,7 +40,12 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
 
         public async Task<List<Review>?> GetByBoardGameNightId(int id)
         {
-            return await dBContext.Reviews.Where(x => x.BoardGameNightId == id).ToListAsync();
+            return await dBContext.Reviews
+                .AsNoTracking()
+                .Include(r => r.Author)
+                .Where(r => r.BoardGameNightId == id)
+                .OrderByDescending(r => r.Date)
+                .ToListAsync();
         }
 
         public async Task<Review?> GetById(Guid id)
@@ -64,6 +69,24 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
             await dBContext.SaveChangesAsync();
 
             return existingReview;
+        }
+
+        public async Task<List<Review>> GetByOrganizerId(int organizerId)
+        {
+            return await dBContext.Reviews
+                .AsNoTracking()
+                .Include(r => r.Author)
+                .Where(r => r.BoardGameNight.OrganizerId == organizerId)
+                .OrderByDescending(r => r.Date)
+                .ToListAsync();
+        }
+
+        public async Task<bool> HasUserReviewedGameNightAsync(
+            int boardGameNightId, int authorId)
+        {
+            return await dBContext.Reviews.AnyAsync(r =>
+                r.BoardGameNightId == boardGameNightId &&
+                r.AuthorId == authorId);
         }
     }
 }

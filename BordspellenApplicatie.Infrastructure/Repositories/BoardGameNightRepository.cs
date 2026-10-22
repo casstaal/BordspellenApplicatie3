@@ -106,5 +106,11 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public async Task<int> CountByOrganizerIdAsync(int organizerId)
+        {
+            return await dBContext.BoardGameNights
+                .CountAsync(x => x.OrganizerId == organizerId);
+        }
     }
 }
