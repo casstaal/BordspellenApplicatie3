@@ -119,6 +119,7 @@ namespace BordspellenApplicatie.Controllers
                 IsVegetarianFriendly =
                     gameNight.IsVegetarianFriendly,
                 Games = gameNight.Games.ToList(),
+                UserBoardGameNights = gameNight.UserBoardGameNights,
                 RegisteredUsersCount =
                     gameNight.UserBoardGameNights.Count
             };
@@ -516,6 +517,114 @@ namespace BordspellenApplicatie.Controllers
                 "Bordspellenavond succesvol verwijderd.";
 
             return RedirectToAction("BoardGameNight", "Overview");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddGame(int gameNightId, Boardgame game)
+        {
+            var gameNight = await _boardGameNightRepository.GetById(gameNightId);
+            if (gameNight == null) return NotFound();
+
+            var user = await GetCurrentUserAsync();
+            if (user == null) return Unauthorized();
+            if (gameNight.OrganizerId != user.Id) return Forbid();
+
+            if (gameNight.UserBoardGameNights.Any())
+            {
+                TempData["ErrorMessage"] =
+                    "Je kunt geen spellen toevoegen omdat er spelers zijn ingeschreven.";
+
+                return RedirectToAction("Details", new { id = gameNightId });
+            }
+
+            game.Id = Guid.NewGuid();
+            game.BoardGameNightId = gameNightId;
+
+            await _gameRepository.Add(game);
+
+            if (game.Is18Plus && !gameNight.Is18Plus)
+            {
+                await _boardGameNightRepository.SetIs18Plus(gameNightId);
+            }
+
+            TempData["SuccessMessage"] = "Bordspel toegevoegd.";
+
+            return RedirectToAction("Edit", new { id = gameNightId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditGame(
+    int gameNightId,
+    Guid gameId,
+    Boardgame game)
+        {
+            var gameNight = await _boardGameNightRepository.GetById(gameNightId);
+            if (gameNight == null) return NotFound();
+
+            var user = await GetCurrentUserAsync();
+            if (user == null) return Unauthorized();
+            if (gameNight.OrganizerId != user.Id) return Forbid();
+
+            if (gameNight.UserBoardGameNights.Any())
+            {
+                TempData["ErrorMessage"] =
+                    "Je kunt geen spellen aanpassen omdat er spelers zijn ingeschreven.";
+
+                return RedirectToAction("Details", new { id = gameNightId });
+            }
+
+            var existingGame = await _gameRepository.GetById(gameId);
+
+            if (existingGame == null || existingGame.BoardGameNightId != gameNightId)
+            {
+                return NotFound();
+            }
+
+            await _gameRepository.Update(gameId, game);
+
+            if (game.Is18Plus && !gameNight.Is18Plus)
+            {
+                await _boardGameNightRepository.SetIs18Plus(gameNightId);
+            }
+
+            TempData["SuccessMessage"] = "Bordspel aangepast.";
+
+            return RedirectToAction("Edit", new { id = gameNightId });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteGame(int gameNightId, Guid gameId)
+        {
+            var gameNight = await _boardGameNightRepository.GetById(gameNightId);
+            if (gameNight == null) return NotFound();
+
+            var user = await GetCurrentUserAsync();
+            if (user == null) return Unauthorized();
+            if (gameNight.OrganizerId != user.Id) return Forbid();
+
+            if (gameNight.UserBoardGameNights.Any())
+            {
+                TempData["ErrorMessage"] =
+                    "Je kunt geen spellen verwijderen omdat er spelers zijn ingeschreven.";
+
+                return RedirectToAction("Details", new { id = gameNightId });
+            }
+
+            var existingGame = await _gameRepository.GetById(gameId);
+
+            if (existingGame == null || existingGame.BoardGameNightId != gameNightId)
+            {
+                return NotFound();
+            }
+
+            await _gameRepository.Delete(gameId);
+
+            TempData["SuccessMessage"] = "Bordspel verwijderd.";
+
+            return RedirectToAction("Edit", new { id = gameNightId });
         }
     }
 }
