@@ -13,7 +13,7 @@ namespace Bordspellenapplicatie.WebAPI.Mappings
         public AutoMapperProfiles()
         {
             CreateMap<BoardGameNight, BoardGameNightDto>()
-            .ForMember(dest => dest.RegisteredUsersId, opt => opt.MapFrom(src => src.RegisteredUsers.Select(user => user.Id)))
+            .ForMember(dest => dest.RegisteredUsersId, opt => opt.MapFrom(src => src.UserBoardGameNights.Select(user => user.Id)))
             .ForMember(dest => dest.Organizer, opt => opt.MapFrom(src => src.Organizer))
             .ForMember(dest => dest.ReviewIds, opt => opt.MapFrom(src => src.Reviews.Select(review => review.Id)))
             .ForMember(dest => dest.GamesId, opt => opt.MapFrom(src => src.Games.Select(game => game.Id)))
@@ -29,7 +29,7 @@ namespace Bordspellenapplicatie.WebAPI.Mappings
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.Reviews, opt => opt.Ignore())
                 .ForMember(dest => dest.UserBoardGameNights, opt => opt.Ignore())
-                .ForMember(dest => dest.RegisteredUsers, opt => opt.Ignore())
+                .ForMember(dest => dest.UserBoardGameNights, opt => opt.Ignore())
                 .ForMember(dest => dest.IsSignedUp, opt => opt.Ignore())
                 .ForMember(dest => dest.Games, opt => opt.Ignore());
 

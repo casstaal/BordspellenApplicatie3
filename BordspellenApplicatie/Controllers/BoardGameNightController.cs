@@ -1,5 +1,4 @@
-﻿using Bordspellenapplicatie.WebAPI.Models.DTO;
-using BordspellenApplicatie.Domain.Interfaces;
+﻿using BordspellenApplicatie.Domain.Interfaces;
 using BordspellenApplicatie.Domain.Models;
 using BordspellenApplicatie.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -9,39 +8,32 @@ using Microsoft.AspNetCore.Mvc;
 namespace BordspellenApplicatie.Controllers
 {
     [Authorize]
-    public class BoardGameNightController(UserManager<IdentityUser> userManager, IBoardGameNightRepository boardGameNightRepository, IUserRepository userRepository, IUserBoardGameNightRepository userBoardGameNightRepository, ILogger<BoardGameNightController> logger, IHttpClientFactory httpClientFactory) : Controller
+    public class BoardGameNightController(UserManager<IdentityUser> userManager, IBoardGameNightRepository boardGameNightRepository, IUserRepository userRepository, IUserBoardGameNightRepository userBoardGameNightRepository, IGameRepository gameRepository, ILogger<BoardGameNightController> logger, IHttpClientFactory httpClientFactory) : Controller
     {
 
         private readonly IUserRepository _userRepository = userRepository;
         private readonly UserManager<IdentityUser> _userManager = userManager;
         private readonly IBoardGameNightRepository _boardGameNightRepository = boardGameNightRepository;
         private readonly IUserBoardGameNightRepository _userBoardGameNightRepository = userBoardGameNightRepository;
+        private readonly IGameRepository _gameRepository = gameRepository;
         private readonly ILogger<BoardGameNightController> _logger = logger;
         private readonly IHttpClientFactory httpClientFactory = httpClientFactory;
 
+        private async Task<User?> GetCurrentUserAsync()
+        {
+            var identityUser = await _userManager.GetUserAsync(User);
+
+            if (identityUser == null)
+            {
+                return null;
+            }
+
+            return await _userRepository
+                .GetUserByIdentityIdAsync(identityUser.Id);
+        }
+
         public async Task<IActionResult> Details(int id)
         {
-            //try
-            //{
-            //    var client = httpClientFactory.CreateClient();
-
-            //    var httpResponseMessage = await client.GetAsync($"https://localhost:7287/api/BoardGameNight/{id}");
-
-            //    httpResponseMessage.EnsureSuccessStatusCode();
-
-            //    var boardGameNight = await httpResponseMessage.Content.ReadFromJsonAsync<BoardGameNightDto>();
-
-            //    if (boardGameNight == null)
-            //    {
-            //        return NotFound();
-            //    }
-
-            //    return View(boardGameNight);
-            //} catch (Exception ex)
-            //{
-            //    _logger.LogError(ex, $"Error fetching board game night with ID {id} from API.");
-            //    return View("Error");
-            //}
             var gameNightDetails = _boardGameNightRepository.GetById(id).Result;
 
             if (gameNightDetails == null)
@@ -69,44 +61,66 @@ namespace BordspellenApplicatie.Controllers
                 IsSignedUp = true,
                 UserBoardGameNights = gameNightDetails.UserBoardGameNights,
                 Games = gameNightDetails.Games.ToList(),
-                RegisteredUsersCount = gameNightDetails.RegisteredUsers.Count(),
+                RegisteredUsersCount = gameNightDetails.UserBoardGameNights.Count(),
                 Is18Plus = gameNightDetails.Is18Plus
             };
 
             return View(viewModel);
         }
-        public IActionResult Edit(int id)
-        {
-            var gameNightDetails = _boardGameNightRepository.GetById(id).Result;
 
-            if (gameNightDetails == null)
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var gameNight = await _boardGameNightRepository.GetById(id);
+
+            if (gameNight == null)
             {
                 return NotFound();
             }
 
-            var organizer = gameNightDetails.Organizer;
+            var user = await GetCurrentUserAsync();
 
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            if (gameNight.OrganizerId != user.Id)
+            {
+                return Forbid();
+            }
+
+            if (gameNight.UserBoardGameNights.Any())
+            {
+                TempData["ErrorMessage"] =
+                    "Deze bordspellenavond kan niet gewijzigd worden " +
+                    "omdat er al spelers zijn ingeschreven.";
+
+                return RedirectToAction("Details", new { id });
+            }
 
             var viewModel = new BoardGameNightDetailsViewModel
             {
-                Id = gameNightDetails.Id,
-                Title = gameNightDetails.Title,
-                Description = gameNightDetails.Description,
-                Organizer = organizer != null
-                    ? $"{organizer.Email}"
-                    : "Unknown Organizer",
-                DateTime = gameNightDetails.DateTime,
-                MaxPlayers = gameNightDetails.MaxPlayers,
-                Food = gameNightDetails.Food,
-                Address = gameNightDetails.Address,
-                IsLactoseIntoleranceFriendly = gameNightDetails.IsLactoseIntoleranceFriendly,
-                IsNutAllergyFriendly = gameNightDetails.IsNutAllergyFriendly,
-                IsNonAlcoholicFriendly = gameNightDetails.IsNonAlcoholicFriendly,
-                IsVegetarianFriendly = gameNightDetails.IsVegetarianFriendly,
-                IsSignedUp = true,
-                Games = gameNightDetails.Games.ToList(),
-                RegisteredUsersCount = gameNightDetails.RegisteredUsers.Count(),
-                Is18Plus = gameNightDetails.Is18Plus
+                Id = gameNight.Id,
+                Title = gameNight.Title,
+                Description = gameNight.Description,
+                Organizer = gameNight.Organizer.Email,
+                DateTime = gameNight.DateTime,
+                MaxPlayers = gameNight.MaxPlayers,
+                Food = gameNight.Food,
+                Address = gameNight.Address,
+                Is18Plus = gameNight.Is18Plus,
+                IsLactoseIntoleranceFriendly =
+                    gameNight.IsLactoseIntoleranceFriendly,
+                IsNutAllergyFriendly =
+                    gameNight.IsNutAllergyFriendly,
+                IsNonAlcoholicFriendly =
+                    gameNight.IsNonAlcoholicFriendly,
+                IsVegetarianFriendly =
+                    gameNight.IsVegetarianFriendly,
+                Games = gameNight.Games.ToList(),
+                RegisteredUsersCount =
+                    gameNight.UserBoardGameNights.Count
             };
 
             return View(viewModel);
@@ -114,28 +128,42 @@ namespace BordspellenApplicatie.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(BoardGameNightDetailsViewModel model)
+        public async Task<IActionResult> Edit(
+            BoardGameNightDetailsViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                _logger.LogWarning("Model is invalid. Model data: {Model}", model);
+            var gameNight = await _boardGameNightRepository
+                .GetById(model.Id);
 
-                foreach (var key in ModelState.Keys)
-                {
-                    var errors = ModelState[key].Errors;
-                    foreach (var error in errors)
-                    {
-                        _logger.LogWarning("Validation error for {Key}: {Error}", key, error.ErrorMessage);
-                    }
-                }
-
-                return View("index", "Home");
-            }
-
-            var gameNight = boardGameNightRepository.GetById(model.Id).Result;
             if (gameNight == null)
             {
                 return NotFound();
+            }
+
+            var user = await GetCurrentUserAsync();
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            if (gameNight.OrganizerId != user.Id)
+            {
+                return Forbid();
+            }
+
+            if (gameNight.UserBoardGameNights.Any())
+            {
+                TempData["ErrorMessage"] =
+                    "Wijzigen is niet toegestaan omdat er al " +
+                    "spelers zijn ingeschreven.";
+
+                return RedirectToAction("Details",
+                    new { id = gameNight.Id });
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
             }
 
             gameNight.Title = model.Title;
@@ -144,13 +172,25 @@ namespace BordspellenApplicatie.Controllers
             gameNight.MaxPlayers = model.MaxPlayers;
             gameNight.Food = model.Food;
             gameNight.Address = model.Address;
-            gameNight.IsLactoseIntoleranceFriendly = model.IsLactoseIntoleranceFriendly;
-            gameNight.IsNutAllergyFriendly = model.IsNutAllergyFriendly;
-            gameNight.IsNonAlcoholicFriendly = model.IsNonAlcoholicFriendly;
-            gameNight.IsVegetarianFriendly = model.IsVegetarianFriendly;
-            gameNight.Is18Plus = model.Is18Plus;
 
-            await boardGameNightRepository.Update(gameNight.Id, gameNight);
+            gameNight.IsLactoseIntoleranceFriendly =
+                model.IsLactoseIntoleranceFriendly;
+
+            gameNight.IsNutAllergyFriendly =
+                model.IsNutAllergyFriendly;
+
+            gameNight.IsNonAlcoholicFriendly =
+                model.IsNonAlcoholicFriendly;
+
+            gameNight.IsVegetarianFriendly =
+                model.IsVegetarianFriendly;
+
+            gameNight.Is18Plus =
+                model.Is18Plus ||
+                gameNight.Games.Any(g => g.Is18Plus);
+
+            await _boardGameNightRepository.Update(
+                gameNight.Id, gameNight);
 
             return RedirectToAction("Details", "BoardGameNight", new
             {
@@ -190,12 +230,7 @@ namespace BordspellenApplicatie.Controllers
 
             }
 
-            var identityUser = await userManager.FindByNameAsync(User.Identity.Name);
-            if (identityUser == null)
-            {
-                return Unauthorized();
-            }
-            var user = _userRepository.GetByIdentityId(identityUser.Id);
+            var user = await GetCurrentUserAsync();
 
             if (user == null)
             {
@@ -206,6 +241,7 @@ namespace BordspellenApplicatie.Controllers
             {
                 Title = model.Title,
                 Organizer = user,
+                OrganizerId = user.Id,
                 Description = model.Description,
                 DateTime = model.DateTime,
                 MaxPlayers = model.MaxPlayers,
@@ -223,112 +259,261 @@ namespace BordspellenApplicatie.Controllers
             return RedirectToAction("AddGames", "BoardGameNight", new { id = boardGameNight.Id });
         }
 
-        public IActionResult AddGames(int id)
+        [HttpGet]
+        public async Task<IActionResult> AddGames(int id)
         {
-            var boardGameNight = _boardGameNightRepository.GetById(id).Result;
+            var boardGameNight = await _boardGameNightRepository.GetById(id);
+
             if (boardGameNight == null)
             {
                 return NotFound();
             }
 
-            AddGamesViewModel addGamesViewModel = new AddGamesViewModel
+            var user = await GetCurrentUserAsync();
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            if (boardGameNight.OrganizerId != user.Id)
+            {
+                return Forbid();
+            }
+
+            if (boardGameNight.UserBoardGameNights.Any())
+            {
+                TempData["ErrorMessage"] =
+                    "Je kunt geen spellen meer toevoegen omdat er al spelers zijn ingeschreven.";
+
+                return RedirectToAction("Details", new { id });
+            }
+
+            var viewModel = new AddGamesViewModel
             {
                 id = id,
                 boardgames = boardGameNight.Games
             };
 
-            return View(addGamesViewModel);
+            return View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult AddGames(AddGamesViewModel addGamesViewModel)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddGames(AddGamesViewModel model)
         {
-            var gameNight = boardGameNightRepository.GetById(addGamesViewModel.id).Result;
+            var gameNight = await _boardGameNightRepository.GetById(model.id);
 
             if (gameNight == null)
             {
                 return NotFound();
             }
 
-            addGamesViewModel.game.Id = new Guid();
-            gameNight.Games.Add(addGamesViewModel.game);
-            _boardGameNightRepository.Update(gameNight.Id ,gameNight);
-            return RedirectToAction("AddGames", "BoardGameNight", new { id = addGamesViewModel.id });
-        }
+            var user = await GetCurrentUserAsync();
 
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> SignUp(int gameNightId)
-        {
-            var identityUser = await _userManager.GetUserAsync(User);
-            if (identityUser == null)
+            if (user == null)
             {
                 return Unauthorized();
             }
 
-            var user = await _userRepository.GetUserByIdentityIdAsync(identityUser.Id);
-            if (user == null)
+            if (gameNight.OrganizerId != user.Id)
             {
-                return NotFound();
+                return Forbid();
             }
 
-            var gameNight = _boardGameNightRepository.GetById(gameNightId).Result;
+            if (gameNight.UserBoardGameNights.Any())
+            {
+                TempData["ErrorMessage"] =
+                    "Je kunt geen spellen meer toevoegen omdat er al spelers zijn ingeschreven.";
+
+                return RedirectToAction("Details", new { id = gameNight.Id });
+            }
+
+            if (model.game == null)
+            {
+                return BadRequest("Geen bordspel opgegeven.");
+            }
+
+            var game = model.game;
+
+            game.Id = Guid.NewGuid();
+            game.BoardGameNightId = gameNight.Id;
+
+            await _gameRepository.Add(game);
+
+            if (game.Is18Plus && !gameNight.Is18Plus)
+            {
+                await _boardGameNightRepository.SetIs18Plus(gameNight.Id);
+            }
+
+            return RedirectToAction("AddGames", new { id = gameNight.Id });
+        }
+
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SignUp(int gameNightId)
+        {
+            var user = await GetCurrentUserAsync();
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var gameNight = await _boardGameNightRepository.GetById(gameNightId);
+
             if (gameNight == null)
             {
                 return NotFound();
             }
 
+            if (gameNight.OrganizerId == user.Id)
+            {
+                TempData["ErrorMessage"] =
+                    "Je kunt je niet inschrijven voor je eigen spelavond.";
+
+                return RedirectToAction("Details", new { id = gameNightId });
+            }
+
             var today = DateTime.Today;
             var age = today.Year - user.DateOfBirth.Year;
-            if (user.DateOfBirth.Date > today.AddYears(-age)) age--;
+
+            if (user.DateOfBirth.Date > today.AddYears(-age))
+            {
+                age--;
+            }
 
             if (gameNight.Is18Plus && age < 18)
             {
-                TempData["ErrorMessage"] = "Je moet 18 jaar of ouder zijn om je in te schrijven voor deze avond.";
+                TempData["ErrorMessage"] =
+                    "Je moet minimaal 18 jaar zijn om je voor deze spelavond in te schrijven.";
+
                 return RedirectToAction("Details", new { id = gameNightId });
             }
 
-            if (gameNight.Organizer != null && gameNight.Organizer.Id == user.Id)
+            if (gameNight.UserBoardGameNights.Count >= gameNight.MaxPlayers)
             {
-                TempData["ErrorMessage"] = "Je kan niet inschrijven voor een door jou georganiseerde avond.";
+                TempData["ErrorMessage"] =
+                    "Deze spelavond zit helaas vol. Inschrijven is niet meer mogelijk.";
+
                 return RedirectToAction("Details", new { id = gameNightId });
             }
 
-            var existingRegistration = await _userBoardGameNightRepository.IsUserRegisteredForBoardGameNightAsync(gameNightId, user.Id);
+            var alreadyRegistered = await _userBoardGameNightRepository
+                .IsUserRegisteredForBoardGameNightAsync(gameNightId, user.Id);
 
-            if (existingRegistration)
+            if (alreadyRegistered)
             {
-                ModelState.AddModelError(string.Empty, "You are already signed up for this game night.");
-                return RedirectToAction("Details", "BoardGameNight", new { id = gameNightId });
+                TempData["ErrorMessage"] =
+                    "Je bent al ingeschreven voor deze spelavond.";
+
+                return RedirectToAction("Details", new { id = gameNightId });
             }
 
-            var userGameNight = new UserBoardGameNight
+            var registeredForDate = await _userBoardGameNightRepository
+                .IsUserRegisteredForDateAsync(user.Id, gameNight.DateTime.Date);
+
+            if (registeredForDate)
+            {
+                TempData["ErrorMessage"] =
+                    "Je bent al ingeschreven voor een andere spelavond op deze datum.";
+
+                return RedirectToAction("Details", new { id = gameNightId });
+            }
+
+            var registration = new UserBoardGameNight
             {
                 BoardGameNightId = gameNightId,
                 UserId = user.Id
             };
 
-            await _userBoardGameNightRepository.AddUserBoardGameNightAsync(userGameNight);
+            await _userBoardGameNightRepository
+                .AddUserBoardGameNightAsync(registration);
 
-            TempData["SuccessMessage"] = "Je bent succesvol ingeschreven voor deze avond!";
-            return RedirectToAction("Details", "BoardGameNight", new { id = gameNightId });
+            TempData["SuccessMessage"] =
+                "Je bent succesvol ingeschreven voor de spelavond!";
+
+            return RedirectToAction("Details", new { id = gameNightId });
         }
 
         [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteUserGameNight(int gameNightId)
         {
-            var userId = _userManager.GetUserId(User);
-            var user = await _userRepository.GetUserByIdentityIdAsync(userId);
+            var user = await GetCurrentUserAsync();
 
             if (user == null)
             {
                 return Unauthorized();
             }
 
+            var gameNight = await _boardGameNightRepository.GetById(gameNightId);
 
-            var boardGameNight = _boardGameNightRepository.GetById(gameNightId);
+            if (gameNight == null)
+            {
+                return NotFound();
+            }
 
-            await _userBoardGameNightRepository.DeleteUserGameNightAsync(gameNightId, user.Id);
+            var isRegistered = await _userBoardGameNightRepository
+                .IsUserRegisteredForBoardGameNightAsync(gameNightId, user.Id);
+
+            if (!isRegistered)
+            {
+                TempData["ErrorMessage"] =
+                    "Je bent niet ingeschreven voor deze spelavond.";
+
+                return RedirectToAction("Details", new { id = gameNightId });
+            }
+
+            await _userBoardGameNightRepository
+                .DeleteUserGameNightAsync(gameNightId, user.Id);
+
+            TempData["SuccessMessage"] =
+                "Je bent succesvol uitgeschreven voor deze spelavond.";
+
+            return RedirectToAction("Details", new { id = gameNightId });
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var gameNight = await _boardGameNightRepository.GetById(id);
+
+            if (gameNight == null)
+            {
+                return NotFound();
+            }
+
+            var user = await GetCurrentUserAsync();
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            if (gameNight.OrganizerId != user.Id)
+            {
+                return Forbid();
+            }
+
+            if (gameNight.UserBoardGameNights.Any())
+            {
+                TempData["ErrorMessage"] =
+                    "Verwijderen is niet toegestaan omdat er al " +
+                    "spelers zijn ingeschreven.";
+
+                return RedirectToAction("Details", new { id });
+            }
+
+            await _boardGameNightRepository.Delete(id);
+
+            TempData["SuccessMessage"] =
+                "Bordspellenavond succesvol verwijderd.";
 
             return RedirectToAction("BoardGameNight", "Overview");
         }

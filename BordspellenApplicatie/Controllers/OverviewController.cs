@@ -14,9 +14,9 @@ namespace BordspellenApplicatie.Controllers
         private readonly IUserRepository _userRepository = userRepository;
 
 
-        public IActionResult BoardGameNight()
+        public async Task<IActionResult> BoardGameNight()
         {
-            var boardGameNights = _boardGameNightRepository.GetAll();
+            var boardGameNights = await _boardGameNightRepository.GetAll();
             return View(boardGameNights);
         }
 

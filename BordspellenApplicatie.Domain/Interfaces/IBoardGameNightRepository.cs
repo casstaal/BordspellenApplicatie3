@@ -13,6 +13,7 @@ namespace BordspellenApplicatie.Domain.Interfaces
         Task<BoardGameNight?> GetById(int id);
         Task<BoardGameNight> Add(BoardGameNight boardGameNight);
         Task<BoardGameNight?> Update(int id, BoardGameNight boardGameNight);
+        Task<bool> SetIs18Plus(int id);
         Task<BoardGameNight?> Delete(int id);
 
         public IEnumerable<Boardgame> GetAllGames(BoardGameNight boardGameNight);

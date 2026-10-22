@@ -48,6 +48,17 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
                 .AnyAsync(ubgn => ubgn.BoardGameNightId == boardGameNightId && ubgn.UserId == userId);
         }
 
+        public async Task<bool> IsUserRegisteredForDateAsync(int userId, DateTime date)
+        {
+            var nextDay = date.Date.AddDays(1);
+
+            return await dBContext.UserBoardGameNights
+                .AnyAsync(ubgn =>
+                    ubgn.UserId == userId &&
+                    ubgn.GameNight.DateTime >= date.Date &&
+                    ubgn.GameNight.DateTime < nextDay);
+        }
+
         public async Task DeleteUserGameNightAsync(int gamenightId, int userId)
         {
             var existingEntry = await dBContext.UserBoardGameNights

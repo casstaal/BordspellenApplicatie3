@@ -11,8 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//var dbConnectionString = builder.Configuration.GetValue<string>("ConnectionStringAzureSQL");
-var dbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+var dbConnectionString =
+    builder.Configuration.GetConnectionString("ConnectionStringAzureSQL")
+    ?? builder.Configuration.GetValue<string>("ConnectionStringAzureSQL")
     ?? throw new InvalidOperationException("Database connection string ontbreekt.");
 
 builder.Services.AddDbContext<BordspellenavondDBContext>(options =>
@@ -56,6 +57,7 @@ builder.Services.AddScoped<AuthSeedData>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IBoardGameNightRepository, BoardGameNightRepository>();
 builder.Services.AddScoped<IUserBoardGameNightRepository, UserBoardGameNightRepository>();
+builder.Services.AddScoped<IGameRepository, GameRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 
 builder.Services.AddHttpClient();

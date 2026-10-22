@@ -36,7 +36,7 @@
                             <img src="/banner6.jpg" alt="User Icon" class="card-img" style="max-height: 100px;">
                             <div class="title-container">
                                 <h5 class="card-title">@boardGameNight.Title</h5>
-                                @if (!boardGameNight.Is18Plus)
+                                @if (boardGameNight.Is18Plus)
                                 {
                                     <span class="age-indicator">18+</span>
                                 }

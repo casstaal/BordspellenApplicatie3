@@ -7,6 +7,7 @@ using BordspellenApplicatie.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Bordspellenapplicatie.WebAPI.Controllers
 {
@@ -16,11 +17,13 @@ namespace Bordspellenapplicatie.WebAPI.Controllers
     {
         private readonly IMapper mapper;
         private readonly IBoardGameNightRepository boardGameNightRepository;
+        private readonly IUserRepository userRepository;
 
-        public BoardGameNightController(IMapper mapper, IBoardGameNightRepository boardGameNightRepository)
+        public BoardGameNightController(IMapper mapper, IBoardGameNightRepository boardGameNightRepository, IUserRepository userRepository)
         {
             this.mapper = mapper;
             this.boardGameNightRepository = boardGameNightRepository;
+            this.userRepository = userRepository;
         }
 
         [HttpGet]
@@ -125,6 +128,113 @@ namespace Bordspellenapplicatie.WebAPI.Controllers
             };
 
             return TypedResults.Ok(response);
+        }
+
+        [HttpPost("{id:int}/register")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IResult> RegisterBoardGameNight(int id)
+        {
+            var identityId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                             ?? User.FindFirstValue("sub");
+
+            if (string.IsNullOrEmpty(identityId))
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            var user = userRepository.GetByIdentityId(identityId);
+
+            if (user == null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            var boardGameNight = await boardGameNightRepository.GetById(id);
+
+            if (boardGameNight == null)
+            {
+                return TypedResults.NotFound();
+            }
+
+            var registeredUsers = boardGameNight.UserBoardGameNights?.ToList()
+                                  ?? new List<UserBoardGameNight>();
+
+            if (registeredUsers.Any(r => r.UserId == user.Id))
+            {
+                return TypedResults.Problem(
+                    detail: "Je bent al aangemeld voor deze bordspellenavond.",
+                    statusCode: StatusCodes.Status400BadRequest
+                );
+            }
+
+            if (registeredUsers.Count >= boardGameNight.MaxPlayers)
+            {
+                return TypedResults.Problem(
+                    detail: "Deze bordspellenavond is vol.",
+                    statusCode: StatusCodes.Status400BadRequest
+                );
+            }
+
+            var age = boardGameNight.DateTime.Year - user.DateOfBirth.Year;
+
+            if (user.DateOfBirth.Date >
+                boardGameNight.DateTime.Date.AddYears(-age))
+            {
+                age--;
+            }
+
+            if (boardGameNight.Is18Plus && age < 18)
+            {
+                return TypedResults.Problem(
+                    detail: "Je moet minimaal 18 jaar zijn voor deze bordspellenavond.",
+                    statusCode: StatusCodes.Status400BadRequest
+                );
+            }
+
+            var allBoardGameNights = await boardGameNightRepository.GetAll();
+
+            var alreadyRegisteredThatDay = allBoardGameNights.Any(bgn =>
+                bgn.Id != boardGameNight.Id &&
+                bgn.DateTime.Date == boardGameNight.DateTime.Date &&
+                bgn.UserBoardGameNights != null &&
+                bgn.UserBoardGameNights.Any(r => r.UserId == user.Id)
+            );
+
+            if (alreadyRegisteredThatDay)
+            {
+                return TypedResults.Problem(
+                    detail: "Je bent al aangemeld voor een andere bordspellenavond op deze dag.",
+                    statusCode: StatusCodes.Status400BadRequest
+                );
+            }
+
+            var registration = new UserBoardGameNight
+            {
+                BoardGameNightId = boardGameNight.Id,
+                UserId = user.Id
+            };
+
+            registeredUsers.Add(registration);
+
+            boardGameNight.UserBoardGameNights = registeredUsers;
+
+            await boardGameNightRepository.Update(
+                boardGameNight.Id,
+                boardGameNight
+            );
+
+            return TypedResults.Created(
+                $"/api/BoardGameNight/{boardGameNight.Id}",
+                new
+                {
+                    Success = true,
+                    Message = "Je bent succesvol aangemeld voor de bordspellenavond."
+                }
+            );
         }
     }
 }

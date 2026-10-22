@@ -24,7 +24,6 @@
   <ItemGroup>
     <ProjectReference Include="..\BordspellenApplicatie.Domain\BordspellenApplicatie.Domain.csproj" />
     <ProjectReference Include="..\BordspellenApplicatie.Infrastructure\BordspellenApplicatie.Infrastructure.csproj" />
-    <ProjectReference Include="..\Bordspellenapplicatie.WebAPI\Bordspellenapplicatie.WebAPI.csproj" />
   </ItemGroup>
 
 </Project>

@@ -85,6 +85,23 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
             return existingBoardGameNight;
         }
 
+        public async Task<bool> SetIs18Plus(int id)
+        {
+            var gameNight = await dBContext.BoardGameNights
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (gameNight == null)
+            {
+                return false;
+            }
+
+            gameNight.Is18Plus = true;
+
+            await dBContext.SaveChangesAsync();
+
+            return true;
+        }
+
         public IEnumerable<Boardgame> GetAllGames(BoardGameNight boardGameNight)
         {
             throw new NotImplementedException();
