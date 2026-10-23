@@ -84,9 +84,16 @@
                 <span class="checkmark"></span>
                 </label>
                 <label class="container">
-                <input asp-for="DrinksAlcohol" type="checkbox">
-                Drinkt geen alcohol
-                <span class="checkmark"></span>
+                    <div class="mt-3">
+                        <label asp-for="DrinksAlcohol">
+                            Drink je alcohol?
+                        </label>
+
+                        <select asp-for="DrinksAlcohol" class="form-control">
+                            <option value="false">Nee, ik drink geen alcohol</option>
+                            <option value="true">Ja, ik drink alcohol</option>
+                        </select>
+                    </div>
                 </label>
             </div> 
             <div class="buttonContainer">

@@ -12,40 +12,44 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
 {
     public class BoardGameNightRepository(BordspellenavondDBContext dBContext) : IBoardGameNightRepository
     {
-        public void Add(BoardGameNight boardGameNight)
+        public async Task<BoardGameNight> Add(BoardGameNight boardGameNight)
         {
-            dBContext.Add(boardGameNight);
-            dBContext.SaveChanges();
+            await dBContext.BoardGameNights.AddAsync(boardGameNight);
+            await dBContext.SaveChangesAsync();
+            return boardGameNight;
         }
 
-        public void Delete(int id)
+        public async Task<BoardGameNight?> Delete(int id)
         {
-            throw new NotImplementedException();
+            var existingBoardGameNight = await dBContext.BoardGameNights.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existingBoardGameNight == null)
+            {
+                return null;
+            }
+
+            dBContext.BoardGameNights.Remove(existingBoardGameNight);
+            await dBContext.SaveChangesAsync();
+            return existingBoardGameNight;
         }
 
-        public void Delete(BoardGameNight boardGameNight)
+        public async Task<List<BoardGameNight>> GetAll()
         {
-            dBContext.BoardGameNights.Remove(boardGameNight);
-            dBContext.SaveChanges();
-        }
-
-        public IEnumerable<BoardGameNight> GetAll()
-        {
-            return dBContext.BoardGameNights
+            return await dBContext.BoardGameNights
                 .Include(bgn => bgn.UserBoardGameNights)
                 .Include(bgn => bgn.Address)
                 .Include(bgn => bgn.Games)
-                .ToList();
+                .ToListAsync();
         }
 
-        public BoardGameNight? GetById(int id)
+        public async Task<BoardGameNight?> GetById(int id)
         {
-            return dBContext.BoardGameNights
+            return await dBContext.BoardGameNights
             .Include(bg => bg.Organizer)
             .Include(bg => bg.UserBoardGameNights)
             .ThenInclude(ugn => ugn.User)
             .Include(bg => bg.Games)
-            .FirstOrDefault(bg => bg.Id == id);
+            .FirstOrDefaultAsync(bg => bg.Id == id);
         }
 
         public IEnumerable<User> GetRegisteredUsers(BoardGameNight boardGameNight)
@@ -53,15 +57,60 @@ namespace BordspellenApplicatie.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public void Update(BoardGameNight boardGameNight)
+        public async Task<BoardGameNight?> Update(int id, BoardGameNight boardGameNight)
         {
-            dBContext.Update(boardGameNight);
-            dBContext.SaveChanges();
+            var existingBoardGameNight = await dBContext.BoardGameNights.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existingBoardGameNight == null)
+            {
+                return null;
+            }
+
+            existingBoardGameNight.DateTime = boardGameNight.DateTime;
+            existingBoardGameNight.Address = boardGameNight.Address;
+            existingBoardGameNight.Is18Plus = boardGameNight.Is18Plus;
+            existingBoardGameNight.Title = boardGameNight.Title;
+            existingBoardGameNight.ImageUrl = boardGameNight.ImageUrl;
+            existingBoardGameNight.Description = boardGameNight.Description;
+            existingBoardGameNight.MaxPlayers = boardGameNight.MaxPlayers;
+            existingBoardGameNight.Food = boardGameNight.Food;
+            existingBoardGameNight.IsLactoseIntoleranceFriendly = boardGameNight.IsLactoseIntoleranceFriendly;
+            existingBoardGameNight.IsVegetarianFriendly = boardGameNight.IsVegetarianFriendly;
+            existingBoardGameNight.IsNutAllergyFriendly = boardGameNight.IsNutAllergyFriendly;
+            existingBoardGameNight.IsNonAlcoholicFriendly = boardGameNight.IsNonAlcoholicFriendly;
+
+            //await dBContext.Update(boardGameNight);
+            await dBContext.SaveChangesAsync();
+
+            return existingBoardGameNight;
+        }
+
+        public async Task<bool> SetIs18Plus(int id)
+        {
+            var gameNight = await dBContext.BoardGameNights
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (gameNight == null)
+            {
+                return false;
+            }
+
+            gameNight.Is18Plus = true;
+
+            await dBContext.SaveChangesAsync();
+
+            return true;
         }
 
         public IEnumerable<Boardgame> GetAllGames(BoardGameNight boardGameNight)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<int> CountByOrganizerIdAsync(int organizerId)
+        {
+            return await dBContext.BoardGameNights
+                .CountAsync(x => x.OrganizerId == organizerId);
         }
     }
 }

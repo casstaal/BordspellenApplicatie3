@@ -1,23 +1,27 @@
 using BordspellenApplicatie.Domain.Interfaces;
 using BordspellenApplicatie.Domain.Models;
 using BordspellenApplicatie.Models;
+using BordspellenApplicatie.Models.DTO;
+using BordspellenApplicatie.Models.Response;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace BordspellenApplicatie.Controllers
 {
-    public class HomeController(UserManager<IdentityUser> userManager, IBoardGameNightRepository boardGameNightRepository, IUserBoardGameNightRepository userBoardGameNightRepository, IUserRepository userRepository, ILogger<HomeController> logger) : Controller
+    public class HomeController(UserManager<IdentityUser> userManager, IBoardGameNightRepository boardGameNightRepository, IUserBoardGameNightRepository userBoardGameNightRepository, IUserRepository userRepository, ILogger<HomeController> logger, IHttpClientFactory httpClientFactory) : Controller
     {
         private readonly UserManager<IdentityUser> _userManager = userManager;
         private readonly IBoardGameNightRepository _boardGameNightRepository = boardGameNightRepository;
         private readonly IUserBoardGameNightRepository _userGameNightRepository = userBoardGameNightRepository;
         private readonly IUserRepository _userRepository = userRepository;
         private readonly ILogger<HomeController> _logger = logger;
+        private readonly IHttpClientFactory httpClientFactory = httpClientFactory;
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var boardGameNights = _boardGameNightRepository.GetAll();
+            var boardGameNights = await _boardGameNightRepository.GetAll();
             ViewBag.BannerUrl = "/banner7.jpg";
 
             return View(boardGameNights);

@@ -1,203 +1,663 @@
 ﻿@using BordspellenApplicatie.Models
+@using BordspellenApplicatie.Domain.Models
 @model BoardGameNightDetailsViewModel
 
 @{
     Layout = null;
+
+    var hasRegistrations = Model.UserBoardGameNights?.Any() ?? false;
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Board Game Nights</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-    <vc:header></vc:header>
-    <div class="container-fluid">
-        <div class="title">
-            <h1>Pas bordspelavond aan</h1>
-        </div>
-        <button class="back-button" onclick="window.history.back();">Terug</button>
-        <form class="createBoardgamenightForm" asp-action="Edit" asp-controller="BoardGameNight" method="post" onsubmit="return confirm('Weet je zeker dat je deze bordspelavond wilt editen?');">
-            <div class="row">
-                <div class="mt-3 col-md-12">
-                    <label asp-for="Organizer">Naam organisator</label>
-                    <input type="text" value="@User.Identity.Name" disabled class="form-control" />
-                    <input type="hidden" asp-for="Organizer" value="@User.Identity.Name" class="form-control" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="mt-3 col-md-12">
-                    <label asp-for="DateTime">Datum</label>
-                    <input type="date" asp-for=DateTime class="form-control" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="mt-3 col-md-12">
-                    <label asp-for="Is18Plus">18+</label><br />
-                    <input style="transform: scale(0.7);" asp-for="Is18Plus" type="checkbox" class="form-control" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="mt-3 col-md-12">
-                    <label asp-for="Title">Title</label>
-                    <input type="text" asp-for="Title" class="form-control" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="mt-3 col-md-12">
-                    <label asp-for="Description">Description</label><br />
-                    <textarea class="textareaDescription form-control" asp-for="Description" rows="4"></textarea>
-                </div>
-            </div>
-            <div class="row">
-                <div class="mt-3 col-md-12">
-                    <label asp-for="MaxPlayers">Max aantal spelers</label>
-                    <input type="number" asp-for="MaxPlayers" class="form-control" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="mt-3 col-md-12">
-                    <label asp-for="Food">Eten & Drinken</label>
-                    <textarea class="textareaFood form-control" asp-for="Food" rows="4"></textarea>
-                </div>
-            </div>
-            <div class="row">
-                <div class="mt-3 col-md-8">
-                    <label asp-for="Address.Street">Street</label><br />
-                    <input asp-for="Address.Street" type="text" class="form-control" />
-                </div>
-                <div class="mt-3 col-md-4">
-                    <label asp-for="Address.Number">Number</label>
-                    <input asp-for="Address.Number" type="text" class="form-control" />
-                </div>
-            </div>
-            <div class="row">
-                <div class="mt-3 col-md-12">
-                    <label asp-for="Address.City">City</label>
-                    <input asp-for="Address.City" type="text" class="form-control" />
-                </div>
-            </div>
-            <div class="allergiesCheckbox">
-                <h5>Allergieen</h5>
-                <h5></h5>
-                <label class="container">
-                    <input asp-for="IsLactoseIntoleranceFriendly" type="checkbox">
-                    Lactose allergie
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container">
-                    <input asp-for="IsNutAllergyFriendly" type="checkbox">
-                    Noten allergie
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container">
-                    <input asp-for="IsVegetarianFriendly" type="checkbox">
-                    Vegetarier
-                    <span class="checkmark"></span>
-                </label>
-                <label class="container">
-                    <input asp-for="IsNonAlcoholicFriendly" type="checkbox">
-                    Alcohol
-                    <span class="checkmark"></span>
-                </label>
-            </div>
-            <div class="buttonContainer">
-                <button class="saveButton" type="submit">Edit bordspelavond</button>
-            </div>
-        </form>
-    </div>
-    <vc:footer></vc:footer>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-<style>
+
+    <title>Bordspelavond aanpassen</title>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
         html, body {
-            height: 100%;
+            min-height: 100%;
             margin: 0;
-            display: flex;
-            flex-direction: column;
             background-color: #AFDDE5;
+            font-family: Calibri, Arial, sans-serif;
         }
 
-        .container-fluid {
-            display: grid;
-            grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
-            grid-template-columns: 1fr 0.75fr 1fr;
-            gap: 10px;
+        .page-content {
+            width: 100%;
+            max-width: 900px;
+            margin: 30px auto 60px;
+            padding: 0 20px;
         }
 
-        .title {
-            grid-column: 2/3;
-            grid-row: 1/2;
+        .page-title {
             text-align: center;
-            margin-top: 30px;
+            margin-bottom: 25px;
         }
 
-        .createBoardgamenightForm {
-            grid-column: 2/3;
-            grid-row: 2/3;
-            background-color: #0FA4AF;
-            border-radius: 10px;
-            color: black;
-            font-weight: bold;
-            padding: 10px 50px;
-            margin-bottom: 50px;
-        }
-
-        input {
-            width: 100%;
-            height: 35px;
-        }
-
-        .textareaDescription, .textareaFood {
-            width: 100%;
-        }
-
-        .buttonContainer {
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-            margin-bottom: 20px;
-        }
-
-        .saveButton {
-            padding: 7px 20px;
-            font-size: 16px;
-            cursor: pointer;
-        }
+            .page-title h1 {
+                font-weight: bold;
+                font-size: 32px;
+            }
 
         .back-button {
-            background-color:#964734;
-            color:white;
-            width: 20%;
-            height: 30%;
-            margin-top: 20px;
-            margin-left: 65px;
+            display: inline-block;
+            background-color: #964734;
+            color: white;
             border-radius: 8px;
+            padding: 10px 25px;
+            margin-bottom: 25px;
+            text-decoration: none;
         }
 
-        .allergiesCheckbox {
+            .back-button:hover {
+                background-color: #763728;
+                color: white;
+                text-decoration: none;
+            }
+
+        .form-panel {
+            background-color: #0FA4AF;
+            border-radius: 10px;
+            padding: 30px 35px;
+            margin-bottom: 30px;
+        }
+
+            .form-panel h2 {
+                font-size: 25px;
+                font-weight: bold;
+                margin-bottom: 25px;
+            }
+
+            .form-panel h3 {
+                font-size: 21px;
+                font-weight: bold;
+                margin-bottom: 20px;
+            }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-control {
+            min-height: 38px;
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-weight: normal;
+        }
+
+            .checkbox-item input[type="checkbox"] {
+                width: 18px;
+                height: 18px;
+                flex-shrink: 0;
+            }
+
+        .checkbox-group {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 10px;
             margin-top: 15px;
         }
 
-            .allergiesCheckbox input[type="checkbox"] {
-                width: 16px;
-                height: 16px;
-                margin-right: 8px;
-                vertical-align: middle;
+        .button-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        .btn-brown {
+            background-color: #964734;
+            border: 1px solid #964734;
+            color: white;
+            border-radius: 6px;
+            padding: 9px 20px;
+        }
+
+            .btn-brown:hover {
+                background-color: #763728;
+                border-color: #763728;
+                color: white;
             }
 
-            .allergiesCheckbox .container {
-                display: flex;
-                align-items: center;
-                font-size: 16px;
-            }
-</style>
+        .game-card {
+            background-color: #AFDDE5;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
 
+        .game-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+            .game-card-header h4 {
+                font-size: 20px;
+                font-weight: bold;
+                margin: 0;
+            }
+
+        .age-indicator {
+            background-color: #964734;
+            color: white;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .game-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .new-game-panel {
+            background-color: #AFDDE5;
+            border-radius: 8px;
+            padding: 25px;
+        }
+
+        .section-divider {
+            border-top: 1px solid white;
+            margin: 30px 0;
+        }
+
+        .field-validation-error {
+            color: #842029;
+            font-size: 13px;
+        }
+
+        @@media (max-width: 600px) {
+            .page-content {
+                padding: 0 12px;
+            }
+
+            .form-panel {
+                padding: 20px;
+            }
+
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+
+            .game-actions {
+                flex-direction: column;
+            }
+
+                .game-actions button {
+                    width: 100%;
+                }
+        }
+    </style>
+</head>
+
+<body>
+    <vc:header></vc:header>
+
+    <main class="page-content">
+
+        <div class="page-title">
+            <h1>Pas bordspelavond aan</h1>
+        </div>
+
+        <a class="back-button"
+           asp-controller="BoardGameNight"
+           asp-action="Details"
+           asp-route-id="@Model.Id">
+            Terug naar details
+        </a>
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["ErrorMessage"]
+            </div>
+        }
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
+        @if (hasRegistrations)
+        {
+            <div class="alert alert-warning">
+                Deze bordspelavond heeft al aangemelde spelers.
+                Je kunt de spelavond en de bordspellen daarom
+                niet meer aanpassen.
+            </div>
+        }
+        else
+        {
+            <section class="form-panel">
+
+                <h2>Gegevens bordspelavond</h2>
+
+                <form asp-action="Edit"
+                      asp-controller="BoardGameNight"
+                      method="post"
+                      onsubmit="return confirm('Weet je zeker dat je deze bordspelavond wilt aanpassen?');">
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="Organizer" />
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label>Naam organisator</label>
+
+                        <input type="text"
+                               value="@Model.Organizer"
+                               class="form-control"
+                               disabled />
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="DateTime">Datum en tijd</label>
+
+                        <input asp-for="DateTime"
+                               type="datetime-local"
+                               asp-format="{0:yyyy-MM-ddTHH:mm}"
+                               class="form-control" />
+
+                        <span asp-validation-for="DateTime"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Title">Titel</label>
+
+                        <input asp-for="Title"
+                               class="form-control"
+                               required />
+
+                        <span asp-validation-for="Title"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Description">Beschrijving</label>
+
+                        <textarea asp-for="Description"
+                                  class="form-control"
+                                  rows="4"></textarea>
+
+                        <span asp-validation-for="Description"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="MaxPlayers">
+                            Maximaal aantal spelers
+                        </label>
+
+                        <input asp-for="MaxPlayers"
+                               type="number"
+                               min="1"
+                               class="form-control" />
+
+                        <span asp-validation-for="MaxPlayers"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Is18Plus">Leeftijdsgrens</label>
+
+                        <label class="checkbox-item">
+                            <input asp-for="Is18Plus"
+                                   type="checkbox" />
+                            Deze spelavond is 18+
+                        </label>
+
+                        @if (Model.Games?.Any(g => g.Is18Plus) == true)
+                        {
+                            <small>
+                                Minimaal één toegevoegd bordspel is 18+.
+                                De spelavond blijft daarom 18+.
+                            </small>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Food">Eten en drinken</label>
+
+                        <textarea asp-for="Food"
+                                  class="form-control"
+                                  rows="4"></textarea>
+
+                        <span asp-validation-for="Food"></span>
+                    </div>
+
+                    <h3>Adres</h3>
+
+                    <div class="row">
+                        <div class="col-md-8 form-group">
+                            <label asp-for="Address.Street">Straat</label>
+
+                            <input asp-for="Address.Street"
+                                   class="form-control" />
+
+                            <span asp-validation-for="Address.Street"></span>
+                        </div>
+
+                        <div class="col-md-4 form-group">
+                            <label asp-for="Address.Number">Huisnummer</label>
+
+                            <input asp-for="Address.Number"
+                                   class="form-control" />
+
+                            <span asp-validation-for="Address.Number"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Address.City">Plaats</label>
+
+                        <input asp-for="Address.City"
+                               class="form-control" />
+
+                        <span asp-validation-for="Address.City"></span>
+                    </div>
+
+                    <h3>Allergieën en dieetwensen</h3>
+
+                    <div class="checkbox-group">
+
+                        <label class="checkbox-item">
+                            <input asp-for="IsLactoseIntoleranceFriendly"
+                                   type="checkbox" />
+                            Lactosevrij
+                        </label>
+
+                        <label class="checkbox-item">
+                            <input asp-for="IsNutAllergyFriendly"
+                                   type="checkbox" />
+                            Notenvrij
+                        </label>
+
+                        <label class="checkbox-item">
+                            <input asp-for="IsVegetarianFriendly"
+                                   type="checkbox" />
+                            Vegetarisch
+                        </label>
+
+                        <label class="checkbox-item">
+                            <input asp-for="IsNonAlcoholicFriendly"
+                                   type="checkbox" />
+                            Alcoholvrij
+                        </label>
+
+                    </div>
+
+                    <div class="button-container">
+                        <button type="submit" class="btn btn-brown">
+                            Wijzigingen spelavond opslaan
+                        </button>
+                    </div>
+
+                </form>
+            </section>
+
+            <section class="form-panel">
+
+                <h2>Bordspellen beheren</h2>
+                <h3>Toegevoegde bordspellen</h3>
+
+                @if (Model.Games != null && Model.Games.Any())
+                {
+                    @foreach (var game in Model.Games)
+                    {
+                        <div class="game-card">
+
+                            <div class="game-card-header">
+                                <h4>@game.Name</h4>
+
+                                @if (game.Is18Plus)
+                                {
+                                    <span class="age-indicator">18+</span>
+                                }
+                            </div>
+
+                            <form asp-controller="BoardGameNight"
+                                  asp-action="EditGame"
+                                  method="post">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="gameNightId"
+                                       value="@Model.Id" />
+
+                                <input type="hidden"
+                                       name="gameId"
+                                       value="@game.Id" />
+
+                                <div class="form-group">
+                                    <label>Spelnaam</label>
+
+                                    <input name="game.Name"
+                                           value="@game.Name"
+                                           class="form-control"
+                                           required />
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Soort spel</label>
+
+                                    <select name="game.Type"
+                                            class="form-control"
+                                            required>
+
+                                        @foreach (var type in Enum.GetValues<Boardgame.GameType>())
+                                        {
+                                            <option value="@type"
+                                                    selected="@(game.Type == type)">
+                                                @(type == Boardgame.GameType.Board
+                                                                                ? "Bordspel"
+                                                                                : "Kaartspel")
+                            </option>
+                                                        }
+
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Genre</label>
+
+                                    <select name="game.Genre"
+                                            class="form-control"
+                                            required>
+
+                                        @foreach (var genre in Enum.GetValues<Boardgame.GenreEnum>())
+                                        {
+                                            <option value="@genre"
+                                                    selected="@(game.Genre == genre)">
+                                                @(genre == Boardgame.GenreEnum.Family
+                                                                                ? "Familie"
+                                                                                : "Party")
+                            </option>
+                                                        }
+
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Beschrijving</label>
+
+                                    <textarea name="game.Description"
+                                  class="form-control"
+                                  rows="4"
+                                  required>@game.Description</textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="checkbox-item">
+                                        <input type="checkbox"
+                                               name="game.Is18Plus"
+                                               value="true"
+                                               checked="@game.Is18Plus" />
+                                        Dit bordspel is 18+
+                                    </label>
+                                </div>
+
+                                <div class="game-actions">
+                                    <button type="submit"
+                                            class="btn btn-brown">
+                                        Wijzigingen opslaan
+                                    </button>
+                                </div>
+                            </form>
+
+                            <form asp-controller="BoardGameNight"
+                                  asp-action="DeleteGame"
+                                  method="post"
+                                  class="mt-3"
+                                  onsubmit="return confirm('Weet je zeker dat je dit bordspel wilt verwijderen?');">
+
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden"
+                                       name="gameNightId"
+                                       value="@Model.Id" />
+
+                                <input type="hidden"
+                                       name="gameId"
+                                       value="@game.Id" />
+
+                                <button type="submit"
+                                        class="btn btn-danger">
+                                    Bordspel verwijderen
+                                </button>
+                            </form>
+
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="alert alert-info">
+                        Er zijn nog geen bordspellen toegevoegd.
+                    </div>
+                }
+
+                <hr class="section-divider" />
+
+                <div class="new-game-panel">
+
+                    <h3>Nieuw bordspel toevoegen</h3>
+
+                    <form asp-controller="BoardGameNight"
+                          asp-action="AddGame"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               name="gameNightId"
+                               value="@Model.Id" />
+
+                        <div class="form-group">
+                            <label>Spelnaam</label>
+
+                            <input name="game.Name"
+                                   class="form-control"
+                                   required />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Soort spel</label>
+
+                            <select name="game.Type"
+                                    class="form-control"
+                                    required>
+
+                                @foreach (var type in Enum.GetValues<Boardgame.GameType>())
+                                {
+                                    <option value="@type">
+                                        @(type == Boardgame.GameType.Board
+                                                                        ? "Bordspel"
+                                                                        : "Kaartspel")
+                            </option>
+                                                        }
+
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Genre</label>
+
+                            <select name="game.Genre"
+                                    class="form-control"
+                                    required>
+
+                                @foreach (var genre in Enum.GetValues<Boardgame.GenreEnum>())
+                                {
+                                    <option value="@genre">
+                                        @(genre == Boardgame.GenreEnum.Family
+                                                                        ? "Familie"
+                                                                        : "Party")
+                            </option>
+                                                        }
+
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Beschrijving</label>
+
+                            <textarea name="game.Description"
+                                  class="form-control"
+                                  rows="4"
+                                  placeholder="Beschrijving van het spel"
+                                  required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox"
+                                       name="game.Is18Plus"
+                                       value="true" />
+                                Dit bordspel is 18+
+                            </label>
+                        </div>
+
+                        <div class="button-container">
+                            <button type="submit"
+                                    class="btn btn-brown">
+                                Bordspel toevoegen
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+
+            </section>
+        }
+
+    </main>
+
+    <vc:footer></vc:footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

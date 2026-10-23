@@ -1,122 +1,150 @@
-﻿@using BordspellenApplicatie.Models
-@model ReviewViewModel
+﻿@model BordspellenApplicatie.Models.ReviewViewModel
 
 @{
     Layout = null;
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Board Game Nights</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Review plaatsen</title>
+
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background-color: #AFDDE5;
+        }
+
+        .review-container {
+            max-width: 650px;
+            margin: 40px auto 80px;
+            padding: 0 20px;
+        }
+
+        .review-form {
+            background-color: #0FA4AF;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+            .review-form label {
+                font-weight: bold;
+            }
+
+        .back-button {
+            display: inline-block;
+            background-color: #964734;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+            .back-button:hover {
+                color: white;
+                text-decoration: none;
+                background-color: #763728;
+            }
+
+        .save-button {
+            background-color: #964734;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+            .save-button:hover {
+                background-color: #763728;
+            }
+    </style>
 </head>
 <body>
     <vc:header></vc:header>
-    <div class="container-fluid">
-        <div class="title">
-            <h1>Maak review aan</h1>
-        </div>
-        <button class="back-button" onclick="window.history.back();">Terug</button>
-        <form class="reviewForm" asp-action="create" asp-controller="Review" method="post">
-            <div asp-validation-summary="All">
+
+    <main class="review-container">
+        <h1 class="text-center mb-4">Review plaatsen</h1>
+
+        <a asp-controller="BoardGameNight"
+           asp-action="Details"
+           asp-route-id="@Model.BoardGameNightId"
+           class="back-button">
+            Terug
+        </a>
+
+        <form asp-action="Create"
+              asp-controller="Review"
+              method="post"
+              class="review-form">
+
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" asp-for="BoardGameNightId" />
+
+            <div asp-validation-summary="All"
+                 class="text-danger"></div>
+
+            <div class="form-group">
+                <label>Auteur</label>
+                <input type="text"
+                       class="form-control"
+                       value="@User.Identity?.Name"
+                       disabled />
             </div>
-            <div>
-                <label asp-for="Title">Titel</label><br />
-                <input asp-for="Title" type="text" />
+
+            <div class="form-group">
+                <label asp-for="Title">Titel</label>
+                <input asp-for="Title"
+                       class="form-control"
+                       maxlength="150"
+                       required />
+                <span asp-validation-for="Title"
+                      class="text-danger"></span>
             </div>
-            <div style="margin-top: 15px;">
-                <label asp-for="Author">Auteur</label><br />
-                <input type="text" value="@User.Identity.Name" disabled />
-                <input type="hidden" asp-for="Author" value="@User.Identity.Name" />
+
+            <div class="form-group">
+                <label asp-for="Score">Score (1–5)</label>
+                <select asp-for="Score"
+                        class="form-control"
+                        required>
+                    <option value="0">Kies een score</option>
+                    <option value="1">1 - Zeer slecht</option>
+                    <option value="2">2 - Slecht</option>
+                    <option value="3">3 - Gemiddeld</option>
+                    <option value="4">4 - Goed</option>
+                    <option value="5">5 - Uitstekend</option>
+                </select>
+                <span asp-validation-for="Score"
+                      class="text-danger"></span>
             </div>
-            <div style="margin-top: 15px;">
-                <label asp-for="Score">Score (1-5)</label><br />
-                <input asp-for="Score" type="number" max="5" min="0" />
+
+            <div class="form-group">
+                <label asp-for="TextReview">Reviewtekst</label>
+                <textarea asp-for="TextReview"
+                          class="form-control"
+                          rows="5"
+                          required
+                          placeholder="Hoe heb je de bordspelavond ervaren?"></textarea>
+                <span asp-validation-for="TextReview"
+                      class="text-danger"></span>
             </div>
-            <div style="margin-top: 15px;">
-                <label asp-for="TextReview">Beschrijving</label><br />
-                <textarea class="textareaDescription" asp-for="TextReview" rows="4"></textarea>
-            </div>
-            <div class="buttonContainer">
-                <button class="saveButton" type="submit">Maak review aan</button>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="save-button">
+                    Review plaatsen
+                </button>
             </div>
         </form>
-    </div>
+    </main>
+
     <vc:footer></vc:footer>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-<style>
-
-    body {
-        background-color: #AFDDE5;
-    }
-    .container-fluid {
-        display: grid;
-        grid-template-rows: 0.5fr 1fr, 1fr, 1fr;
-        grid-template-columns: 1fr 0.75fr 1fr;
-        gap: 10px;
-    }
-
-    .title {
-        grid-column: 2/3;
-        grid-row: 1/2;
-        text-align: center;
-        margin-top: 30px;
-        margin-bottom: 20px;
-    }
-
-    .reviewForm {
-        grid-column: 2/3;
-        grid-row: 2/3;
-        background-color: #0FA4AF;
-        color: white;
-        padding: 20px;
-        margin-bottom: 85px;
-        border-radius: 10px;
-    }
-
-    input {
-        width: 100%;
-        height: 35px;
-    }
-
-    .textareaDescription {
-        width: 100%;
-    }
-
-    .buttonContainer {
-        display: flex;
-        justify-content: center;
-        margin-top: 10px;
-        margin-bottom: 30px;
-        margin-top: 30px;
-    }
-
-    .saveButton {
-        width: 100%;
-        max-width: 200px; 
-    }
-
-    .saveButton {
-        padding: 7px 20px;
-        font-size: 16px;
-        cursor: pointer;
-    }
-
-    .back-button {
-        background-color: #964734;
-        color: white;
-        width: 20%;
-        height: 30%;
-        margin-top: 20px;
-        margin-left: 65px;
-        border-radius: 8px;
-    }
-</style>
-
-

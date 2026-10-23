@@ -45,6 +45,12 @@ namespace BordspellenApplicatie.Infrastructure.Data
                 .HasForeignKey(r => r.BoardGameNightId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Boardgame>()
+                .HasOne(g => g.BoardGameNight)
+                .WithMany(b => b.Games)
+                .HasForeignKey(g => g.BoardGameNightId)
+                .OnDelete(DeleteBehavior.Cascade);
+
         }
 
     }

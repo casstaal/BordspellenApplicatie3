@@ -1,18 +1,18 @@
-﻿using BordspellenApplicatie.Domain.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BordspellenApplicatie.Models
 {
     public class ReviewViewModel
     {
-        [Required]
-        public string Title { get; set; } = null!;
-        public int Score { get; set; }
-        public required string TextReview { get; set; }
-        public string Author { get; set; } = null!;
-        public DateTime Date { get; set; }
+        [Required(ErrorMessage = "Vul een titel in.")]
+        public string Title { get; set; } = string.Empty;
 
-        [Required]
+        [Range(1, 5, ErrorMessage = "De score moet tussen 1 en 5 liggen.")]
+        public int Score { get; set; }
+
+        [Required(ErrorMessage = "Vul een reviewtekst in.")]
+        public string TextReview { get; set; } = string.Empty;
+
         public int BoardGameNightId { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace BordspellenApplicatie.Domain.Interfaces
         Task AddUserBoardGameNightAsync(UserBoardGameNight userBoardGameNight);
         Task DeleteUserBoardGameNightAsync(UserBoardGameNight userBoardGameNight);
 
-
+        Task<bool> IsUserRegisteredForDateAsync(int userId, DateTime date);
         Task<bool> IsUserRegisteredForBoardGameNightAsync(int boardGameNightId, int userId);
         public Task DeleteUserGameNightAsync(int gamenightId, int userId);
 

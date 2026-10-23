@@ -23,11 +23,25 @@ namespace BordspellenApplicatie.Models
         public bool IsNutAllergyFriendly { get; set; }
         public bool IsNonAlcoholicFriendly { get; set; }
         public List<Boardgame> Games { get; set; } = new List<Boardgame>();
-        public List<Review> Reviews { get; set; } = new List<Review>();
+        // Reviews van deze bordspelavond
+        public List<Review> Reviews { get; set; } = new();
+
+        // Reviews en statistieken van de organisator
+        public double? OrganizerAverageScore { get; set; }
+        public int OrganizerReviewCount { get; set; }
+        public int OrganizerGameNightCount { get; set; }
+
+        // Mag de ingelogde speler een review plaatsen?
+        public bool CanWriteReview { get; set; }
         public ICollection<UserBoardGameNight> UserBoardGameNights { get; set; } = new List<UserBoardGameNight>();
         public int RegisteredUsersCount { get; set; }
         public bool IsSignedUp { get; set; }
         public int Id { get; set; }
 
+        // Dieetwensen van de ingelogde gebruiker
+        public bool IsLactoseIntolerant { get; set; }
+        public bool HasNutAllergy { get; set; }
+        public bool IsVegetarian { get; set; }
+        public bool DrinksAlcohol { get; set; }
     }
 }

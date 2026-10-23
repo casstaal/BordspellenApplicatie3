@@ -1,40 +1,92 @@
 ﻿using BordspellenApplicatie.Domain.Interfaces;
 using BordspellenApplicatie.Domain.Models;
 using BordspellenApplicatie.Infrastructure.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace BordspellenApplicatie.Infrastructure.Repositories
 {
     public class ReviewRepository(BordspellenavondDBContext dBContext) : IReviewRepository
     {
-        public void Add(Review review)
+        public async Task<Review> Add(Review review)
         {
-            dBContext.Add(review);
-            dBContext.SaveChanges();
+            await dBContext.Reviews.AddAsync(review);
+            await dBContext.SaveChangesAsync();
+            return review;
         }
 
-        public void Delete(Guid id)
+        public async Task<Review?> Delete(Guid id)
         {
-            throw new NotImplementedException();
+            var existingReview = await dBContext.Reviews.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existingReview == null)
+            {
+                return null;
+            }
+
+            dBContext.Reviews.Remove(existingReview);
+            await dBContext.SaveChangesAsync();
+            return existingReview;
         }
 
-        public IEnumerable<Review> GetAll()
+        public async Task<List<Review>> GetAll()
         {
-            throw new NotImplementedException();
+            return await dBContext.Reviews.ToListAsync();
         }
 
-        public Review GetById(Guid id)
+        public async Task<List<Review>?> GetByAuthorId(int id)
         {
-            throw new NotImplementedException();
+            return await dBContext.Reviews.Where(x => x.AuthorId == id).ToListAsync();
         }
 
-        public void Update(Review review)
+        public async Task<List<Review>?> GetByBoardGameNightId(int id)
         {
-            throw new NotImplementedException();
+            return await dBContext.Reviews
+                .AsNoTracking()
+                .Include(r => r.Author)
+                .Where(r => r.BoardGameNightId == id)
+                .OrderByDescending(r => r.Date)
+                .ToListAsync();
+        }
+
+        public async Task<Review?> GetById(Guid id)
+        {
+            return await dBContext.Reviews.FirstOrDefaultAsync(x =>x.Id == id);
+        }
+
+        public async Task<Review> Update(Guid id, Review review)
+        {
+            var existingReview = await dBContext.Reviews.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existingReview == null)
+            {
+                return null;
+            }
+
+            existingReview.Title = review.Title;
+            existingReview.Score = review.Score;
+            existingReview.TextReview = review.TextReview;
+
+            await dBContext.SaveChangesAsync();
+
+            return existingReview;
+        }
+
+        public async Task<List<Review>> GetByOrganizerId(int organizerId)
+        {
+            return await dBContext.Reviews
+                .AsNoTracking()
+                .Include(r => r.Author)
+                .Where(r => r.BoardGameNight.OrganizerId == organizerId)
+                .OrderByDescending(r => r.Date)
+                .ToListAsync();
+        }
+
+        public async Task<bool> HasUserReviewedGameNightAsync(
+            int boardGameNightId, int authorId)
+        {
+            return await dBContext.Reviews.AnyAsync(r =>
+                r.BoardGameNightId == boardGameNightId &&
+                r.AuthorId == authorId);
         }
     }
 }

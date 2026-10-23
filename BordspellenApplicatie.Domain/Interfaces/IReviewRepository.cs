@@ -9,10 +9,15 @@ namespace BordspellenApplicatie.Domain.Interfaces
 {
     public interface IReviewRepository
     {
-        public IEnumerable<Review> GetAll();
-        public Review GetById(Guid id);
-        public void Add(Review review);
-        public void Delete(Guid id);
-        public void Update(Review review);
+        Task<List<Review>> GetAll();
+        Task<Review?> GetById(Guid id);
+        Task<List<Review>?> GetByBoardGameNightId(int id);
+        Task<List<Review>?> GetByAuthorId(int id);
+        Task<Review> Add(Review review);
+        Task<Review?> Delete(Guid id);
+        Task<Review> Update(Guid id, Review review);
+        Task<List<Review>> GetByOrganizerId(int organizerId);
+        Task<bool> HasUserReviewedGameNightAsync(
+            int boardGameNightId, int authorId);
     }
 }

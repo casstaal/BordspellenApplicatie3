@@ -14,9 +14,9 @@ namespace BordspellenApplicatie.Controllers
         private readonly IUserRepository _userRepository = userRepository;
 
 
-        public IActionResult BoardGameNight()
+        public async Task<IActionResult> BoardGameNight()
         {
-            var boardGameNights = _boardGameNightRepository.GetAll();
+            var boardGameNights = await _boardGameNightRepository.GetAll();
             return View(boardGameNights);
         }
 
@@ -59,7 +59,7 @@ namespace BordspellenApplicatie.Controllers
                 IsVegetarianFriendly = userBoardGameNight.GameNight.IsVegetarianFriendly,
                 IsSignedUp = true,
                 Games = userBoardGameNight.GameNight.Games?.ToList() ?? new List<Boardgame>(),
-                RegisteredUsersCount = userBoardGameNight.GameNight.RegisteredUsers?.Count ?? 0
+                RegisteredUsersCount =  0
             };
         }
 
