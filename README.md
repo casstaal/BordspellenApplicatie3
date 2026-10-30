@@ -89,3 +89,66 @@ If I were to continue developing this project, I would focus on:
 This application was developed as an educational project to gain practical experience with ASP.NET Core, database-driven applications, API development, and cloud deployment.
 
 The project is not intended to be a production-ready application. It demonstrates my experience with these technologies, as well as areas where I would improve the architecture and implementation in future development.
+
+
+
+## Installation
+
+### Prerequisites
+
+- .NET 8 SDK
+- SQL Server or SQL Server Express
+- Entity Framework Core CLI (`dotnet-ef`)
+
+### 1. Clone the repository
+
+```powershell
+git clone <repository-url>
+cd <repository-folder>
+```
+
+### 2. Configure the database
+
+Both the MVC application and Web API require a SQL Server connection string.
+
+Configure the `ConnectionStringAzureSQL` setting in both projects using .NET User Secrets or environment variables.
+
+Example connection string:
+
+```text
+Server=localhost;Database=BordspellenavondDB;Trusted_Connection=True;TrustServerCertificate=True;
+```
+
+### 3. Restore dependencies
+
+```powershell
+dotnet restore
+```
+
+### 4. Apply database migrations
+
+Apply the existing Entity Framework Core migrations to create the required database tables.
+
+The migrations are located in the `BordspellenApplicatie.Infrastructure` project and use two separate DbContexts:
+
+- `BordspellenavondDBContext` – application data
+- `BordspellenavondIdentityDBContext` – authentication and user data
+
+### 5. Run the application
+
+Start the MVC application:
+
+```powershell
+dotnet run --project BordspellenApplicatie
+```
+
+To run the Web API separately:
+
+```powershell
+dotnet run --project Bordspellenapplicatie.WebAPI
+```
+
+Open the local URLs displayed in the terminal.
+
+The Web API also provides Swagger (`/swagger`) and GraphQL (`/graphql`) endpoints.
+
